@@ -1,6 +1,7 @@
 #include "game.h"
 #include "player.h"
 #include "physics.h"
+#include "sprites.h"
 
 void update_player(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 
@@ -42,4 +43,7 @@ void update_player(GtkWidget *drawing_area, game_state_t *game_state, float dt_s
 
     player_movement(game_state, dt_seconds, allocation.width);
     apply_physics(game_state, dt_seconds, allocation.height);
+
+    update_player_animation_state(game_state, dt_seconds);
+    update_player_animation(&game_state->player, dt_seconds);
 }

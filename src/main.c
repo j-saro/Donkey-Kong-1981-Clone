@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     g_object_unref(app);
 
     // Clean up
-    cairo_surface_destroy(game_state.player.sprite_sheet);
+    cleanup_sprites(&game_state.player);
     free(game_state.pressed_keys);
 
     return status;

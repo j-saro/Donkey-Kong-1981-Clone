@@ -16,9 +16,15 @@ typedef struct {
     float x, y;
     float velocity_x;
     float velocity_y;
-    cairo_surface_t *sprite_sheet;
-    cairo_surface_t *sprite;
+    int direction;
     bool is_grounded;
+
+    cairo_surface_t *sprite_sheet;
+    cairo_surface_t *current_frame;
+    int current_animation;
+    int current_frame_index;
+    float frame_time; // Time accumulated since last frame change
+    int frame_width, frame_height;
 } player_t;
 
 typedef struct {
@@ -26,3 +32,17 @@ typedef struct {
     int *pressed_keys;
     unsigned int num_pressed_keys;
 } game_state_t;
+
+typedef enum {
+    ANIM_IDLE,
+    ANIM_WALK,
+    ANIM_JUMP,
+    ANIM_LAND,
+} AnimationState;
+
+typedef struct {
+    int start_x;
+    int start_y;
+    int frame_count;
+    float frame_duration;
+} AnimationSequence;
