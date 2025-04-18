@@ -2,6 +2,7 @@
 #include "player.h"
 #include "physics.h"
 #include "sprites.h"
+#include "animation.h"
 
 void update_player(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 

@@ -1,17 +1,19 @@
 BIN = game
 
-SOURCES = $(shell find . -name "*.c")
-OBJ = $(SOURCES:.c=.o)
-HEADERS = $(shell find . -name "*.h")
+SRC_DIR = src
+INC_DIR = include
 
-CFLAGS = $(shell pkg-config --cflags gtk+-3.0) -O4
+SOURCES = $(shell find $(SRC_DIR) -name "*.c")
+OBJ = $(SOURCES:.c=.o)
+
+CFLAGS = -I$(INC_DIR) $(shell pkg-config --cflags gtk+-3.0) -O4
 LIBS = $(shell pkg-config --libs gtk+-3.0)
 
 $(BIN): $(OBJ)
-	gcc -o $@ $(CFLAGS) $^ $(LIBS)
+	gcc -o $@ $(OBJ) $(CFLAGS) $(LIBS)
 
-%.o: %.c $(HEADERS)
-	gcc -c -o $@ $(CFLAGS) $< $(LIBS)
+%.o: %.c
+	gcc -c -o $@ $< $(CFLAGS)
 
 clean:
 	rm -f $(BIN) $(OBJ)
