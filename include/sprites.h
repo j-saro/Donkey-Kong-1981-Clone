@@ -3,5 +3,5 @@
 #include <gtk/gtk.h>
 #include "types.h"
 
-void load_sprites(gpointer user_data);
-void cleanup_sprites(player_t *player);
+void sprites_load(gpointer user_data);
+void sprites_cleanup(game_state_t *game_state);

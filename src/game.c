@@ -1,10 +1,10 @@
 #include "game.h"
 #include "player.h"
-#include "physics.h"
-#include "sprites.h"
-#include "animation.h"
+#include "level.h"
 
-void update_player(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
+
+gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
+gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_data);
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     game_state_t *game_state = (game_state_t*) user_data;
@@ -15,6 +15,7 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     cairo_rectangle(cr, 0, 0 , allocation.width, allocation.height);
     cairo_fill(cr);
 
+    level_draw(cr, &game_state->level);
     player_draw(cr, &game_state->player);
     return G_SOURCE_CONTINUE;
 }
@@ -32,19 +33,8 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
 
-    update_player(drawing_area, game_state, dt_seconds);
+    player_update(drawing_area, game_state, dt_seconds);
 
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;
-}
-
-void update_player(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(drawing_area, &allocation);
-
-    player_movement(game_state, dt_seconds, allocation.width);
-    apply_physics(game_state, dt_seconds, allocation.height);
-
-    update_player_animation_state(game_state, dt_seconds);
-    update_player_animation(&game_state->player, dt_seconds);
 }

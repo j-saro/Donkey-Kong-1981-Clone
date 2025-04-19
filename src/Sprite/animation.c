@@ -6,8 +6,12 @@ const AnimationSequence animations[] = {
     [ANIM_JUMP] = {63, 21, 1, 0.15f},
 };
 
-void update_player_frame(player_t *player);
+void update_player_animation_state(game_state_t *game_state, float dt_seconds);
+void update_player_animation(player_t *player, float dt_seconds);
+void update_aimation_frame(player_t *player);
+void set_player_animation(player_t *player, AnimationState new_anim);
 
+// determines and sets the appropriate animation state for the player 
 void update_player_animation_state(game_state_t *game_state, float dt_seconds) {
     if (!game_state->player.is_grounded) {
         set_player_animation(&game_state->player, ANIM_JUMP);
@@ -21,6 +25,7 @@ void update_player_animation_state(game_state_t *game_state, float dt_seconds) {
     }
 }
 
+// keeps the animation frame_time updated
 void update_player_animation(player_t *player, float dt_seconds) {
     AnimationSequence anim = animations[player->current_animation];
     
@@ -29,11 +34,12 @@ void update_player_animation(player_t *player, float dt_seconds) {
     if (player->frame_time >= anim.frame_duration) {
         player->frame_time = 0;
         player->current_frame_index = (player->current_frame_index + 1) % anim.frame_count;
-        update_player_frame(player);
+        update_aimation_frame(player);
     }
 }
 
-void update_player_frame(player_t *player) {
+// changes to next frame in the animation
+void update_aimation_frame(player_t *player) {
     if (player->current_frame != NULL) {
         cairo_surface_destroy(player->current_frame);
         player->current_frame = NULL;
@@ -56,11 +62,12 @@ void update_player_frame(player_t *player) {
     }
 }
 
+// sets a new Animation
 void set_player_animation(player_t *player, AnimationState new_anim) {
     if (player->current_animation != new_anim) {
         player->current_animation = new_anim;
         player->current_frame_index = 0;
         player->frame_time = 0;
-        update_player_frame(player);
+        update_aimation_frame(player);
     }
 }
