@@ -79,7 +79,6 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     for (int i = 0; i < level->num_platforms; i++) {
         cJSON *platform_json = cJSON_GetArrayItem(platforms_json, i);
 
-        level->platforms[i].sprite = NULL;
         // Extract platform attributes (x, y, width, height)
         level->platforms[i].position.x = (float)cJSON_GetObjectItem(platform_json, "x")->valuedouble;
         level->platforms[i].position.y = (float)cJSON_GetObjectItem(platform_json, "y")->valuedouble;
@@ -98,13 +97,29 @@ void level_cleanup(level_t *level) {
 }
 
 void level_draw(cairo_t *cr, const level_t *level) {
+    cairo_surface_t *surface = level->sprite_sheet;
+    
     for (int i = 0; i < level->num_platforms; ++i) {
         const platform_t *platform = &level->platforms[i];
+
         cairo_save(cr);
-        cairo_set_source_rgb(cr, 0.3, 0.3, 0.8);
-        cairo_rectangle(cr, platform->position.x, platform->position.y,
-                        platform->width, platform->height);
+
+        cairo_pattern_t *pattern = cairo_pattern_create_for_surface(surface);
+        cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
+
+        cairo_matrix_t matrix;
+        cairo_matrix_init_translate(&matrix, -platform->position.x, -platform->position.y);
+        cairo_pattern_set_matrix(pattern, &matrix);
+
+        cairo_set_source(cr, pattern);
+        cairo_rectangle(cr, 
+                        platform->position.x, 
+                        platform->position.y,
+                        platform->width, 
+                        platform->height);
         cairo_fill(cr);
+
+        cairo_pattern_destroy(pattern);
         cairo_restore(cr);
     }
 }

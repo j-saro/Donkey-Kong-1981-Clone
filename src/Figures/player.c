@@ -51,11 +51,8 @@ void player_draw(cairo_t *cr, const player_t *player) {
 }
 
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(drawing_area, &allocation);
-
-    player_movement(game_state, dt_seconds, allocation.width);
-    apply_physics(game_state, dt_seconds, allocation.height);
+    player_movement(game_state, dt_seconds, BASE_WIDTH);
+    apply_physics(game_state, dt_seconds, BASE_HEIGHT);
 
     update_player_animation_state(game_state, dt_seconds);
     update_player_animation(&game_state->player, dt_seconds);
@@ -63,22 +60,14 @@ void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_s
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
     float move_amount = MOVE_SPEED * dt_seconds;
-
-    if (game_state->player.x > screen_width - PLAYER_WIDTH) {
-        game_state->player.x = screen_width - PLAYER_WIDTH;
-    }
     
     if (game_state->pressed_keys['a'] || game_state->pressed_keys['A']) {
-        if (game_state->player.x > 0) {
-            game_state->player.x -= move_amount;
-            game_state->player.direction = -1;
-        }
+        game_state->player.x -= move_amount;
+        game_state->player.direction = -1;
     }
     if (game_state->pressed_keys['d'] || game_state->pressed_keys['D']) {
-        if (game_state->player.x < screen_width - PLAYER_WIDTH) {
-            game_state->player.x += move_amount;
-            game_state->player.direction = 1;
-        } 
+        game_state->player.x += move_amount;
+        game_state->player.direction = 1;
     }
     if (game_state->pressed_keys[GDK_KEY_space] && game_state->player.is_grounded) {
         game_state->player.velocity_y = -JUMP_FORCE;

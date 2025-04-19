@@ -20,9 +20,9 @@ static void activate(GtkApplication* app, gpointer user_data) {
     const unsigned int window_width = 800;
     const unsigned int window_height = 600;
 
-    gtk_window_set_default_size(GTK_WINDOW(window), window_width, window_height);
-    game_state->player.x = window_width * 0.5f;
-    game_state->player.y = window_height * 0.5f;
+    gtk_window_set_default_size(GTK_WINDOW(window), BASE_WIDTH, BASE_HEIGHT);
+    game_state->player.x = BASE_WIDTH * 0.5f;
+    game_state->player.y = BASE_HEIGHT * 0.5f;
 
     GtkWidget *drawing_area = gtk_drawing_area_new();
     gtk_container_add(GTK_CONTAINER(window), drawing_area);
@@ -43,9 +43,10 @@ int main(int argc, char **argv) {
     game_state.num_pressed_keys = 256;
     game_state.pressed_keys = calloc(game_state.num_pressed_keys, sizeof(int));
 
+    sprites_load_level(&game_state);
     level_init(&game_state.level);
     player_init(&game_state.player);
-    sprites_load(&game_state);
+    sprites_load_player(&game_state);
 
     app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);

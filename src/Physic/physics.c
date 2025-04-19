@@ -13,8 +13,8 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
     float player_right = game_state->player.x + PLAYER_WIDTH;
 
     // Ground collision
-    if (player_bottom > screen_height - GROUND_LEVEL) {
-        game_state->player.y = screen_height - GROUND_LEVEL - PLAYER_HEIGHT;
+    if (player_bottom > screen_height) {
+        game_state->player.y = screen_height - PLAYER_HEIGHT;
         game_state->player.velocity_y = 0;
         game_state->player.is_grounded = true;
     } else {
