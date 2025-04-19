@@ -8,7 +8,7 @@ const AnimationSequence animations[] = {
 
 void update_player_animation_state(game_state_t *game_state, float dt_seconds);
 void update_player_animation(player_t *player, float dt_seconds);
-void update_aimation_frame(player_t *player);
+void update_animation_frame(player_t *player);
 void set_player_animation(player_t *player, AnimationState new_anim);
 
 // determines and sets the appropriate animation state for the player 
@@ -34,12 +34,12 @@ void update_player_animation(player_t *player, float dt_seconds) {
     if (player->frame_time >= anim.frame_duration) {
         player->frame_time = 0;
         player->current_frame_index = (player->current_frame_index + 1) % anim.frame_count;
-        update_aimation_frame(player);
+        update_animation_frame(player);
     }
 }
 
 // changes to next frame in the animation
-void update_aimation_frame(player_t *player) {
+void update_animation_frame(player_t *player) {
     if (player->current_frame != NULL) {
         cairo_surface_destroy(player->current_frame);
         player->current_frame = NULL;
@@ -68,6 +68,6 @@ void set_player_animation(player_t *player, AnimationState new_anim) {
         player->current_animation = new_anim;
         player->current_frame_index = 0;
         player->frame_time = 0;
-        update_aimation_frame(player);
+        update_animation_frame(player);
     }
 }

@@ -29,6 +29,7 @@ typedef struct {
 } player_t;
 
 // Level related
+
 typedef struct {
     float x, y;
 } point_t;
