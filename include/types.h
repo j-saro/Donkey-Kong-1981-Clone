@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #define BASE_WIDTH 600.0f
-#define BASE_HEIGHT 500.0f
+#define BASE_HEIGHT 600.0f
 #define GRAVITY 800.0f
 #define MOVE_SPEED 150.0f
 #define JUMP_FORCE 300.0f
