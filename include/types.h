@@ -7,7 +7,7 @@
 #define BASE_HEIGHT 600.0f
 #define GRAVITY 800.0f
 #define MOVE_SPEED 150.0f
-#define JUMP_FORCE 300.0f
+#define JUMP_FORCE 250.0f
 #define SCALE 2.0f
 #define TILE_SIZE 16
 #define PLAYER_HEIGHT (TILE_SIZE * SCALE)
