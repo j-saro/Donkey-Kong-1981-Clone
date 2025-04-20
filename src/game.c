@@ -1,7 +1,8 @@
+#include <math.h>
 #include "game.h"
 #include "player.h"
 #include "level.h"
-#include <math.h>
+#include "physics.h"
 
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -12,6 +13,7 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     GtkAllocation alloc;
     gtk_widget_get_allocation(drawing_area, &alloc);
 
+    // calc scale
     float window_width = alloc.width;
     float window_height = alloc.height;
     float scale_x = window_width / (float)BASE_WIDTH;
@@ -67,7 +69,10 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     previous_time = current_time;
 
     game_state->player.previous_y = game_state->player.y;
+
+    check_ladder_collision(game_state);
     player_update(drawing_area, game_state, dt_seconds);
+    apply_physics(game_state, dt_seconds, BASE_HEIGHT);
 
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;

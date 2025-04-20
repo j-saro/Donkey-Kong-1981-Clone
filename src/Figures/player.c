@@ -1,10 +1,9 @@
 #include "player.h"
 #include "sprites.h"
 #include "animation.h"
-#include "physics.h"
 
 void player_init(player_t *player);
-void player_draw(cairo_t *cr, const player_t *player);
+void player_draw(cairo_t *cr, player_t *player);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 
@@ -16,6 +15,8 @@ void player_init(player_t *player) {
     player->velocity_y = 0;
     player->direction = 1;
     player->is_grounded = false;
+    player->climbing = false;
+    player->on_ladder = false;
 
     // Player Animation
     player->current_animation = ANIM_IDLE;
@@ -29,7 +30,7 @@ void player_init(player_t *player) {
     player->current_frame = NULL;
 }
 
-void player_draw(cairo_t *cr, const player_t *player) {
+void player_draw(cairo_t *cr, player_t *player) {
     cairo_save(cr);
 
     float scale_x = SCALE * player->direction;
@@ -52,7 +53,6 @@ void player_draw(cairo_t *cr, const player_t *player) {
 
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
     player_movement(game_state, dt_seconds, BASE_WIDTH);
-    apply_physics(game_state, dt_seconds, BASE_HEIGHT);
 
     update_player_animation_state(game_state, dt_seconds);
     update_player_animation(&game_state->player, dt_seconds);
@@ -68,6 +68,23 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
     if (game_state->pressed_keys['d'] || game_state->pressed_keys['D']) {
         game_state->player.x += move_amount;
         game_state->player.direction = 1;
+    }
+    if ((game_state->pressed_keys['w'] || game_state->pressed_keys['W']) &&
+         game_state->player.on_ladder) {
+        
+        game_state->player.y -= move_amount;
+    }
+    if ((game_state->pressed_keys['s'] || game_state->pressed_keys['S']) &&
+        game_state->player.on_ladder) {
+
+        float player_bottom = game_state->player.y + PLAYER_HEIGHT;
+        int current_ladder = game_state->player.current_ladder_index;
+        structure_t *ladder = &game_state->level.ladders[current_ladder];
+        float ladder_bottom = ladder->position.y + ladder->height;
+
+        if (player_bottom <= ladder_bottom - 2) {
+            game_state->player.y += move_amount;
+        }
     }
     if (game_state->pressed_keys[GDK_KEY_space] && game_state->player.is_grounded) {
         game_state->player.velocity_y = -JUMP_FORCE;

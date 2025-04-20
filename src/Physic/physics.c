@@ -4,11 +4,14 @@
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
 void window_collision(game_state_t *game_state, float screen_height);
 void platform_collision(game_state_t *game_state);
+void check_ladder_collision(game_state_t *game_state);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     // Gravitation
-    game_state->player.velocity_y += GRAVITY * dt_seconds;
-    game_state->player.y += game_state->player.velocity_y * dt_seconds;
+    if (!game_state->player.on_ladder) {
+        game_state->player.velocity_y += GRAVITY * dt_seconds;
+        game_state->player.y += game_state->player.velocity_y * dt_seconds;
+    }
 
     window_collision(game_state, screen_height);
     platform_collision(game_state);
@@ -57,14 +60,44 @@ void platform_collision(game_state_t *game_state) {
         if (!(player_right > platform_left && player_left < platform_right))
             continue;
 
+        // snap player to platform
         if (player->velocity_y > 0 &&
             (old_bottom - 2) <= platform_top &&
             new_bottom >= platform_top)
         {
             player->y = platform_top - PLAYER_HEIGHT;
             player->velocity_y = 0;
+            player->current_platform_index = i;
             grounded = true;
+            break;
         }
     }
     player->is_grounded = grounded;
+}
+
+void check_ladder_collision(game_state_t *game_state) {
+    player_t *player = &game_state->player;
+    float player_center = player->x + PLAYER_WIDTH * 0.5f;
+    float player_top = player->y;
+    float player_bottom = player->y + PLAYER_HEIGHT;
+
+    bool is_on_ladder = false;
+
+    for (int i = 0; i < game_state->level.num_ladders; i++) {
+        const structure_t *ladder = &game_state->level.ladders[i];
+        float ladder_left = ladder->position.x;
+        float ladder_right = ladder_left + ladder->width;
+        float ladder_top = ladder->position.y - 19;
+        float ladder_bottom = ladder_top + ladder->height;
+
+        bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);
+        bool overlap_ladder = (player_bottom > ladder_top && player_top < ladder_bottom);
+
+        if (inside_ladder && overlap_ladder) {
+            is_on_ladder = true;
+            player->current_ladder_index = i;
+            break;
+        }
+    }
+    player->on_ladder = is_on_ladder;
 }

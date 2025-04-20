@@ -29,7 +29,7 @@ void sprites_load_player(gpointer user_data) {
 
 void sprites_load_level(gpointer user_data) {
     game_state_t *game_state = (game_state_t*) user_data;
-    // Load level/platform sprite
+    
     game_state->level.platform_sprite_sheet = cairo_image_surface_create_from_png("./assets/platform.png");
     if (cairo_surface_status(game_state->level.platform_sprite_sheet) != CAIRO_STATUS_SUCCESS) {
         g_warning("Failed to create platform spritesheet");

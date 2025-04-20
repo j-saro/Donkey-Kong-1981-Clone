@@ -4,6 +4,9 @@ const AnimationSequence animations[] = {
     [ANIM_IDLE] = {1, 21, 1, 0.2f},
     [ANIM_WALK] = {1, 21, 3, 0.1f},
     [ANIM_JUMP] = {63, 21, 1, 0.15f},
+    [ANIM_CLIMB] = {132, 21, 2, 0.1f},
+    //[ANIM_CLIMB_TOP] = {164, 21, 3, 0.5f},
+    [ANIM_CLIMB_IDLE] = {132, 21, 1, 1.0f},
 };
 
 void update_player_animation_state(game_state_t *game_state, float dt_seconds);
@@ -13,16 +16,34 @@ void set_player_animation(player_t *player, AnimationState new_anim);
 
 // determines and sets the appropriate animation state for the player 
 void update_player_animation_state(game_state_t *game_state, float dt_seconds) {
-    if (!game_state->player.is_grounded) {
-        set_player_animation(&game_state->player, ANIM_JUMP);
-    } 
-    else if (game_state->pressed_keys['a'] || game_state->pressed_keys['A'] || 
-             game_state->pressed_keys['d'] || game_state->pressed_keys['D']) {
-        set_player_animation(&game_state->player, ANIM_WALK);
+    player_t *player = &game_state->player;
+    bool key_left   = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
+    bool key_right  = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
+    bool key_up     = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
+    bool key_down   = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
+
+    if (!player->is_grounded && !player->on_ladder) {
+        player->climbing = false;
+        set_player_animation(player, ANIM_JUMP);
+        return;
     }
-    else {
-        set_player_animation(&game_state->player, ANIM_IDLE);
+    if (player->on_ladder && (key_up || key_down)) {
+        player->climbing = true;
+        set_player_animation(player, ANIM_CLIMB);
+        return;
     }
+    if (player->on_ladder && player->climbing) {
+        set_player_animation(player, ANIM_CLIMB_IDLE);
+        return;
+    }
+    if (player->is_grounded && (key_left || key_right)) {
+        player->climbing = false;
+        set_player_animation(player, ANIM_WALK);
+        return;
+    }
+
+    player->climbing = false;
+    set_player_animation(player, ANIM_IDLE);
 }
 
 // keeps the animation frame_time updated

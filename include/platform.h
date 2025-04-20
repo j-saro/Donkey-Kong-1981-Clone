@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cJSON.h"
 #include "types.h"
 
