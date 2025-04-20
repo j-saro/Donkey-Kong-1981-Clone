@@ -41,27 +41,27 @@ void platform_collision(game_state_t *game_state) {
     player_t *player = &game_state->player;
 
     float old_bottom = player->previous_y + PLAYER_HEIGHT;
-    float new_bottom = player->y      + PLAYER_HEIGHT;
-    float player_left   = player->x;
-    float player_right  = player->x + PLAYER_WIDTH;
+    float new_bottom = player->y + PLAYER_HEIGHT;
+    float player_left = player->x;
+    float player_right = player->x + PLAYER_WIDTH;
 
     bool grounded = false;
     for (int i = 0; i < game_state->level.num_platforms; i++) {
-        const platform_t *plat = &game_state->level.platforms[i];
+        const structure_t *platform = &game_state->level.platforms[i];
 
-        float plat_left  = plat->position.x;
-        float plat_right = plat_left + plat->width;
-        float plat_top   = plat->position.y;
+        float platform_left = platform->position.x;
+        float platform_right = platform_left + platform->width;
+        float platform_top = platform->position.y;
 
         // calc x-overlap
-        if (!(player_right > plat_left && player_left < plat_right))
+        if (!(player_right > platform_left && player_left < platform_right))
             continue;
 
         if (player->velocity_y > 0 &&
-            (old_bottom - 2) <= plat_top &&
-            new_bottom >= plat_top)
+            (old_bottom - 2) <= platform_top &&
+            new_bottom >= platform_top)
         {
-            player->y = plat_top - PLAYER_HEIGHT;
+            player->y = platform_top - PLAYER_HEIGHT;
             player->velocity_y = 0;
             grounded = true;
         }

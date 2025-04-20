@@ -41,12 +41,16 @@ typedef struct {
     point_t position;
     float width;
     float height;
-} platform_t;
+} structure_t;
 
 typedef struct {
     int num_platforms;
-    platform_t *platforms;
-    cairo_surface_t *sprite_sheet;
+    structure_t *platforms;
+    cairo_surface_t *platform_sprite_sheet;
+
+    int num_ladders;
+    structure_t *ladders;
+    cairo_surface_t *ladder_sprite_sheet;
 } level_t;
 
 typedef struct {
