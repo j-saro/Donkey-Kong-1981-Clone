@@ -16,6 +16,7 @@
 // Player/Mario
 typedef struct {
     float x, y;
+    float previous_y;
     float velocity_x;
     float velocity_y;
     int direction;

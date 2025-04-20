@@ -16,13 +16,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Donkey Kong 1981");
-
-    const unsigned int window_width = 800;
-    const unsigned int window_height = 600;
-
     gtk_window_set_default_size(GTK_WINDOW(window), BASE_WIDTH, BASE_HEIGHT);
-    game_state->player.x = BASE_WIDTH * 0.5f;
-    game_state->player.y = BASE_HEIGHT * 0.5f;
 
     GtkWidget *drawing_area = gtk_drawing_area_new();
     gtk_container_add(GTK_CONTAINER(window), drawing_area);

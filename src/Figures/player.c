@@ -10,8 +10,8 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
 
 void player_init(player_t *player) {
     // Player Position
-    player->x = 0;
-    player->y = 0;
+    player->x = 120;
+    player->y = 530;
     player->velocity_x = 0;
     player->velocity_y = 0;
     player->direction = 1;

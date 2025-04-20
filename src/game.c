@@ -24,8 +24,8 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     float offset_x = (window_width - scene_w) / 2.0f;
     float offset_y = (window_height - scene_h) / 2.0f;
 
-    // clear the window
-    cairo_set_source_rgb(cr, 0, 0, 0);
+    // grey offset background
+    cairo_set_source_rgb(cr, 0.2, 0.2, 0.2);
     cairo_rectangle(cr, 0, 0, window_width, window_height);
     cairo_fill(cr);
 
@@ -33,6 +33,11 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     cairo_save(cr);
     cairo_translate(cr, offset_x, offset_y);
     cairo_scale(cr, scale, scale);
+
+    // black game background
+    cairo_set_source_rgb(cr, 0, 0, 0);
+    cairo_rectangle(cr, 0, 0, BASE_WIDTH, BASE_HEIGHT);
+    cairo_fill(cr);
 
     // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
     level_draw(cr, &game_state->level);
@@ -61,6 +66,7 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
 
+    game_state->player.previous_y = game_state->player.y;
     player_update(drawing_area, game_state, dt_seconds);
 
     gtk_widget_queue_draw(drawing_area);
