@@ -29,6 +29,10 @@ void player_init(player_t *player) {
     // Initialize surfaces to NULL
     player->animation.sprite_sheet = NULL;
     player->animation.current_frame = NULL;
+
+    // Initialize Platform & Ladder with 0
+    player->current_ladder_index = 0;
+    player->current_platform_index = 0;
 }
 
 void player_draw(cairo_t *cr, player_t *player) {
@@ -66,6 +70,10 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
     
+    float player_bottom = game_state->player.y + PLAYER_HEIGHT;
+    int current_ladder = game_state->player.current_ladder_index;
+    structure_t *ladder = &game_state->level.ladders[current_ladder];
+
     if (key_left) {
         game_state->player.x -= move_amount;
         game_state->player.direction = -1;
@@ -75,15 +83,13 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         game_state->player.direction = 1;
     }
     if (key_up && game_state->player.on_ladder) {
-        game_state->player.y -= move_amount;
+        float ladder_top = ladder->y - LADDER_EXTRA;
+        if ((player_bottom - 2) >= ladder_top) {
+            game_state->player.y -= move_amount;
+        }
     }
     if (key_down && game_state->player.on_ladder) {
-
-        float player_bottom = game_state->player.y + PLAYER_HEIGHT;
-        int current_ladder = game_state->player.current_ladder_index;
-        structure_t *ladder = &game_state->level.ladders[current_ladder];
         float ladder_bottom = ladder->y + ladder->height;
-
         if (player_bottom <= ladder_bottom - 2) {
             game_state->player.y += move_amount;
         }
@@ -102,26 +108,37 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
 
-    if (!player->is_grounded && !player->on_ladder) {
-        player->climbing = false;
-        set_animation(&player->animation, ANIM_JUMP);
-        return;
-    }
-    if (player->on_ladder && (key_up || key_down)) {
+    float player_bottom = game_state->player.y + PLAYER_HEIGHT;
+    int current_ladder = game_state->player.current_ladder_index;
+    structure_t *ladder = &game_state->level.ladders[current_ladder];
+    int current_platform = game_state->player.current_platform_index;
+    structure_t *platform = &game_state->level.platforms[current_platform];
+    float ladder_top = ladder->y - platform->height;
+    float ladder_bottom = ladder->y + ladder->height - 2;
+
+    if (player->on_ladder && (key_down || key_up)) {
         player->climbing = true;
-        set_animation(&player->animation, ANIM_CLIMB);
-        return;
     }
-    if (player->on_ladder && player->climbing) {
-        set_animation(&player->animation, ANIM_CLIMB_IDLE);
-        return;
-    }
-    if (player->is_grounded && (key_left || key_right)) {
+    else {
         player->climbing = false;
-        set_animation(&player->animation, ANIM_WALK);
-        return;
     }
 
-    player->climbing = false;
-    set_animation(&player->animation, ANIM_IDLE);
+    if (!player->is_grounded && !player->on_ladder) {
+        set_animation(&player->animation, ANIM_JUMP);
+    }
+    else if (player->on_ladder && key_up && player_bottom > ladder_top) {
+        set_animation(&player->animation, ANIM_CLIMB);
+    }
+    else if (player->on_ladder && key_down && player_bottom < ladder_bottom) {
+        set_animation(&player->animation, ANIM_CLIMB);
+    }
+    else if (player->on_ladder && player->climbing && player_bottom > ladder_top) {
+        set_animation(&player->animation, ANIM_CLIMB_IDLE);
+    }
+    else if (player->is_grounded && (key_left || key_right)) {
+        set_animation(&player->animation, ANIM_WALK);
+    }
+    else {
+        set_animation(&player->animation, ANIM_IDLE);
+    }
 }

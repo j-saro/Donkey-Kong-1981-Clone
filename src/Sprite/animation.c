@@ -5,7 +5,6 @@ const animation_sequence animations[] = {
     [ANIM_WALK] = {1, 21, 3, 0.1f},
     [ANIM_JUMP] = {63, 21, 1, 0.15f},
     [ANIM_CLIMB] = {132, 21, 2, 0.1f},
-    //[ANIM_CLIMB_TOP] = {164, 21, 3, 0.5f},
     [ANIM_CLIMB_IDLE] = {132, 21, 1, 1.0f},
 };
 

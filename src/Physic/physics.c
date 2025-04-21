@@ -86,13 +86,13 @@ void check_ladder_collision(game_state_t *game_state) {
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const structure_t *ladder = &game_state->level.ladders[i];
 
-        if (!ladder->has_physics || player->current_animation == ANIM_JUMP) {
+        if (!ladder->has_physics || player->animation.current_animation == ANIM_JUMP) {
             continue;
         }
 
         float ladder_left = ladder->x;
         float ladder_right = ladder_left + ladder->width;
-        float ladder_top = ladder->y - 19;
+        float ladder_top = ladder->y - LADDER_EXTRA;
         float ladder_bottom = ladder_top + ladder->height;
 
         bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);
