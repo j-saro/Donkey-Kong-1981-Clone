@@ -4,7 +4,6 @@
 #include "game.h"
 #include "input.h"
 #include "player.h"
-#include "sprites.h"
 #include "types.h"
 #include "level.h"
 
@@ -34,13 +33,10 @@ int main(int argc, char **argv) {
     int status;
     game_state_t game_state;
 
-    game_state.num_pressed_keys = 256;
-    game_state.pressed_keys = calloc(game_state.num_pressed_keys, sizeof(int));
-
-    sprites_load_level(&game_state);
-    level_init(&game_state.level);
-    player_init(&game_state.player);
-    sprites_load_player(&game_state);
+    // init
+    input_init(&game_state);
+    level_init(&game_state);
+    player_init(&game_state);
 
     app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);
@@ -48,9 +44,9 @@ int main(int argc, char **argv) {
     g_object_unref(app);
 
     // Clean up
+    input_cleanup(&game_state);
     level_cleanup(&game_state.level);
-    sprites_cleanup(&game_state);
-    free(game_state.pressed_keys);
+    player_cleanup(&game_state.player);
 
     return status;
 }

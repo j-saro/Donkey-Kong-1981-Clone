@@ -9,8 +9,8 @@ void check_ladder_collision(game_state_t *game_state);
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     // Gravitation
     if (!game_state->player.climbing) {
-        game_state->player.velocity_y += GRAVITY * dt_seconds;
-        game_state->player.y += game_state->player.velocity_y * dt_seconds;
+        game_state->player.base.velocity_y += GRAVITY * dt_seconds;
+        game_state->player.base.y += game_state->player.base.velocity_y * dt_seconds;
     }
 
     window_collision(game_state, screen_height);
@@ -20,23 +20,23 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 void window_collision(game_state_t *game_state, float screen_height) {
     player_t *player = &game_state->player;
 
-    float player_bottom = player->y + PLAYER_HEIGHT;
+    float player_bottom = player->base.y + PLAYER_HEIGHT;
 
     // Left/Right window collison
-    if (player->x < 0) {
-        player->x = 0;
+    if (player->base.x < 0) {
+        player->base.x = 0;
     }
-    if (player->x > BASE_WIDTH - PLAYER_WIDTH) {
-        player->x = BASE_WIDTH - PLAYER_WIDTH;
+    if (player->base.x > BASE_WIDTH - PLAYER_WIDTH) {
+        player->base.x = BASE_WIDTH - PLAYER_WIDTH;
     }
     
     // Bottom window collision
     if (player_bottom > screen_height) {
-        player->y = screen_height - PLAYER_HEIGHT;
-        player->velocity_y = 0;
-        player->is_grounded = true;
+        player->base.y = screen_height - PLAYER_HEIGHT;
+        player->base.velocity_y = 0;
+        player->base.is_grounded = true;
     } else {
-        player->is_grounded = false;
+        player->base.is_grounded = false;
     }
 }
 
@@ -44,9 +44,9 @@ void platform_collision(game_state_t *game_state) {
     player_t *player = &game_state->player;
 
     float old_bottom = player->previous_y + PLAYER_HEIGHT;
-    float new_bottom = player->y + PLAYER_HEIGHT;
-    float player_left = player->x;
-    float player_right = player->x + PLAYER_WIDTH;
+    float new_bottom = player->base.y + PLAYER_HEIGHT;
+    float player_left = player->base.x;
+    float player_right = player->base.x + PLAYER_WIDTH;
 
     bool grounded = false;
     for (int i = 0; i < game_state->level.num_platforms; i++) {
@@ -61,32 +61,32 @@ void platform_collision(game_state_t *game_state) {
             continue;
 
         // snap player to platform
-        if (player->velocity_y > 0 &&
+        if (player->base.velocity_y > 0 &&
             (old_bottom - 2) <= platform_top &&
             new_bottom >= platform_top)
         {
-            player->y = platform_top - PLAYER_HEIGHT;
-            player->velocity_y = 0;
+            player->base.y = platform_top - PLAYER_HEIGHT;
+            player->base.velocity_y = 0;
             player->current_platform_index = i;
             grounded = true;
             break;
         }
     }
-    player->is_grounded = grounded;
+    player->base.is_grounded = grounded;
 }
 
 void check_ladder_collision(game_state_t *game_state) {
     player_t *player = &game_state->player;
-    float player_center = player->x + PLAYER_WIDTH * 0.5f;
-    float player_top = player->y;
-    float player_bottom = player->y + PLAYER_HEIGHT;
+    float player_center = player->base.x + PLAYER_WIDTH * 0.5f;
+    float player_top = player->base.y;
+    float player_bottom = player->base.y + PLAYER_HEIGHT;
 
     bool is_on_ladder = false;
 
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const structure_t *ladder = &game_state->level.ladders[i];
 
-        if (!ladder->has_physics || player->animation.current_animation == ANIM_JUMP) {
+        if (!ladder->has_physics || player->base.animation.current_animation == ANIM_JUMP) {
             continue;
         }
 

@@ -1,6 +1,6 @@
 #include "animation.h"
 
-const animation_sequence animations[] = {
+const animation_sequence_t animations[] = {
     [ANIM_IDLE] = {1, 21, 1, 0.2f},
     [ANIM_WALK] = {1, 21, 3, 0.1f},
     [ANIM_JUMP] = {63, 21, 1, 0.15f},
@@ -10,19 +10,24 @@ const animation_sequence animations[] = {
 
 void update_animation_progress(animation_t *animation, float dt_seconds);
 void update_animation_frame(animation_t *animation);
-void set_animation(animation_t *animation, animation_state new_anim);
+void set_animation(animation_t *animation, animation_state_t new_anim);
 
 
 // keeps the animation frame_time updated
 void update_animation_progress(animation_t *animation, float dt_seconds) {
-    animation_sequence anim = animations[animation->current_animation];
+    animation_sequence_t anim = animations[animation->current_animation];
     
     animation->frame_time += dt_seconds;
     
     if (animation->frame_time >= anim.frame_duration) {
         animation->frame_time = 0;
-        animation->current_frame_index = (animation->current_frame_index + 1) % anim.frame_count;
-        update_animation_frame(animation);
+
+        int new_index = (animation->current_frame_index + 1) % anim.frame_count;
+    
+        if (new_index != animation->current_frame_index) {
+            animation->current_frame_index = new_index;
+            update_animation_frame(animation);
+        }
     }
 }
 
@@ -32,7 +37,7 @@ void update_animation_frame(animation_t *animation) {
         animation->current_frame = NULL;
     }
 
-    animation_sequence sequence = animations[animation->current_animation];
+    animation_sequence_t sequence = animations[animation->current_animation];
 
     int x = sequence.start_x + (animation->current_frame_index * animation->frame_width);
     int y = sequence.start_y;
@@ -50,7 +55,7 @@ void update_animation_frame(animation_t *animation) {
 }
 
 // sets a new Animation
-void set_animation(animation_t *animation, animation_state new_anim) {
+void set_animation(animation_t *animation, animation_state_t new_anim) {
     if (animation->current_animation != new_anim) {
         animation->current_animation = new_anim;
         animation->current_frame_index = 0;

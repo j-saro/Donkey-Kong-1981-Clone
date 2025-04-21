@@ -485,12 +485,15 @@
                 "height": 42
             }
         ],
-        "barrels": [
+        "static_entities": [
             {
                 "x": 60,
                 "y": 538,
                 "width": 16,
-                "height": 16
+                "height": 16,
+                "sprite": "./assets/barrel_sprite_sheet.png",
+                "sprite_x": 0,
+                "sprite_y": 7
             }
         ]
     }

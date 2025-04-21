@@ -62,7 +62,7 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
 
-    game_state->player.previous_y = game_state->player.y;
+    game_state->player.previous_y = game_state->player.base.y;
 
     check_ladder_collision(game_state);
     player_update(drawing_area, game_state, dt_seconds);

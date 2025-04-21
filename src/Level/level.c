@@ -4,18 +4,17 @@
 #include "level.h"
 #include "platform.h"
 #include "ladder.h"
-#include "barrel.h"
+#include "static_entity.h"
 
-
-gboolean level_init(level_t *level);
+gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
 gboolean level_parse_from_json(level_t *level, const char *json_str);
 void level_cleanup(level_t *level);
 void level_draw(cairo_t *cr, const level_t *level);
 
-gboolean level_init(level_t *level) {
+gboolean level_init(game_state_t *game_state) {
     const char *filename = "data/level_data.json";
-    return level_load_from_json(level, filename);
+    return level_load_from_json(&game_state->level, filename);
 }
 
 gboolean level_load_from_json(level_t *level, const char *filename) {
@@ -83,16 +82,16 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
-    cJSON *barrels_json = cJSON_GetObjectItem(level_json, "barrels");
-    if (barrels_json == NULL || !cJSON_IsArray(barrels_json)) {
-        printf("Error: No 'barrels' array found in JSON\n");
+    cJSON *static_entities_json = cJSON_GetObjectItem(level_json, "static_entities");
+    if (static_entities_json == NULL || !cJSON_IsArray(static_entities_json)) {
+        printf("Error: No 'static_entities' array found in JSON\n");
         cJSON_Delete(json);
         return FALSE;
     }
 
     platform_init(level, platforms_json);
     ladder_init(level, ladders_json);
-    barrel_init(level, barrels_json);
+    static_entity_init(level, static_entities_json);
 
     cJSON_Delete(json);
     return TRUE;
@@ -101,11 +100,11 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
 void level_cleanup(level_t *level) {
     platform_cleanup(level);
     ladder_cleanup(level);
-    barrel_cleanup(level);
+    static_entity_cleanup(level);
 }
 
 void level_draw(cairo_t *cr, const level_t *level) {
     platform_draw(cr, level);
     ladder_draw(cr, level);
-    barrel_draw(cr, level);
+    static_entity_draw(cr, level);
 }

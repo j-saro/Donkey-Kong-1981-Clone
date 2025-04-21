@@ -3,6 +3,8 @@
 
 gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+void input_init(game_state_t *game_state);
+void input_cleanup(game_state_t *game_state);
 
 gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data) {
     game_state_t *game_state = (game_state_t*) user_data;
@@ -18,4 +20,15 @@ gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_da
         game_state->pressed_keys[event->keyval] = 0;
     }
     return TRUE;
+}
+
+void input_init(game_state_t *game_state) {
+    game_state->num_pressed_keys = 256;
+    game_state->pressed_keys = calloc(game_state->num_pressed_keys, sizeof(int));
+}
+
+void input_cleanup(game_state_t *game_state) {
+    free(game_state->pressed_keys);
+    game_state->pressed_keys = NULL;
+    game_state->num_pressed_keys = 0;
 }

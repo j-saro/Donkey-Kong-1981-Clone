@@ -22,14 +22,14 @@ typedef enum {
     ANIM_JUMP,
     ANIM_CLIMB,
     ANIM_CLIMB_IDLE,
-} animation_state;
+} animation_state_t;
 
 typedef struct {
     int start_x;
     int start_y;
     int frame_count;
     float frame_duration;
-} animation_sequence;
+} animation_sequence_t;
 
 typedef struct {
     cairo_surface_t *sprite_sheet;
@@ -49,10 +49,10 @@ typedef struct {
 } structure_t;
 
 typedef struct {
-    structure_t barrel;
-    bool on_fire;
+    structure_t entity;
+    cairo_surface_t *sprite_sheet;
     cairo_surface_t *sprite;
-} barrel_t;
+} static_entity_t;
 
 typedef struct {
     // Platforms
@@ -66,30 +66,30 @@ typedef struct {
     cairo_surface_t *ladder_sprite_sheet;
 
     // Barrel
-    int num_barrels;
-    barrel_t *barrels;
-    cairo_surface_t *barrel_sprite_sheet;
+    int num_static_entities;
+    static_entity_t *static_entities;
 } level_t;
+
+typedef struct {
+    float x, y;
+    float velocity_x, velocity_y;
+    int direction;
+    bool is_grounded;
+
+    animation_t animation;
+} movable_entity_t;
 
 
 // Player/Mario
 typedef struct {
-    // Position
-    float x, y;
-    float previous_y; // last frame player y-pos
-    float velocity_x;
-    float velocity_y;
-    int direction; // direction character is facing
-    bool is_grounded; // if character is on ground/platform
+    movable_entity_t base;
+    float previous_y;
 
     // Ladder 
-    bool on_ladder; // true if on leader else false
-    bool climbing; // true if going up or down else false
+    bool on_ladder;
+    bool climbing;
     int current_platform_index;
     int current_ladder_index;
-
-    // Sprite/Animation
-    animation_t animation;
 } player_t;
 
 // current game state

@@ -5,4 +5,5 @@
 
 gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
-
+void input_init(game_state_t *game_state);
+void input_cleanup(game_state_t *game_state);

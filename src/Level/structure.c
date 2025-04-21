@@ -3,8 +3,8 @@
 #include "structure.h"
 
 void structure_parse(structure_t *structure, cJSON *json);
-void structure_cleanup(structure_t **array, int *count);
-void structure_draw(cairo_t *cr, const structure_t *arr, int count, cairo_surface_t *surface);
+void structure_array_cleanup(structure_t **array, int *count);
+void structure_draw(cairo_t *cr, const structure_t *array, int count, cairo_surface_t *surface);
 
 void structure_parse(structure_t *structure, cJSON *json) {
     structure->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
@@ -16,15 +16,15 @@ void structure_parse(structure_t *structure, cJSON *json) {
     structure->has_physics = (physics == NULL) ? true : cJSON_IsTrue(physics);
 }
 
-void structure_cleanup(structure_t **array, int *count) {
+void structure_array_cleanup(structure_t **array, int *count) {
     free(*array);
     *array = NULL;
     *count = 0;
 }
 
-void structure_draw(cairo_t *cr, const structure_t *arr, int count, cairo_surface_t *surface) {
+void structure_draw(cairo_t *cr, const structure_t *array, int count, cairo_surface_t *surface) {
     for (int i = 0; i < count; ++i) {
-        const structure_t *s = &arr[i];
+        const structure_t *structure = &array[i];
 
         cairo_save(cr);
 
@@ -32,11 +32,11 @@ void structure_draw(cairo_t *cr, const structure_t *arr, int count, cairo_surfac
         cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
 
         cairo_matrix_t matrix;
-        cairo_matrix_init_translate(&matrix, -s->x, -s->y);
+        cairo_matrix_init_translate(&matrix, -structure->x, -structure->y);
         cairo_pattern_set_matrix(pattern, &matrix);
 
         cairo_set_source(cr, pattern);
-        cairo_rectangle(cr, s->x, s->y, s->width, s->height);
+        cairo_rectangle(cr, structure->x, structure->y, structure->width, structure->height);
         cairo_fill(cr);
 
         cairo_pattern_destroy(pattern);
