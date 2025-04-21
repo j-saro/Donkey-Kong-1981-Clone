@@ -43,6 +43,13 @@ void sprites_load_level(gpointer user_data) {
         sprites_cleanup(game_state);
         return;
     }
+
+    game_state->level.barrel_sprite_sheet = cairo_image_surface_create_from_png("./assets/barrel_sprite_sheet.png");
+    if (cairo_surface_status(game_state->level.barrel_sprite_sheet) != CAIRO_STATUS_SUCCESS) {
+        g_warning("Failed to create barrel spritesheet");
+        sprites_cleanup(game_state);
+        return;
+    }
 }
 
 void sprites_cleanup(game_state_t *game_state) {
@@ -59,5 +66,10 @@ void sprites_cleanup(game_state_t *game_state) {
     if (game_state->level.platform_sprite_sheet != NULL) {
         cairo_surface_destroy(game_state->level.platform_sprite_sheet);
         game_state->level.platform_sprite_sheet = NULL;
+    }
+
+    if (game_state->level.barrel_sprite_sheet != NULL) {
+        cairo_surface_destroy(game_state->level.barrel_sprite_sheet);
+        game_state->level.barrel_sprite_sheet = NULL;
     }
 }

@@ -46,12 +46,6 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     player_draw(cr, &game_state->player);
     cairo_restore(cr);
 
-    // draw border or HUD in real window‐space
-    cairo_set_source_rgb(cr, 1, 0, 0);
-    cairo_set_line_width(cr, 4.0);
-    cairo_rectangle(cr, 0, 0, window_width, window_height);
-    cairo_stroke(cr);
-
     return G_SOURCE_CONTINUE;
 }
 

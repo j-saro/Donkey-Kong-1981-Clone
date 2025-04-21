@@ -6,7 +6,7 @@
 #define BASE_WIDTH 600.0f
 #define BASE_HEIGHT 600.0f
 #define GRAVITY 800.0f
-#define MOVE_SPEED 150.0f
+#define MOVE_SPEED 100.0f
 #define JUMP_FORCE 250.0f
 #define SCALE 2.0f // player scale
 #define TILE_SIZE 16
@@ -22,6 +22,12 @@ typedef struct {
 } structure_t;
 
 typedef struct {
+    structure_t barrel;
+    bool on_fire;
+    cairo_surface_t *sprite;
+} barrel_t;
+
+typedef struct {
     // Platforms
     int num_platforms;
     structure_t *platforms;
@@ -31,6 +37,11 @@ typedef struct {
     int num_ladders;
     structure_t *ladders;
     cairo_surface_t *ladder_sprite_sheet;
+
+    // Barrel
+    int num_barrels;
+    barrel_t *barrels;
+    cairo_surface_t *barrel_sprite_sheet;
 } level_t;
 
 
