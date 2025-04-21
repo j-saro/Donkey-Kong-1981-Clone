@@ -6,6 +6,7 @@ void player_init(player_t *player);
 void player_draw(cairo_t *cr, player_t *player);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
+void player_change_animation(game_state_t *game_state, float dt_seconds);
 
 void player_init(player_t *player) {
     // Player Position
@@ -19,15 +20,15 @@ void player_init(player_t *player) {
     player->on_ladder = false;
 
     // Player Animation
-    player->current_animation = ANIM_IDLE;
-    player->current_frame_index = 0;
-    player->frame_time = 0;
-    player->frame_width = TILE_SIZE;
-    player->frame_height = TILE_SIZE;
+    player->animation.current_animation = ANIM_IDLE;
+    player->animation.current_frame_index = 0;
+    player->animation.frame_time = 0;
+    player->animation.frame_width = TILE_SIZE;
+    player->animation.frame_height = TILE_SIZE;
 
     // Initialize surfaces to NULL
-    player->sprite_sheet = NULL;
-    player->current_frame = NULL;
+    player->animation.sprite_sheet = NULL;
+    player->animation.current_frame = NULL;
 }
 
 void player_draw(cairo_t *cr, player_t *player) {
@@ -41,7 +42,7 @@ void player_draw(cairo_t *cr, player_t *player) {
     cairo_translate(cr, draw_x, player->y);
     cairo_scale(cr, scale_x, scale_y);
 
-    cairo_pattern_t *pattern = cairo_pattern_create_for_surface(player->current_frame);
+    cairo_pattern_t *pattern = cairo_pattern_create_for_surface(player->animation.current_frame);
     cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST); 
 
     cairo_set_source(cr, pattern);
@@ -54,8 +55,8 @@ void player_draw(cairo_t *cr, player_t *player) {
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
-    update_player_animation_state(game_state, dt_seconds);
-    update_player_animation(&game_state->player, dt_seconds);
+    player_change_animation(game_state, dt_seconds);
+    update_animation_progress(&game_state->player.animation, dt_seconds);
 }
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
@@ -91,4 +92,36 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         game_state->player.velocity_y = -JUMP_FORCE;
         game_state->player.is_grounded = false;
     }
+}
+
+// determines and sets the appropriate animation state for the player 
+void player_change_animation(game_state_t *game_state, float dt_seconds) {
+    player_t *player = &game_state->player;
+    bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
+    bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
+    bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
+    bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
+
+    if (!player->is_grounded && !player->on_ladder) {
+        player->climbing = false;
+        set_animation(&player->animation, ANIM_JUMP);
+        return;
+    }
+    if (player->on_ladder && (key_up || key_down)) {
+        player->climbing = true;
+        set_animation(&player->animation, ANIM_CLIMB);
+        return;
+    }
+    if (player->on_ladder && player->climbing) {
+        set_animation(&player->animation, ANIM_CLIMB_IDLE);
+        return;
+    }
+    if (player->is_grounded && (key_left || key_right)) {
+        player->climbing = false;
+        set_animation(&player->animation, ANIM_WALK);
+        return;
+    }
+
+    player->climbing = false;
+    set_animation(&player->animation, ANIM_IDLE);
 }

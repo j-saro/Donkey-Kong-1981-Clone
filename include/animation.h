@@ -3,7 +3,7 @@
 #include <gtk/gtk.h>
 #include "types.h"
 
-void update_player_animation_state(game_state_t *game_state, float dt_seconds);
-void update_player_animation(player_t *player, float dt_seconds);
-void update_animation_frame(player_t *player);
-void set_player_animation(player_t *player, AnimationState new_anim);
+void player_change_animation(game_state_t *game_state, float dt_seconds);
+void update_animation_progress(animation_t *animation, float dt_seconds);
+void update_animation_frame(animation_t *animation);
+void set_animation(animation_t *animation, animation_state new_anim);
