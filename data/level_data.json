@@ -361,7 +361,8 @@
                 "x": 221,
                 "y": 550,
                 "width": 19,
-                "height": 20
+                "height": 20,
+                "has_physics": false
             },
             {
                 "x": 480,
@@ -385,7 +386,8 @@
                 "x": 180,
                 "y": 392,
                 "width": 19,
-                "height": 30
+                "height": 30,
+                "has_physics": false
             },
             {
                 "x": 180,
@@ -421,7 +423,8 @@
                 "x": 440,
                 "y": 330,
                 "width": 19,
-                "height": 18
+                "height": 18,
+                "has_physics": false
             },
             {
                 "x": 440,
@@ -439,7 +442,8 @@
                 "x": 240,
                 "y": 252,
                 "width": 19,
-                "height": 18
+                "height": 18,
+                "has_physics": false
             },
             {
                 "x": 479,

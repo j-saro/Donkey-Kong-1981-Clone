@@ -16,12 +16,9 @@
 // Level related
 typedef struct {
     float x, y;
-} point_t;
-
-typedef struct {
-    point_t position;
     float width;
     float height;
+    bool has_physics;
 } structure_t;
 
 typedef struct {

@@ -17,10 +17,10 @@ void set_player_animation(player_t *player, AnimationState new_anim);
 // determines and sets the appropriate animation state for the player 
 void update_player_animation_state(game_state_t *game_state, float dt_seconds) {
     player_t *player = &game_state->player;
-    bool key_left   = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
-    bool key_right  = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
-    bool key_up     = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
-    bool key_down   = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
+    bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
+    bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
+    bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
+    bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
 
     if (!player->is_grounded && !player->on_ladder) {
         player->climbing = false;

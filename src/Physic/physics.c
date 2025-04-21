@@ -8,7 +8,7 @@ void check_ladder_collision(game_state_t *game_state);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     // Gravitation
-    if (!game_state->player.on_ladder) {
+    if (!game_state->player.climbing) {
         game_state->player.velocity_y += GRAVITY * dt_seconds;
         game_state->player.y += game_state->player.velocity_y * dt_seconds;
     }
@@ -52,12 +52,12 @@ void platform_collision(game_state_t *game_state) {
     for (int i = 0; i < game_state->level.num_platforms; i++) {
         const structure_t *platform = &game_state->level.platforms[i];
 
-        float platform_left = platform->position.x;
+        float platform_left = platform->x;
         float platform_right = platform_left + platform->width;
-        float platform_top = platform->position.y;
+        float platform_top = platform->y;
 
         // calc x-overlap
-        if (!(player_right > platform_left && player_left < platform_right))
+        if (!(player_right > platform_left && player_left < platform_right) || !platform->has_physics)
             continue;
 
         // snap player to platform
@@ -85,9 +85,14 @@ void check_ladder_collision(game_state_t *game_state) {
 
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const structure_t *ladder = &game_state->level.ladders[i];
-        float ladder_left = ladder->position.x;
+
+        if (!ladder->has_physics || player->current_animation == ANIM_JUMP) {
+            continue;
+        }
+
+        float ladder_left = ladder->x;
         float ladder_right = ladder_left + ladder->width;
-        float ladder_top = ladder->position.y - 19;
+        float ladder_top = ladder->y - 19;
         float ladder_bottom = ladder_top + ladder->height;
 
         bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);

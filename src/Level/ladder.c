@@ -14,10 +14,16 @@ void ladder_init(level_t *level, cJSON *ladders_json) {
         cJSON *ladder_json = cJSON_GetArrayItem(ladders_json, i);
 
         // Extract ladder attributes (x, y, width, height)
-        level->ladders[i].position.x = (float)cJSON_GetObjectItem(ladder_json, "x")->valuedouble;
-        level->ladders[i].position.y = (float)cJSON_GetObjectItem(ladder_json, "y")->valuedouble;
+        level->ladders[i].x = (float)cJSON_GetObjectItem(ladder_json, "x")->valuedouble;
+        level->ladders[i].y = (float)cJSON_GetObjectItem(ladder_json, "y")->valuedouble;
         level->ladders[i].width = (float)cJSON_GetObjectItem(ladder_json, "width")->valuedouble;
         level->ladders[i].height = (float)cJSON_GetObjectItem(ladder_json, "height")->valuedouble;
+        cJSON *physics = cJSON_GetObjectItem(ladder_json, "has_physics");
+        if (physics == NULL) {
+            level->ladders[i].has_physics = true;
+        } else {
+            level->ladders[i].has_physics = cJSON_IsTrue(physics);
+        }
     }
 }
 
@@ -39,13 +45,13 @@ void ladder_draw(cairo_t *cr, const level_t *level) {
         cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
 
         cairo_matrix_t matrix;
-        cairo_matrix_init_translate(&matrix, -ladder->position.x, -ladder->position.y);
+        cairo_matrix_init_translate(&matrix, -ladder->x, -ladder->y);
         cairo_pattern_set_matrix(pattern, &matrix);
 
         cairo_set_source(cr, pattern);
         cairo_rectangle(cr, 
-                        ladder->position.x, 
-                        ladder->position.y,
+                        ladder->x, 
+                        ladder->y,
                         ladder->width, 
                         ladder->height);
         cairo_fill(cr);

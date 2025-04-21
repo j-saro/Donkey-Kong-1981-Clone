@@ -10,7 +10,7 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
 void player_init(player_t *player) {
     // Player Position
     player->x = 120;
-    player->y = 530;
+    player->y = 430;
     player->velocity_x = 0;
     player->velocity_y = 0;
     player->direction = 1;
@@ -60,27 +60,28 @@ void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_s
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
     float move_amount = MOVE_SPEED * dt_seconds;
+    bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
+    bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
+    bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
+    bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
     
-    if (game_state->pressed_keys['a'] || game_state->pressed_keys['A']) {
+    if (key_left) {
         game_state->player.x -= move_amount;
         game_state->player.direction = -1;
     }
-    if (game_state->pressed_keys['d'] || game_state->pressed_keys['D']) {
+    if (key_right) {
         game_state->player.x += move_amount;
         game_state->player.direction = 1;
     }
-    if ((game_state->pressed_keys['w'] || game_state->pressed_keys['W']) &&
-         game_state->player.on_ladder) {
-        
+    if (key_up && game_state->player.on_ladder) {
         game_state->player.y -= move_amount;
     }
-    if ((game_state->pressed_keys['s'] || game_state->pressed_keys['S']) &&
-        game_state->player.on_ladder) {
+    if (key_down && game_state->player.on_ladder) {
 
         float player_bottom = game_state->player.y + PLAYER_HEIGHT;
         int current_ladder = game_state->player.current_ladder_index;
         structure_t *ladder = &game_state->level.ladders[current_ladder];
-        float ladder_bottom = ladder->position.y + ladder->height;
+        float ladder_bottom = ladder->y + ladder->height;
 
         if (player_bottom <= ladder_bottom - 2) {
             game_state->player.y += move_amount;

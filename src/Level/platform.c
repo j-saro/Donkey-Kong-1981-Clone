@@ -14,10 +14,16 @@ void platform_init(level_t *level, cJSON *platforms_json) {
         cJSON *platform_json = cJSON_GetArrayItem(platforms_json, i);
 
         // Extract platform attributes (x, y, width, height)
-        level->platforms[i].position.x = (float)cJSON_GetObjectItem(platform_json, "x")->valuedouble;
-        level->platforms[i].position.y = (float)cJSON_GetObjectItem(platform_json, "y")->valuedouble;
+        level->platforms[i].x = (float)cJSON_GetObjectItem(platform_json, "x")->valuedouble;
+        level->platforms[i].y = (float)cJSON_GetObjectItem(platform_json, "y")->valuedouble;
         level->platforms[i].width = (float)cJSON_GetObjectItem(platform_json, "width")->valuedouble;
         level->platforms[i].height = (float)cJSON_GetObjectItem(platform_json, "height")->valuedouble;
+        cJSON *physics = cJSON_GetObjectItem(platform_json, "has_physics");
+        if (physics == NULL) {
+            level->platforms[i].has_physics = true;
+        } else {
+            level->platforms[i].has_physics = cJSON_IsTrue(physics);
+        }
     }
 }
 
@@ -39,13 +45,13 @@ void platform_draw(cairo_t *cr, const level_t *level) {
         cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
 
         cairo_matrix_t matrix;
-        cairo_matrix_init_translate(&matrix, -platform->position.x, -platform->position.y);
+        cairo_matrix_init_translate(&matrix, -platform->x, -platform->y);
         cairo_pattern_set_matrix(pattern, &matrix);
 
         cairo_set_source(cr, pattern);
         cairo_rectangle(cr, 
-                        platform->position.x, 
-                        platform->position.y,
+                        platform->x, 
+                        platform->y,
                         platform->width, 
                         platform->height);
         cairo_fill(cr);
