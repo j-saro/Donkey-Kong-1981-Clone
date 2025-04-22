@@ -12,9 +12,9 @@ const animation_sequence_t animations[] = {
     [ANIM_IDLE_PEACH] = {0, 0, 2, 0.3f},
 
     // Donkey Kong
-    [ANIM_IDLE_DONKEY_KONG] = {1, 21, 1, 0.3f},
-    [ANIM_BEATING_CHEST_DONKEY_KONG] = {54, 21, 1, 0.3f},
-    [ANIM_THROWING_BARREL_DONEKY_KONG] = {156, 21, 3, 1.0f},
+    [ANIM_IDLE_DONKEY_KONG] = {1, 21, 1, 1.0f},
+    [ANIM_BEATING_CHEST_DONKEY_KONG] = {54, 21, 2, 0.5f},
+    [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 1.0f},
 };
 
 void update_animation_progress(animation_t *animation, float dt_seconds);

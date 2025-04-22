@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include <assert.h>
-
+#include <time.h>
 #include "types.h"
 #include "game.h"
 #include "input.h"
@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
     GtkApplication *app;
     int status;
     game_state_t game_state;
+    srand((unsigned)time(NULL)); // seed for rand function
 
     // init
     input_init(&game_state);

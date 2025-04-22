@@ -30,7 +30,7 @@ typedef enum {
     // Donkey Kong
     ANIM_IDLE_DONKEY_KONG,
     ANIM_BEATING_CHEST_DONKEY_KONG,
-    ANIM_THROWING_BARREL_DONEKY_KONG,
+    ANIM_THROWING_BARREL_DONKEY_KONG,
 } animation_state_t;
 
 typedef struct {
@@ -91,7 +91,7 @@ typedef struct {
 typedef struct {
     movable_entity_t base;
     float anim_interval;
-    float frame_time;
+    float anim_time;
 } peach_t;
 
 typedef struct {
