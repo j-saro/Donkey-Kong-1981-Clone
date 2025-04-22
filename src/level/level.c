@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cJSON.h"
-#include "level.h"
-#include "platform.h"
-#include "ladder.h"
-#include "static_entity.h"
+#include "level/level.h"
+#include "entities/environment/platform.h"
+#include "entities/environment/ladder.h"
+#include "entities/abstract/static_entity.h"
+#include "entities/characters/peach.h"
+#include "entities/characters/donkey_kong.h"
+#include "entities/characters/player.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
@@ -89,9 +92,30 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
+    cJSON *peach_json = cJSON_GetObjectItem(level_json, "peach");
+    if (!cJSON_IsObject(peach_json)) {
+        printf("Error: 'peach' is not an object\n");
+        return FALSE;
+    }
+
+    cJSON *donkey_kong_json = cJSON_GetObjectItem(level_json, "donkey_kong");
+    if (!cJSON_IsObject(donkey_kong_json)) {
+        printf("Error: 'donkey_kong' is not an object\n");
+        return FALSE;
+    }
+
+    cJSON *mario_json = cJSON_GetObjectItem(level_json, "mario");
+    if (!cJSON_IsObject(mario_json)) {
+        printf("Error: 'donkey_kong' is not an object\n");
+        return FALSE;
+    }
+
     platform_init(level, platforms_json);
     ladder_init(level, ladders_json);
     static_entity_init(level, static_entities_json);
+    peach_init(&level->peach, peach_json);
+    donkey_kong_init(&level->donkey_kong, donkey_kong_json);
+    player_init(&level->player, mario_json);
 
     cJSON_Delete(json);
     return TRUE;
@@ -101,10 +125,16 @@ void level_cleanup(level_t *level) {
     platform_cleanup(level);
     ladder_cleanup(level);
     static_entity_cleanup(level);
+    peach_cleanup(&level->peach.base);
+    donkey_kong_cleanup(&level->donkey_kong.base);
+    player_cleanup(&level->player.base);
 }
 
 void level_draw(cairo_t *cr, const level_t *level) {
     platform_draw(cr, level);
     ladder_draw(cr, level);
     static_entity_draw(cr, level);
+    peach_draw(cr, &level->peach.base);
+    donkey_kong_draw(cr, &level->donkey_kong.base);
+    player_draw(cr, &level->player.base);
 }

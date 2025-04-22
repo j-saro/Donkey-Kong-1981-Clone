@@ -1,4 +1,4 @@
-#include "animation.h"
+#include "core/animation.h"
 
 const animation_sequence_t animations[] = {
     // Mario
@@ -15,6 +15,10 @@ const animation_sequence_t animations[] = {
     [ANIM_IDLE_DONKEY_KONG] = {1, 21, 1, 1.0f},
     [ANIM_BEATING_CHEST_DONKEY_KONG] = {54, 21, 2, 0.5f},
     [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 1.0f},
+
+    // Barrel
+    [ANIM_SIDE] = {0, 0, 1, 0.3f},
+    [ANIM_FRONT] = {0, 0, 1, 0.3f},
 };
 
 void update_animation_progress(animation_t *animation, float dt_seconds);

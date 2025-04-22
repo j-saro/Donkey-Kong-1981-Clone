@@ -504,6 +504,30 @@
                 "sprite_x": 0,
                 "sprite_y": 0
             }
-        ]
+        ],
+        "peach": {
+            "x": 250,
+            "y": 91,
+            "direction": 1,
+            "is_grounded": true,
+            "frame_width": 16,
+            "frame_height": 24
+        },
+        "donkey_kong": {
+            "x": 73,
+            "y": 131,
+            "direction": 1,
+            "is_grounded": true,
+            "frame_width": 48,
+            "frame_height": 32
+        },
+        "mario": {
+            "x": 120,
+            "y": 530,
+            "direction": 1,
+            "is_grounded": true,
+            "frame_width": 16,
+            "frame_height": 16
+        }
     }
 }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform.h"
-#include "structure.h"
+#include "entities/environment/platform.h"
+#include "entities/abstract/structure.h"
 #include <gtk/gtk.h>
 
 void platform_init(level_t *level, cJSON *platforms_json);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "structure.h"
+#include "entities/abstract/structure.h"
 
 void structure_parse(structure_t *structure, cJSON *json);
 void structure_array_cleanup(structure_t **array, int *count);

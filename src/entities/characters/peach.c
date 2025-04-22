@@ -1,51 +1,37 @@
-#include "peach.h"
-#include "movable_entity.h"
-#include "animation.h"
+#include "entities/characters/peach.h"
+#include "entities/abstract/movable_entity.h"
+#include "core/animation.h"
 
 
-void peach_init(peach_t *peach);
+void peach_init(peach_t *peach, cJSON *json);
 void peach_load_sprites(movable_entity_t *base);
 void peach_cleanup(movable_entity_t *base);
-void peach_draw(cairo_t *cr, movable_entity_t *base);
+void peach_draw(cairo_t *cr, const movable_entity_t *base);
 void peach_update(peach_t *peach, float dt_seconds);
 
-void peach_init(peach_t *peach) {
-    movable_entity_t *base = &peach->base;
-    // Peach Position
-    base->x = 250;
-    base->y = 91;
-    base->velocity_x = 0;
-    base->velocity_y = 0;
-    base->direction = 1;
-    base->is_grounded = false;
+void peach_init(peach_t *peach, cJSON *json) {
+    // Load Values from Json
+    movable_entity_parse(&peach->base, json);
 
-    // Peach Animation
-    base->animation.current_animation = ANIM_IDLE_PEACH;
-    base->animation.current_frame_index = 0;
-    base->animation.frame_time = 0;
-    base->animation.frame_width = TILE_SIZE;
-    base->animation.frame_height = 24;
+    // Peach Animation Default Values
+    peach->base.animation.current_animation = ANIM_IDLE_PEACH;
     peach->anim_interval = 3.0f;
     peach->anim_time = 0;
-
-    // Initialize surfaces to NULL
-    base->animation.sprite_sheet = NULL;
-    base->animation.current_frame = NULL;
 
     peach_load_sprites(&peach->base);
 }
 
 void peach_load_sprites(movable_entity_t *base) {
     const char *spritesheet = "./assets/peach_sprite_sheet.png";
-    movable_entitiy_load_sprites(base, spritesheet);
+    movable_entity_load_sprites(base, spritesheet);
 }
 
 void peach_cleanup(movable_entity_t *base) {
-    movable_entitiy_cleanup(base);
+    movable_entity_cleanup(base);
 }
 
-void peach_draw(cairo_t *cr, movable_entity_t *base) {
-    movable_entitiy_draw(cr, base);
+void peach_draw(cairo_t *cr, const movable_entity_t *base) {
+    movable_entity_draw(cr, base);
 }
 
 void peach_update(peach_t *peach, float dt_seconds) {

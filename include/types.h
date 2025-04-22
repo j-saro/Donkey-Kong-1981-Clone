@@ -15,7 +15,10 @@
 #define LADDER_EXTRA 19
 
 
-// Animation related
+/* 
+* Animation related
+*/
+
 typedef enum {
     // Mario
     ANIM_IDLE_MARIO,
@@ -31,6 +34,10 @@ typedef enum {
     ANIM_IDLE_DONKEY_KONG,
     ANIM_BEATING_CHEST_DONKEY_KONG,
     ANIM_THROWING_BARREL_DONKEY_KONG,
+
+    // Barrel
+    ANIM_SIDE,
+    ANIM_FRONT,
 } animation_state_t;
 
 typedef struct {
@@ -49,7 +56,10 @@ typedef struct {
     int frame_width, frame_height;
 } animation_t;
 
-// Level related
+/* 
+* Abstract 'Classes'
+*/
+
 typedef struct {
     float x, y;
     float width;
@@ -64,22 +74,6 @@ typedef struct {
 } static_entity_t;
 
 typedef struct {
-    // Platforms
-    int num_platforms;
-    structure_t *platforms;
-    cairo_surface_t *platform_sprite_sheet;
-
-    // Ladders
-    int num_ladders;
-    structure_t *ladders;
-    cairo_surface_t *ladder_sprite_sheet;
-
-    // OilBarrel/Barrels (static objects)
-    int num_static_entities;
-    static_entity_t *static_entities;
-} level_t;
-
-typedef struct {
     float x, y;
     float velocity_x, velocity_y;
     int direction;
@@ -87,6 +81,11 @@ typedef struct {
 
     animation_t animation;
 } movable_entity_t;
+
+
+/* 
+* Level related
+*/
 
 typedef struct {
     movable_entity_t base;
@@ -100,6 +99,10 @@ typedef struct {
 
 typedef struct {
     movable_entity_t base;
+} enemy_t;
+
+typedef struct {
+    movable_entity_t base;
     float previous_y;
 
     // Ladder 
@@ -109,12 +112,44 @@ typedef struct {
     int current_ladder_index;
 } player_t;
 
-// current game state
+
+typedef struct {
+    // Player/Mario
+    player_t player;
+
+    // Platforms
+    int num_platforms;
+    structure_t *platforms;
+    cairo_surface_t *platform_sprite_sheet;
+
+    // Ladders
+    int num_ladders;
+    structure_t *ladders;
+    cairo_surface_t *ladder_sprite_sheet;
+
+    // Static objects
+    int num_static_entities;
+    static_entity_t *static_entities;
+
+    // Peach
+    peach_t peach;
+
+    // Donkey Kong
+    donkey_kong_t donkey_kong;
+
+    // Enemys
+    enemy_t *enemies;
+    unsigned int enemy_capacity;
+    unsigned int num_enemies;
+    cairo_surface_t *enemies_stylesheet;
+} level_t;
+
+
+/* 
+* Game State
+*/
 typedef struct {
     int *pressed_keys;
     unsigned int num_pressed_keys;
     level_t level;
-    player_t player;
-    peach_t peach;
-    donkey_kong_t donkey_kong;
 } game_state_t;

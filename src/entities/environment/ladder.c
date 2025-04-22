@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "ladder.h"
-#include "structure.h"
+#include "entities/environment/ladder.h"
+#include "entities/abstract/structure.h"
 #include <gtk/gtk.h>
 
 void ladder_init(level_t *level, cJSON *ladders_json);

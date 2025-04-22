@@ -1,10 +1,10 @@
 #include <math.h>
-#include "game.h"
-#include "player.h"
-#include "level.h"
-#include "physics.h"
-#include "peach.h"
-#include "donkey_kong.h"
+#include "core/game.h"
+#include "entities/characters/player.h"
+#include "level/level.h"
+#include "core/physics.h"
+#include "entities/characters/peach.h"
+#include "entities/characters/donkey_kong.h"
 
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -45,9 +45,6 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
 
     // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
     level_draw(cr, &game_state->level);
-    peach_draw(cr, &game_state->peach.base);
-    player_draw(cr, &game_state->player.base);
-    donkey_kong_draw(cr, &game_state->donkey_kong.base);
     
     cairo_restore(cr);
 
@@ -67,12 +64,12 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
 
-    game_state->player.previous_y = game_state->player.base.y;
+    game_state->level.player.previous_y = game_state->level.player.base.y;
 
     check_ladder_collision(game_state);
     player_update(drawing_area, game_state, dt_seconds);
-    peach_update(&game_state->peach, dt_seconds);
-    donkey_kong_update(&game_state->donkey_kong, dt_seconds);
+    peach_update(&game_state->level.peach, dt_seconds);
+    donkey_kong_update(&game_state->level.donkey_kong, dt_seconds);
     apply_physics(game_state, dt_seconds, BASE_HEIGHT);
 
     gtk_widget_queue_draw(drawing_area);

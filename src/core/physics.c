@@ -1,4 +1,4 @@
-#include "physics.h"
+#include "core/physics.h"
 #include <stdio.h>
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
@@ -7,10 +7,11 @@ void platform_collision(game_state_t *game_state);
 void check_ladder_collision(game_state_t *game_state);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
+    player_t *player = &game_state->level.player;
     // Gravitation
-    if (!game_state->player.climbing) {
-        game_state->player.base.velocity_y += GRAVITY * dt_seconds;
-        game_state->player.base.y += game_state->player.base.velocity_y * dt_seconds;
+    if (!player->climbing) {
+        player->base.velocity_y += GRAVITY * dt_seconds;
+        player->base.y += player->base.velocity_y * dt_seconds;
     }
 
     window_collision(game_state, screen_height);
@@ -18,7 +19,7 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 }
 
 void window_collision(game_state_t *game_state, float screen_height) {
-    player_t *player = &game_state->player;
+    player_t *player = &game_state->level.player;
 
     float player_bottom = player->base.y + PLAYER_HEIGHT;
 
@@ -41,7 +42,7 @@ void window_collision(game_state_t *game_state, float screen_height) {
 }
 
 void platform_collision(game_state_t *game_state) {
-    player_t *player = &game_state->player;
+    player_t *player = &game_state->level.player;
 
     float old_bottom = player->previous_y + PLAYER_HEIGHT;
     float new_bottom = player->base.y + PLAYER_HEIGHT;
@@ -76,7 +77,7 @@ void platform_collision(game_state_t *game_state) {
 }
 
 void check_ladder_collision(game_state_t *game_state) {
-    player_t *player = &game_state->player;
+    player_t *player = &game_state->level.player;
     float player_center = player->base.x + PLAYER_WIDTH * 0.5f;
     float player_top = player->base.y;
     float player_bottom = player->base.y + PLAYER_HEIGHT;

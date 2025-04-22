@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "static_entity.h"
-#include "structure.h"
+#include "entities/abstract/static_entity.h"
+#include "entities/abstract/structure.h"
 
 void static_entity_init(level_t *level, cJSON *static_entities_json);
 void static_entity_cleanup(level_t *level);

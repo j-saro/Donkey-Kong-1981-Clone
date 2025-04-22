@@ -2,13 +2,10 @@
 #include <assert.h>
 #include <time.h>
 #include "types.h"
-#include "game.h"
-#include "input.h"
-#include "level.h"
-#include "player.h"
-#include "peach.h"
-#include "donkey_kong.h"
-
+#include "core/game.h"
+#include "core/input.h"
+#include "level/level.h"
+#include "entities/characters/player.h"
 
 static void activate(GtkApplication* app, gpointer user_data);
 
@@ -39,9 +36,6 @@ int main(int argc, char **argv) {
     // init
     input_init(&game_state);
     level_init(&game_state);
-    player_init(&game_state.player);
-    peach_init(&game_state.peach);
-    donkey_kong_init(&game_state.donkey_kong);
 
     app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);
@@ -51,9 +45,6 @@ int main(int argc, char **argv) {
     // Clean up
     input_cleanup(&game_state);
     level_cleanup(&game_state.level);
-    player_cleanup(&game_state.player.base);
-    peach_cleanup(&game_state.peach.base);
-    donkey_kong_cleanup(&game_state.donkey_kong.base);
 
     return status;
 }

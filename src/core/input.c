@@ -1,4 +1,4 @@
-#include "input.h"
+#include "core/input.h"
 
 
 gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);

@@ -1,115 +1,110 @@
-#include "player.h"
-#include "animation.h"
-#include "movable_entity.h"
+#include "entities/characters/player.h"
+#include "core/animation.h"
+#include "entities/abstract/movable_entity.h"
 
-void player_init(player_t *player);
+void player_init(player_t *player, cJSON *json);
 void player_load_sprites(movable_entity_t *base);
 void player_cleanup(movable_entity_t *base);
-void player_draw(cairo_t *cr, movable_entity_t *base);
+void player_draw(cairo_t *cr, const movable_entity_t *base);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
 
-void player_init(player_t *player) {
-    movable_entity_t *base = &player->base;
-    // Player Position
-    base->x = 120;
-    base->y = 530;
-    base->velocity_x = 0;
-    base->velocity_y = 0;
-    base->direction = 1;
-    base->is_grounded = false;
+void player_init(player_t *player, cJSON *json) {
+    // Json read Values
+    movable_entity_parse(&player->base, json);
+
+    // Player Default Values
+    // Animation
+    player->base.animation.current_animation = ANIM_IDLE_MARIO;
+    
+    // Position
     player->climbing = false;
     player->on_ladder = false;
-
-    // Player Animation
-    base->animation.current_animation = ANIM_IDLE_MARIO;
-    base->animation.current_frame_index = 0;
-    base->animation.frame_time = 0;
-    base->animation.frame_width = TILE_SIZE;
-    base->animation.frame_height = TILE_SIZE;
-
-    // Initialize surfaces to NULL
-    base->animation.sprite_sheet = NULL;
-    base->animation.current_frame = NULL;
-
-    // Initialize Platform & Ladder with 0
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
+    
 
     player_load_sprites(&player->base);
 }
 
 void player_load_sprites(movable_entity_t *base) {
     const char *spritesheet = "./assets/mario_sprite_sheet.png";
-    movable_entitiy_load_sprites(base, spritesheet);
+    movable_entity_load_sprites(base, spritesheet);
 }
 
 void player_cleanup(movable_entity_t *base) {
-    movable_entitiy_cleanup(base);
+    movable_entity_cleanup(base);
 }
 
-void player_draw(cairo_t *cr, movable_entity_t *base) {
-    movable_entitiy_draw(cr, base);
+void player_draw(cairo_t *cr, const movable_entity_t *base) {
+    movable_entity_draw(cr, base);
 }
 
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
     player_change_animation(game_state, dt_seconds);
-    update_animation_progress(&game_state->player.base.animation, dt_seconds);
+    update_animation_progress(&game_state->level.player.base.animation, dt_seconds);
 }
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
+    player_t *player = &game_state->level.player;
+
     float move_amount = MOVE_SPEED * dt_seconds;
+
     bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
     bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
     
-    float player_bottom = game_state->player.base.y + PLAYER_HEIGHT;
-    int current_ladder = game_state->player.current_ladder_index;
+    float player_bottom = player->base.y + PLAYER_HEIGHT;
+    int current_ladder = player->current_ladder_index;
     structure_t *ladder = &game_state->level.ladders[current_ladder];
 
     if (key_left) {
-        game_state->player.base.x -= move_amount;
-        game_state->player.base.direction = -1;
+        player->base.x -= move_amount;
+        player->base.direction = -1;
     }
     if (key_right) {
-        game_state->player.base.x += move_amount;
-        game_state->player.base.direction = 1;
+        player->base.x += move_amount;
+        player->base.direction = 1;
     }
-    if (key_up && game_state->player.on_ladder) {
+    if (key_up && player->on_ladder) {
         float ladder_top = ladder->y - LADDER_EXTRA;
         if ((player_bottom - 2) >= ladder_top) {
-            game_state->player.base.y -= move_amount;
+            player->base.y -= move_amount;
         }
     }
-    if (key_down && game_state->player.on_ladder) {
+    if (key_down && player->on_ladder) {
         float ladder_bottom = ladder->y + ladder->height;
         if (player_bottom <= ladder_bottom - 2) {
-            game_state->player.base.y += move_amount;
+            player->base.y += move_amount;
         }
     }
-    if (game_state->pressed_keys[GDK_KEY_space] && game_state->player.base.is_grounded) {
-        game_state->player.base.velocity_y = -JUMP_FORCE;
-        game_state->player.base.is_grounded = false;
+    if (game_state->pressed_keys[GDK_KEY_space] && player->base.is_grounded) {
+        player->base.velocity_y = -JUMP_FORCE;
+        player->base.is_grounded = false;
     }
 }
 
 // determines and sets the appropriate animation state for the player 
 void player_change_animation(game_state_t *game_state, float dt_seconds) {
-    player_t *player = &game_state->player;
+    player_t *player = &game_state->level.player;
+
     bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
     bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
 
-    float player_bottom = game_state->player.base.y + PLAYER_HEIGHT;
-    int current_ladder = game_state->player.current_ladder_index;
+    float player_bottom = player->base.y + PLAYER_HEIGHT;
+
+    int current_ladder = player->current_ladder_index;
     structure_t *ladder = &game_state->level.ladders[current_ladder];
-    int current_platform = game_state->player.current_platform_index;
+
+    int current_platform = player->current_platform_index;
     structure_t *platform = &game_state->level.platforms[current_platform];
+    
     float ladder_top = ladder->y - platform->height;
     float ladder_bottom = ladder->y + ladder->height - 2;
 
