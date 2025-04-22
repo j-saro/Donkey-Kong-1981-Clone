@@ -1,11 +1,15 @@
 #include "animation.h"
 
 const animation_sequence_t animations[] = {
-    [ANIM_IDLE] = {1, 21, 1, 0.2f},
-    [ANIM_WALK] = {1, 21, 3, 0.1f},
-    [ANIM_JUMP] = {63, 21, 1, 0.15f},
-    [ANIM_CLIMB] = {132, 21, 2, 0.1f},
-    [ANIM_CLIMB_IDLE] = {132, 21, 1, 1.0f},
+    // Mario Animations
+    [ANIM_IDLE_MARIO] = {1, 21, 1, 0.2f},
+    [ANIM_WALK_MARIO] = {1, 21, 3, 0.1f},
+    [ANIM_JUMP_MARIO] = {63, 21, 1, 0.15f},
+    [ANIM_CLIMB_MARIO] = {132, 21, 2, 0.1f},
+    [ANIM_CLIMB_IDLE_MARIO] = {132, 21, 1, 1.0f},
+
+    // Peach Animations
+    [ANIM_IDLE_PEACH] = {0, 0, 2, 0.2f},
 };
 
 void update_animation_progress(animation_t *animation, float dt_seconds);

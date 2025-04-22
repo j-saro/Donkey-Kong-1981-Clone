@@ -17,11 +17,15 @@
 
 // Animation related
 typedef enum {
-    ANIM_IDLE,
-    ANIM_WALK,
-    ANIM_JUMP,
-    ANIM_CLIMB,
-    ANIM_CLIMB_IDLE,
+    // Mario
+    ANIM_IDLE_MARIO,
+    ANIM_WALK_MARIO,
+    ANIM_JUMP_MARIO,
+    ANIM_CLIMB_MARIO,
+    ANIM_CLIMB_IDLE_MARIO,
+
+    // Peach
+    ANIM_IDLE_PEACH
 } animation_state_t;
 
 typedef struct {
@@ -65,7 +69,7 @@ typedef struct {
     structure_t *ladders;
     cairo_surface_t *ladder_sprite_sheet;
 
-    // Barrel
+    // OilBarrel/Barrels (static objects)
     int num_static_entities;
     static_entity_t *static_entities;
 } level_t;
@@ -79,8 +83,16 @@ typedef struct {
     animation_t animation;
 } movable_entity_t;
 
+typedef struct {
+    movable_entity_t base;
+    float anim_interval;
+    float frame_time;
+} peach_t;
 
-// Player/Mario
+typedef struct {
+    movable_entity_t base;
+} donkey_kong_t;
+
 typedef struct {
     movable_entity_t base;
     float previous_y;
@@ -94,8 +106,9 @@ typedef struct {
 
 // current game state
 typedef struct {
-    player_t player;
     int *pressed_keys;
     unsigned int num_pressed_keys;
     level_t level;
+    player_t player;
+    peach_t peach;
 } game_state_t;

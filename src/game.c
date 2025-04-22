@@ -3,6 +3,7 @@
 #include "player.h"
 #include "level.h"
 #include "physics.h"
+#include "peach.h"
 
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -43,7 +44,9 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
 
     // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
     level_draw(cr, &game_state->level);
-    player_draw(cr, &game_state->player);
+    peach_draw(cr, &game_state->peach.base);
+    player_draw(cr, &game_state->player.base);
+    
     cairo_restore(cr);
 
     return G_SOURCE_CONTINUE;
@@ -66,6 +69,7 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 
     check_ladder_collision(game_state);
     player_update(drawing_area, game_state, dt_seconds);
+    peach_update(&game_state->peach, dt_seconds);
     apply_physics(game_state, dt_seconds, BASE_HEIGHT);
 
     gtk_widget_queue_draw(drawing_area);

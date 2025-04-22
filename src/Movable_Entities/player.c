@@ -1,95 +1,56 @@
 #include "player.h"
 #include "animation.h"
+#include "movable_entity.h"
 
-void player_init(game_state_t *game_state);
-void player_load_sprites(game_state_t *game_state);
-void player_cleanup(player_t *player);
-void player_draw(cairo_t *cr, player_t *player);
+void player_init(player_t *player);
+void player_load_sprites(movable_entity_t *base);
+void player_cleanup(movable_entity_t *base);
+void player_draw(cairo_t *cr, movable_entity_t *base);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
 
-void player_init(game_state_t *game_state) {
-    player_t *player = &game_state->player;
-
+void player_init(player_t *player) {
+    movable_entity_t *base = &player->base;
     // Player Position
-    player->base.x = 120;
-    player->base.y = 530;
-    player->base.velocity_x = 0;
-    player->base.velocity_y = 0;
-    player->base.direction = 1;
-    player->base.is_grounded = false;
+    base->x = 120;
+    base->y = 530;
+    base->velocity_x = 0;
+    base->velocity_y = 0;
+    base->direction = 1;
+    base->is_grounded = false;
     player->climbing = false;
     player->on_ladder = false;
 
     // Player Animation
-    player->base.animation.current_animation = ANIM_IDLE;
-    player->base.animation.current_frame_index = 0;
-    player->base.animation.frame_time = 0;
-    player->base.animation.frame_width = TILE_SIZE;
-    player->base.animation.frame_height = TILE_SIZE;
+    base->animation.current_animation = ANIM_IDLE_MARIO;
+    base->animation.current_frame_index = 0;
+    base->animation.frame_time = 0;
+    base->animation.frame_width = TILE_SIZE;
+    base->animation.frame_height = TILE_SIZE;
 
     // Initialize surfaces to NULL
-    player->base.animation.sprite_sheet = NULL;
-    player->base.animation.current_frame = NULL;
+    base->animation.sprite_sheet = NULL;
+    base->animation.current_frame = NULL;
 
     // Initialize Platform & Ladder with 0
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
 
-    player_load_sprites(game_state);
+    player_load_sprites(&player->base);
 }
 
-void player_load_sprites(game_state_t *game_state) {
-    // Load player sprite
-    game_state->player.base.animation.sprite_sheet = cairo_image_surface_create_from_png("./assets/mario_sprite_sheet.png");
-    if (cairo_surface_status(game_state->player.base.animation.sprite_sheet) != CAIRO_STATUS_SUCCESS) {
-        g_warning("Failed to create player spritesheet");
-        return;
-    }
-    
-    // Load first animation
-    player_t *player = &game_state->player;
-    update_animation_frame(&player->base.animation);
-    if (game_state->player.base.animation.current_frame == NULL || 
-        cairo_surface_status(game_state->player.base.animation.current_frame) != CAIRO_STATUS_SUCCESS) {
-        g_warning("Failed to create initial frame surface");
-    }
+void player_load_sprites(movable_entity_t *base) {
+    const char *spritesheet = "./assets/mario_sprite_sheet.png";
+    movable_entitiy_load_sprites(base, spritesheet);
 }
 
-void player_cleanup(player_t *player) {
-    // Cleanup Current Animation Sprite
-    if (player->base.animation.current_frame != NULL) {
-        cairo_surface_destroy(player->base.animation.current_frame);
-        player->base.animation.current_frame = NULL;
-    }
-        
-    // Cleanup Player spritesheet
-    if (player->base.animation.sprite_sheet != NULL) {
-        cairo_surface_destroy(player->base.animation.sprite_sheet);
-        player->base.animation.sprite_sheet = NULL;
-    }
+void player_cleanup(movable_entity_t *base) {
+    movable_entitiy_cleanup(base);
 }
 
-void player_draw(cairo_t *cr, player_t *player) {
-    cairo_save(cr);
-
-    float scale_x = SCALE * player->base.direction;
-    float scale_y = SCALE;
-
-    float draw_x = player->base.direction == -1 ? player->base.x + TILE_SIZE * SCALE : player->base.x;
-
-    cairo_translate(cr, draw_x, player->base.y);
-    cairo_scale(cr, scale_x, scale_y);
-
-    cairo_pattern_t *pattern = cairo_pattern_create_for_surface(player->base.animation.current_frame);
-    cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST); 
-
-    cairo_set_source(cr, pattern);
-    cairo_paint(cr);
-
-    cairo_pattern_destroy(pattern);
-    cairo_restore(cr);
+void player_draw(cairo_t *cr, movable_entity_t *base) {
+    movable_entitiy_draw(cr, base);
 }
 
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
@@ -154,26 +115,26 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
 
     if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_JUMP);
+        set_animation(&player->base.animation, ANIM_JUMP_MARIO);
     }
     else if (player->on_ladder && key_up && player_bottom > ladder_top) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB);
+        set_animation(&player->base.animation, ANIM_CLIMB_MARIO);
     }
     else if (player->on_ladder && key_down && player_bottom < ladder_bottom) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB);
+        set_animation(&player->base.animation, ANIM_CLIMB_MARIO);
     }
     else if (player->on_ladder && player->climbing && player_bottom > ladder_top) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB_IDLE);
+        set_animation(&player->base.animation, ANIM_CLIMB_IDLE_MARIO);
     }
     else if (player->base.is_grounded && (key_left || key_right)) {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_WALK);
+        set_animation(&player->base.animation, ANIM_WALK_MARIO);
     }
     else {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_IDLE);
+        set_animation(&player->base.animation, ANIM_IDLE_MARIO);
     }
 }
