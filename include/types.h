@@ -25,7 +25,12 @@ typedef enum {
     ANIM_CLIMB_IDLE_MARIO,
 
     // Peach
-    ANIM_IDLE_PEACH
+    ANIM_IDLE_PEACH,
+
+    // Donkey Kong
+    ANIM_IDLE_DONKEY_KONG,
+    ANIM_BEATING_CHEST_DONKEY_KONG,
+    ANIM_THROWING_BARREL_DONEKY_KONG,
 } animation_state_t;
 
 typedef struct {
@@ -111,4 +116,5 @@ typedef struct {
     level_t level;
     player_t player;
     peach_t peach;
+    donkey_kong_t donkey_kong;
 } game_state_t;

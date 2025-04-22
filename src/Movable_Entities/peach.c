@@ -25,7 +25,7 @@ void peach_init(peach_t *peach) {
     base->animation.frame_time = 0;
     base->animation.frame_width = TILE_SIZE;
     base->animation.frame_height = 24;
-    peach->anim_interval = 2.0f;
+    peach->anim_interval = 3.0f;
     peach->frame_time = 0;
 
     // Initialize surfaces to NULL

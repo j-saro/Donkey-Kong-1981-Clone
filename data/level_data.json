@@ -494,6 +494,15 @@
                 "sprite": "./assets/barrel_sprite_sheet.png",
                 "sprite_x": 0,
                 "sprite_y": 7
+            },
+            {
+                "x": 30,
+                "y": 130,
+                "width": 21,
+                "height": 32,
+                "sprite": "./assets/barrels.png",
+                "sprite_x": 0,
+                "sprite_y": 0
             }
         ]
     }

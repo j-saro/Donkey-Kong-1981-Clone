@@ -7,6 +7,7 @@
 #include "level.h"
 #include "player.h"
 #include "peach.h"
+#include "donkey_kong.h"
 
 
 static void activate(GtkApplication* app, gpointer user_data);
@@ -39,6 +40,7 @@ int main(int argc, char **argv) {
     level_init(&game_state);
     player_init(&game_state.player);
     peach_init(&game_state.peach);
+    donkey_kong_init(&game_state.donkey_kong);
 
     app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);
@@ -50,6 +52,7 @@ int main(int argc, char **argv) {
     level_cleanup(&game_state.level);
     player_cleanup(&game_state.player.base);
     peach_cleanup(&game_state.peach.base);
+    donkey_kong_cleanup(&game_state.donkey_kong.base);
 
     return status;
 }
