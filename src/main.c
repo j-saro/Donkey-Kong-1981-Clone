@@ -5,7 +5,6 @@
 #include "core/game.h"
 #include "core/input.h"
 #include "level/level.h"
-#include "entities/characters/player.h"
 
 static void activate(GtkApplication* app, gpointer user_data);
 

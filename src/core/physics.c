@@ -51,7 +51,7 @@ void platform_collision(game_state_t *game_state) {
 
     bool grounded = false;
     for (int i = 0; i < game_state->level.num_platforms; i++) {
-        const structure_t *platform = &game_state->level.platforms[i];
+        const geometry_t *platform = &game_state->level.platforms[i];
 
         float platform_left = platform->x;
         float platform_right = platform_left + platform->width;
@@ -85,7 +85,7 @@ void check_ladder_collision(game_state_t *game_state) {
     bool is_on_ladder = false;
 
     for (int i = 0; i < game_state->level.num_ladders; i++) {
-        const structure_t *ladder = &game_state->level.ladders[i];
+        const geometry_t *ladder = &game_state->level.ladders[i];
 
         if (!ladder->has_physics || player->base.animation.current_animation == ANIM_JUMP_MARIO) {
             continue;

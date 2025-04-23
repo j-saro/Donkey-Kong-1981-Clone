@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "entities/abstract/structure.h"
+#include "entities/abstract/geometry.h"
 
-void structure_parse(structure_t *structure, cJSON *json);
-void structure_array_cleanup(structure_t **array, int *count);
-void structure_draw(cairo_t *cr, const structure_t *array, int count, cairo_surface_t *surface);
+void geometry_parse(geometry_t *structure, cJSON *json);
+void geometry_array_cleanup(geometry_t **array, int *count);
+void geometry_draw(cairo_t *cr, const geometry_t *array, int count, cairo_surface_t *surface);
 
-void structure_parse(structure_t *structure, cJSON *json) {
+void geometry_parse(geometry_t *structure, cJSON *json) {
     structure->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
     structure->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
     structure->width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
@@ -16,15 +16,15 @@ void structure_parse(structure_t *structure, cJSON *json) {
     structure->has_physics = (physics == NULL) ? true : cJSON_IsTrue(physics);
 }
 
-void structure_array_cleanup(structure_t **array, int *count) {
+void geometry_array_cleanup(geometry_t **array, int *count) {
     free(*array);
     *array = NULL;
     *count = 0;
 }
 
-void structure_draw(cairo_t *cr, const structure_t *array, int count, cairo_surface_t *surface) {
+void geometry_draw(cairo_t *cr, const geometry_t *array, int count, cairo_surface_t *surface) {
     for (int i = 0; i < count; ++i) {
-        const structure_t *structure = &array[i];
+        const geometry_t *structure = &array[i];
 
         cairo_save(cr);
 

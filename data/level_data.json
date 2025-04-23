@@ -455,13 +455,15 @@
                 "x": 221,
                 "y": 171,
                 "width": 19,
-                "height": 24
+                "height": 24,
+                "has_physics": false
             },
             {
                 "x": 180,
                 "y": 171,
                 "width": 19,
-                "height": 24
+                "height": 24,
+                "has_physics": false
             }
             ,
             {
@@ -509,7 +511,6 @@
             "x": 250,
             "y": 91,
             "direction": 1,
-            "is_grounded": true,
             "frame_width": 16,
             "frame_height": 24
         },
@@ -517,7 +518,6 @@
             "x": 73,
             "y": 131,
             "direction": 1,
-            "is_grounded": true,
             "frame_width": 48,
             "frame_height": 32
         },
@@ -525,9 +525,26 @@
             "x": 120,
             "y": 530,
             "direction": 1,
-            "is_grounded": true,
             "frame_width": 16,
             "frame_height": 16
-        }
+        },
+        "enemys": [
+            {
+                "id": "BARREL",
+                "x": 100,
+                "y": 200,
+                "direction": 1,
+                "spawn_interval": 50.0,
+                "initial_delay": 2.0
+            },
+            {
+                "id": "BARREL",
+                "x": 400,
+                "y": 200,
+                "direction": 1,
+                "spawn_interval": 50.0,
+                "initial_delay": 3.0
+            }
+        ]
     }
 }

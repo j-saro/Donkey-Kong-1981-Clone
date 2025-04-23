@@ -27,7 +27,7 @@ void peach_load_sprites(movable_entity_t *base) {
 }
 
 void peach_cleanup(movable_entity_t *base) {
-    movable_entity_cleanup(base);
+    movable_entity_cleanup(&base->animation);
 }
 
 void peach_draw(cairo_t *cr, const movable_entity_t *base) {

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "entities/abstract/static_entity.h"
-#include "entities/abstract/structure.h"
+#include "entities/abstract/geometry.h"
 
 void static_entity_init(level_t *level, cJSON *static_entities_json);
 void static_entity_cleanup(level_t *level);
@@ -20,7 +20,7 @@ void static_entity_init(level_t *level, cJSON *static_entities_json) {
 
     for (int i = 0; i < level->num_static_entities; i++) {
         cJSON *entity_json = cJSON_GetArrayItem(static_entities_json, i);
-        structure_parse(&level->static_entities[i].entity, entity_json);
+        geometry_parse(&level->static_entities[i].entity, entity_json);
 
         // Get spritesheet path
         cJSON *sheet_item = cJSON_GetObjectItem(entity_json, "sprite");

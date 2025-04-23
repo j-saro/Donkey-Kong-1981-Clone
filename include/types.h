@@ -65,10 +65,10 @@ typedef struct {
     float width;
     float height;
     bool has_physics;
-} structure_t;
+} geometry_t;
 
 typedef struct {
-    structure_t entity;
+    geometry_t entity;
     cairo_surface_t *sprite_sheet;
     cairo_surface_t *sprite;
 } static_entity_t;
@@ -82,11 +82,35 @@ typedef struct {
     animation_t animation;
 } movable_entity_t;
 
+typedef enum {
+    BARREL,
+    FIRE_SPIRIT,
+    ERROR,
+} enemy_type_t;
 
 /* 
 * Level related
 */
 
+// Enemys
+typedef struct {
+    enemy_type_t type;
+    float x, y;
+    int direction;
+    float spawn_interval;
+    float spawn_timer;
+} enemy_spawn_t;
+
+typedef struct {
+    animation_t animation;
+} barrel_t;
+
+typedef struct {
+    enemy_type_t type;
+    movable_entity_t base;
+} enemy_t;
+
+// Actors
 typedef struct {
     movable_entity_t base;
     float anim_interval;
@@ -96,10 +120,6 @@ typedef struct {
 typedef struct {
     movable_entity_t base;
 } donkey_kong_t;
-
-typedef struct {
-    movable_entity_t base;
-} enemy_t;
 
 typedef struct {
     movable_entity_t base;
@@ -117,31 +137,35 @@ typedef struct {
     // Player/Mario
     player_t player;
 
-    // Platforms
-    int num_platforms;
-    structure_t *platforms;
-    cairo_surface_t *platform_sprite_sheet;
-
-    // Ladders
-    int num_ladders;
-    structure_t *ladders;
-    cairo_surface_t *ladder_sprite_sheet;
-
-    // Static objects
-    int num_static_entities;
-    static_entity_t *static_entities;
-
     // Peach
     peach_t peach;
 
     // Donkey Kong
     donkey_kong_t donkey_kong;
 
+    // Platforms
+    int num_platforms;
+    geometry_t *platforms;
+    cairo_surface_t *platform_sprite_sheet;
+
+    // Ladders
+    int num_ladders;
+    geometry_t *ladders;
+    cairo_surface_t *ladder_sprite_sheet;
+
+    // Static objects
+    int num_static_entities;
+    static_entity_t *static_entities;
+
     // Enemys
     enemy_t *enemies;
     unsigned int enemy_capacity;
     unsigned int num_enemies;
-    cairo_surface_t *enemies_stylesheet;
+
+    enemy_spawn_t *enemy_spawns;
+    unsigned int num_enemy_spawns;
+
+    barrel_t barrel;
 } level_t;
 
 

@@ -25,7 +25,7 @@ void donkey_kong_load_sprites(movable_entity_t *base) {
 }
 
 void donkey_kong_cleanup(movable_entity_t *base) {
-    movable_entity_cleanup(base);
+    movable_entity_cleanup(&base->animation);
 }
 
 void donkey_kong_draw(cairo_t *cr, const movable_entity_t *base) {

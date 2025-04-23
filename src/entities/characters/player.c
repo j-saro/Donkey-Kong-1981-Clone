@@ -34,7 +34,7 @@ void player_load_sprites(movable_entity_t *base) {
 }
 
 void player_cleanup(movable_entity_t *base) {
-    movable_entity_cleanup(base);
+    movable_entity_cleanup(&base->animation);
 }
 
 void player_draw(cairo_t *cr, const movable_entity_t *base) {
@@ -60,7 +60,7 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
     
     float player_bottom = player->base.y + PLAYER_HEIGHT;
     int current_ladder = player->current_ladder_index;
-    structure_t *ladder = &game_state->level.ladders[current_ladder];
+    geometry_t *ladder = &game_state->level.ladders[current_ladder];
 
     if (key_left) {
         player->base.x -= move_amount;
@@ -100,10 +100,10 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     float player_bottom = player->base.y + PLAYER_HEIGHT;
 
     int current_ladder = player->current_ladder_index;
-    structure_t *ladder = &game_state->level.ladders[current_ladder];
+    geometry_t *ladder = &game_state->level.ladders[current_ladder];
 
     int current_platform = player->current_platform_index;
-    structure_t *platform = &game_state->level.platforms[current_platform];
+    geometry_t *platform = &game_state->level.platforms[current_platform];
     
     float ladder_top = ladder->y - platform->height;
     float ladder_bottom = ladder->y + ladder->height - 2;

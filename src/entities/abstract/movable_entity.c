@@ -6,7 +6,7 @@
 
 void movable_entity_load_sprites(movable_entity_t *base, const char *spritesheet);
 void movable_entity_parse(movable_entity_t *base, cJSON *json);
-void movable_entity_cleanup(movable_entity_t *base);
+void movable_entity_cleanup(animation_t *animation);
 void movable_entity_draw(cairo_t *cr, const movable_entity_t *base);
 
 void movable_entity_load_sprites(movable_entity_t *base, const char *spritesheet) {
@@ -30,13 +30,13 @@ void movable_entity_parse(movable_entity_t *base, cJSON *json) {
     base->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
     base->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
     base->direction = cJSON_GetObjectItem(json, "direction")->valueint;
-    base->is_grounded = cJSON_IsTrue(cJSON_GetObjectItem(json, "is_grounded"));
     base->animation.frame_width = cJSON_GetObjectItem(json, "frame_width")->valueint;
     base->animation.frame_height = cJSON_GetObjectItem(json, "frame_height")->valueint;
 
     // Default Values
     base->velocity_x = 0;
     base->velocity_y = 0;
+    base->is_grounded = true;
 
     base->animation.current_frame_index = 0;
     base->animation.frame_time = 0;
@@ -44,17 +44,17 @@ void movable_entity_parse(movable_entity_t *base, cJSON *json) {
     base->animation.current_frame = NULL;
 }
 
-void movable_entity_cleanup(movable_entity_t *base) {
+void movable_entity_cleanup(animation_t *animation) {
     // Cleanup current frame
-    if (base->animation.current_frame != NULL) {
-        cairo_surface_destroy(base->animation.current_frame);
-        base->animation.current_frame = NULL;
+    if (animation->current_frame != NULL) {
+        cairo_surface_destroy(animation->current_frame);
+        animation->current_frame = NULL;
     }
 
     // Cleanup spritesheet
-    if (base->animation.sprite_sheet != NULL) {
-        cairo_surface_destroy(base->animation.sprite_sheet);
-        base->animation.sprite_sheet = NULL;
+    if (animation->sprite_sheet != NULL) {
+        cairo_surface_destroy(animation->sprite_sheet);
+        animation->sprite_sheet = NULL;
     }
 }
 
