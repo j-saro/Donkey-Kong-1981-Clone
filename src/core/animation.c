@@ -18,7 +18,7 @@ const animation_sequence_t animations[] = {
 
     // Barrel
     [ANIM_BARREL_SIDE] = {0, 0, 4, 0.1f},
-    [ANIM_BARREL_FRONT] = {0, 0, 1, 0.3f},
+    [ANIM_BARREL_FRONT] = {68, 0, 2, 0.1f},
 };
 
 void update_animation_progress(animation_t *animation, float dt_seconds);

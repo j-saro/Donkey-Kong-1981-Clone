@@ -1,6 +1,9 @@
 #include "core/physics.h"
 #include <stdio.h>
 #include "entities/abstract/enemy.h"
+#include <math.h>
+#include <stdlib.h>
+#include "core/animation.h"
 
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
@@ -164,10 +167,12 @@ void barrel_physics(level_t *level, float dt_seconds) {
 
         // Apply movement
         if (enemy->base.velocity_y == 0) {
-            enemy->base.x += 2 * enemy->base.direction;
-        } else {
+            enemy->base.x += MOVE_SPEED * enemy->base.direction * dt_seconds;
+        } 
+        else {
+
             enemy->base.x += 0.1 * enemy->base.direction;
-        }
+        }        
         enemy->base.velocity_y += GRAVITY * dt_seconds;
         enemy->base.y += enemy->base.velocity_y * dt_seconds;
 
@@ -175,13 +180,48 @@ void barrel_physics(level_t *level, float dt_seconds) {
             enemy->fly_time += dt_seconds;
         }
 
+        // Apply physics
+        barrel_collision(level, enemy);
+
+        if (enemy->base.is_grounded) {
+            float enemy_center_x = enemy->base.x + TILE_SIZE * 0.5f;
+        
+            for (int j = 0; j < level->num_ladders; j++) {
+                const geometry_t *ladder = &level->ladders[j];
+
+                if (!ladder->has_physics) {
+                    continue;
+                }
+
+                float ladder_center = ladder->x - 5;
+                float ladder_left = ladder->x;
+                float ladder_right = ladder_left + ladder->width;
+                float ladder_top = ladder->y - PHYSICS_EPSILON;
+
+                float barrel_bottom = enemy->base.y + 10;
+        
+                bool aligned_with_ladder = (enemy_center_x > ladder_left && enemy_center_x < ladder_right);
+                bool close_enough_y = fabs(barrel_bottom - ladder_top) <= 6.0f;
+                
+                if (aligned_with_ladder && close_enough_y) {
+                    int probability = (level->player.current_ladder_index == j) ? 20 : 2;
+                    if ((rand() % 200) < probability) {
+                        enemy->base.y += 30;
+                        enemy->base.is_grounded = false;
+                        set_animation(&enemy->base.animation, ANIM_BARREL_FRONT);
+                        break;
+                    }
+                }
+            }
+        }
+        
         if (enemy->fly_time > 0.1 && enemy->base.is_grounded) {
             enemy->base.direction *= -1;
             enemy->fly_time = 0;
+            if (!(enemy->base.animation.current_animation == ANIM_BARREL_SIDE)) {
+                set_animation(&enemy->base.animation, ANIM_BARREL_SIDE);
+            }
         }
-
-        // Apply physics
-        barrel_collision(level, enemy);
 
         // Remove out of bound enemies
         if (enemy->base.x < 0 || enemy->base.x > BASE_WIDTH) {
