@@ -2,7 +2,7 @@
 
 const animation_sequence_t animations[] = {
     // Mario
-    [ANIM_IDLE_MARIO] = {1, 21, 1, 0.2f},
+    [ANIM_IDLE_MARIO] = {1, 21, 1, 1.0f},
     [ANIM_WALK_MARIO] = {1, 21, 3, 0.1f},
     [ANIM_JUMP_MARIO] = {63, 21, 1, 0.15f},
     [ANIM_CLIMB_MARIO] = {132, 21, 2, 0.1f},
@@ -17,8 +17,8 @@ const animation_sequence_t animations[] = {
     [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 1.0f},
 
     // Barrel
-    [ANIM_SIDE] = {0, 0, 1, 0.3f},
-    [ANIM_FRONT] = {0, 0, 1, 0.3f},
+    [ANIM_BARREL_SIDE] = {0, 0, 4, 0.1f},
+    [ANIM_BARREL_FRONT] = {0, 0, 1, 0.3f},
 };
 
 void update_animation_progress(animation_t *animation, float dt_seconds);

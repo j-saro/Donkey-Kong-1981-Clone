@@ -1,0 +1,62 @@
+{
+    "level": {
+        "platforms": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            }
+        ],
+        "ladders": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0
+            }
+        ],
+        "static_entities": [
+            {
+                "x": 0,
+                "y": 0,
+                "width": 0,
+                "height": 0,
+                "sprite": "./assets/... .png",
+                "sprite_x": 0,
+                "sprite_y": 0
+            }
+        ],
+        "peach": {
+            "x": 0,
+            "y": 0,
+            "direction": 1,
+            "frame_width": 0,
+            "frame_height": 0
+        },
+        "donkey_kong": {
+            "x": 0,
+            "y": 0,
+            "direction": 1,
+            "frame_width": 0,
+            "frame_height": 0
+        },
+        "mario": {
+            "x": 0,
+            "y": 0,
+            "direction": 1,
+            "frame_width": 0,
+            "frame_height": 0
+        },
+        "enemys": [
+            {
+                "id": "BARREL",
+                "x": 0,
+                "y": 0,
+                "direction": 1,
+                "spawn_interval": 0,
+                "initial_delay": 0
+            }
+        ]
+    }
+}

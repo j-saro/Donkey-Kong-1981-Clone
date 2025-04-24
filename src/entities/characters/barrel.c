@@ -9,7 +9,7 @@ void barrel_load_sprite(enemy_t *enemy, int i);
 
 void barrel_init(barrel_t *barrel) {
     animation_t *animation = &barrel->animation;
-    const char *filename = "./assets/mario_sprite_sheet.png"; // filler value
+    const char *filename = "./assets/barrels_sprite_sheet.png";
 
     animation->sprite_sheet = cairo_image_surface_create_from_png(filename);
     if (cairo_surface_status(animation->sprite_sheet) != CAIRO_STATUS_SUCCESS) {
@@ -18,9 +18,9 @@ void barrel_init(barrel_t *barrel) {
     }
     animation->current_frame = NULL;
     
-    animation->current_animation = ANIM_CLIMB_MARIO; // filler value
-    animation->frame_height = 16; // filler value
-    animation->frame_width = 16; // filler value
+    animation->current_animation = ANIM_BARREL_SIDE;
+    animation->frame_height = TILE_SIZE;
+    animation->frame_width = TILE_SIZE;
 }
 
 void barrel_cleanup(barrel_t *barrel) {

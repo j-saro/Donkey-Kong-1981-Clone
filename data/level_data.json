@@ -531,19 +531,11 @@
         "enemys": [
             {
                 "id": "BARREL",
-                "x": 100,
-                "y": 200,
+                "x": 160,
+                "y": 170,
                 "direction": 1,
                 "spawn_interval": 50.0,
                 "initial_delay": 2.0
-            },
-            {
-                "id": "BARREL",
-                "x": 400,
-                "y": 200,
-                "direction": 1,
-                "spawn_interval": 50.0,
-                "initial_delay": 3.0
             }
         ]
     }

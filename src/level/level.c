@@ -135,7 +135,7 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     // Enemys
     barrel_init(&level->barrel);
     enemy_init(level, enemy_json);
-
+    
     cJSON_Delete(json);
     return TRUE;
 }

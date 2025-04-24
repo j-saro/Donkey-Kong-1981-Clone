@@ -36,8 +36,8 @@ typedef enum {
     ANIM_THROWING_BARREL_DONKEY_KONG,
 
     // Barrel
-    ANIM_SIDE,
-    ANIM_FRONT,
+    ANIM_BARREL_SIDE,
+    ANIM_BARREL_FRONT,
 } animation_state_t;
 
 typedef struct {
