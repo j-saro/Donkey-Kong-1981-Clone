@@ -537,6 +537,19 @@
                 "spawn_interval": 0,
                 "initial_delay": 0
             }
-        ]
+        ],
+        "animations": {
+            "ANIM_IDLE_MARIO": {"start_x": 1, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
+            "ANIM_WALK_MARIO": {"start_x": 1, "start_y": 21, "frame_count": 3, "frame_duration": 0.1},
+            "ANIM_JUMP_MARIO": {"start_x": 63, "start_y": 21, "frame_count": 1, "frame_duration": 0.15},
+            "ANIM_CLIMB_MARIO": {"start_x": 132, "start_y": 21, "frame_count": 2, "frame_duration": 0.1},
+            "ANIM_CLIMB_IDLE_MARIO": {"start_x": 132, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
+            "ANIM_IDLE_PEACH": {"start_x": 0, "start_y": 0, "frame_count": 2, "frame_duration": 0.3},
+            "ANIM_IDLE_DONKEY_KONG": {"start_x": 1, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
+            "ANIM_BEATING_CHEST_DONKEY_KONG": {"start_x": 54, "start_y": 21, "frame_count": 2, "frame_duration": 0.5},
+            "ANIM_THROWING_BARREL_DONKEY_KONG": {"start_x": 156, "start_y": 21, "frame_count": 3, "frame_duration": 0.5},
+            "ANIM_BARREL_SIDE": {"start_x": 0, "start_y": 0, "frame_count": 4, "frame_duration": 0.1},
+            "ANIM_BARREL_FRONT": {"start_x": 68, "start_y": 0, "frame_count": 2, "frame_duration": 0.1}
+        }
     }
 }

@@ -10,6 +10,7 @@
 #include "entities/characters/player.h"
 #include "entities/characters/barrel.h"
 #include "entities/abstract/enemy.h"
+#include "core/animation.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
@@ -120,6 +121,16 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
+    cJSON *animation_json = cJSON_GetObjectItem(level_json, "animations");
+    if (animation_json == NULL || !cJSON_IsObject(animation_json)) {
+        printf("Error: No 'animations' object found in JSON\n");
+        cJSON_Delete(json);
+        return FALSE;
+    }
+
+    // Animation
+    animation_load_form_json(level, animation_json);
+
     // Geometry
     platform_init(level, platforms_json);
     ladder_init(level, ladders_json);
@@ -156,6 +167,9 @@ void level_cleanup(level_t *level) {
     // enemys
     enemy_cleanup(level);
     barrel_cleanup(&level->barrel);
+
+    // Animation
+    animation_cleanup();
 }
 
 void level_draw(cairo_t *cr, const level_t *level) {

@@ -1,30 +1,56 @@
 #include "core/animation.h"
 
-const animation_sequence_t animations[] = {
-    // Mario
-    [ANIM_IDLE_MARIO] = {1, 21, 1, 1.0f},
-    [ANIM_WALK_MARIO] = {1, 21, 3, 0.1f},
-    [ANIM_JUMP_MARIO] = {63, 21, 1, 0.15f},
-    [ANIM_CLIMB_MARIO] = {132, 21, 2, 0.1f},
-    [ANIM_CLIMB_IDLE_MARIO] = {132, 21, 1, 1.0f},
-
-    // Peach
-    [ANIM_IDLE_PEACH] = {0, 0, 2, 0.3f},
-
-    // Donkey Kong
-    [ANIM_IDLE_DONKEY_KONG] = {1, 21, 1, 1.0f},
-    [ANIM_BEATING_CHEST_DONKEY_KONG] = {54, 21, 2, 0.5f},
-    [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 0.5f},
-
-    // Barrel
-    [ANIM_BARREL_SIDE] = {0, 0, 4, 0.1f},
-    [ANIM_BARREL_FRONT] = {68, 0, 2, 0.1f},
-};
-
+void animation_load_form_json(level_t *level, cJSON *json);
+int get_animation_enum_by_name(const char *name);
+void animation_cleanup(void);
 void update_animation_progress(animation_t *animation, float dt_seconds);
 void update_animation_frame(animation_t *animation);
 void set_animation(animation_t *animation, animation_state_t new_anim);
 
+animation_sequence_t *animations = NULL;
+
+void animation_load_form_json(level_t *level, cJSON *json) {
+    animations = calloc(NUM_ANIMATIONS + 1, sizeof(animation_sequence_t));
+
+    cJSON *animation_obj;
+    int i = 0;
+
+    cJSON_ArrayForEach(animation_obj, json) {
+        const char *animation_name = animation_obj->string;
+        int anim_id = get_animation_enum_by_name(animation_name);
+        if (anim_id == -1) {
+            fprintf(stderr, "Unknown animation name: %s\n", animation_name);
+            continue;
+        }    
+
+        animations[i].start_x = cJSON_GetObjectItem(animation_obj, "start_x")->valueint;
+        animations[i].start_y = cJSON_GetObjectItem(animation_obj, "start_y")->valueint;
+        animations[i].frame_count = cJSON_GetObjectItem(animation_obj, "frame_count")->valueint;
+        animations[i].frame_duration = (float)cJSON_GetObjectItem(animation_obj, "frame_duration")->valuedouble;
+
+        i++;
+    }
+}
+
+int get_animation_enum_by_name(const char *name) {
+    if (strcmp(name, "ANIM_IDLE_MARIO") == 0) return ANIM_IDLE_MARIO;
+    if (strcmp(name, "ANIM_WALK_MARIO") == 0) return ANIM_WALK_MARIO;
+    if (strcmp(name, "ANIM_JUMP_MARIO") == 0) return ANIM_JUMP_MARIO;
+    if (strcmp(name, "ANIM_CLIMB_MARIO") == 0) return ANIM_CLIMB_MARIO;
+    if (strcmp(name, "ANIM_CLIMB_IDLE_MARIO") == 0) return ANIM_CLIMB_IDLE_MARIO;
+    if (strcmp(name, "ANIM_IDLE_PEACH") == 0) return ANIM_IDLE_PEACH;
+    if (strcmp(name, "ANIM_IDLE_DONKEY_KONG") == 0) return ANIM_IDLE_DONKEY_KONG;
+    if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;
+    if (strcmp(name, "ANIM_THROWING_BARREL_DONKEY_KONG") == 0) return ANIM_THROWING_BARREL_DONKEY_KONG;
+    if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
+    if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
+    return -1; 
+}
+
+void animation_cleanup(void) {
+    free(animations);
+    animations = NULL;
+}
 
 // keeps the animation frame_time updated
 void update_animation_progress(animation_t *animation, float dt_seconds) {

@@ -39,6 +39,9 @@ typedef enum {
     // Barrel
     ANIM_BARREL_SIDE,
     ANIM_BARREL_FRONT,
+
+    // Size
+    NUM_ANIMATIONS 
 } animation_state_t;
 
 typedef struct {
@@ -180,4 +183,5 @@ typedef struct {
     int *pressed_keys;
     unsigned int num_pressed_keys;
     level_t level;
+
 } game_state_t;

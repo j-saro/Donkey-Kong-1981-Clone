@@ -12,6 +12,7 @@ void platform_collision(game_state_t *game_state);
 void check_ladder_collision(game_state_t *game_state);
 void barrel_collision(level_t *level, enemy_t *enemy);
 void barrel_physics(level_t *level, float dt_seconds);
+void barrel_ladder_option(level_t *level, enemy_t *enemy);
 void player_barrel_collision(player_t *player, enemy_t *enemy);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
@@ -180,40 +181,8 @@ void barrel_physics(level_t *level, float dt_seconds) {
             enemy->fly_time += dt_seconds;
         }
 
-        // Apply physics
         barrel_collision(level, enemy);
-
-        if (enemy->base.is_grounded) {
-            float enemy_center_x = enemy->base.x + TILE_SIZE * 0.5f;
-        
-            for (int j = 0; j < level->num_ladders; j++) {
-                const geometry_t *ladder = &level->ladders[j];
-
-                if (!ladder->has_physics) {
-                    continue;
-                }
-
-                float ladder_center = ladder->x - 5;
-                float ladder_left = ladder->x;
-                float ladder_right = ladder_left + ladder->width;
-                float ladder_top = ladder->y - PHYSICS_EPSILON;
-
-                float barrel_bottom = enemy->base.y + 10;
-        
-                bool aligned_with_ladder = (enemy_center_x > ladder_left && enemy_center_x < ladder_right);
-                bool close_enough_y = fabs(barrel_bottom - ladder_top) <= 6.0f;
-                
-                if (aligned_with_ladder && close_enough_y) {
-                    int probability = (level->player.current_ladder_index == j) ? 20 : 2;
-                    if ((rand() % 200) < probability) {
-                        enemy->base.y += 30;
-                        enemy->base.is_grounded = false;
-                        set_animation(&enemy->base.animation, ANIM_BARREL_FRONT);
-                        break;
-                    }
-                }
-            }
-        }
+        barrel_ladder_option(level, enemy);
         
         if (enemy->fly_time > 0.1 && enemy->base.is_grounded) {
             enemy->base.direction *= -1;
@@ -228,6 +197,40 @@ void barrel_physics(level_t *level, float dt_seconds) {
             enemy_destroy(level, i);
             i--;
             continue;
+        }
+    }
+}
+
+void barrel_ladder_option(level_t *level, enemy_t *enemy) {
+    if (enemy->base.is_grounded) {
+        float enemy_center_x = enemy->base.x + TILE_SIZE * 0.5f;
+    
+        for (int j = 0; j < level->num_ladders; j++) {
+            const geometry_t *ladder = &level->ladders[j];
+
+            if (!ladder->has_physics) {
+                continue;
+            }
+
+            float ladder_center = ladder->x - 5;
+            float ladder_left = ladder->x;
+            float ladder_right = ladder_left + ladder->width;
+            float ladder_top = ladder->y - PHYSICS_EPSILON;
+
+            float barrel_bottom = enemy->base.y + 10;
+    
+            bool aligned_with_ladder = (enemy_center_x > ladder_left && enemy_center_x < ladder_right);
+            bool close_enough_y = fabs(barrel_bottom - ladder_top) <= 6.0f;
+            
+            if (aligned_with_ladder && close_enough_y) {
+                int probability = (level->player.current_ladder_index == j) ? 20 : 2;
+                if ((rand() % 200) < probability) {
+                    enemy->base.y += 30;
+                    enemy->base.is_grounded = false;
+                    set_animation(&enemy->base.animation, ANIM_BARREL_FRONT);
+                    break;
+                }
+            }
         }
     }
 }
