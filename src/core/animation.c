@@ -14,7 +14,7 @@ const animation_sequence_t animations[] = {
     // Donkey Kong
     [ANIM_IDLE_DONKEY_KONG] = {1, 21, 1, 1.0f},
     [ANIM_BEATING_CHEST_DONKEY_KONG] = {54, 21, 2, 0.5f},
-    [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 1.0f},
+    [ANIM_THROWING_BARREL_DONKEY_KONG] = {156, 21, 3, 0.5f},
 
     // Barrel
     [ANIM_BARREL_SIDE] = {0, 0, 4, 0.1f},

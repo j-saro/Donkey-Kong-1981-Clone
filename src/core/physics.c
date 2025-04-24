@@ -1,14 +1,20 @@
 #include "core/physics.h"
 #include <stdio.h>
+#include "entities/abstract/enemy.h"
+
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
 void window_collision(game_state_t *game_state, float screen_height);
 void platform_collision(game_state_t *game_state);
 void check_ladder_collision(game_state_t *game_state);
+void barrel_collision(level_t *level, enemy_t *enemy);
+void barrel_physics(level_t *level, float dt_seconds);
+void player_barrel_collision(player_t *player, enemy_t *enemy);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     player_t *player = &game_state->level.player;
-    // Gravitation
+
+    // Gravitation Player
     if (!player->climbing) {
         player->base.velocity_y += GRAVITY * dt_seconds;
         player->base.y += player->base.velocity_y * dt_seconds;
@@ -16,6 +22,7 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 
     window_collision(game_state, screen_height);
     platform_collision(game_state);
+    barrel_physics(&game_state->level, dt_seconds);
 }
 
 void window_collision(game_state_t *game_state, float screen_height) {
@@ -53,12 +60,15 @@ void platform_collision(game_state_t *game_state) {
     for (int i = 0; i < game_state->level.num_platforms; i++) {
         const geometry_t *platform = &game_state->level.platforms[i];
 
+        if (!platform->has_physics)
+            continue;
+
         float platform_left = platform->x;
         float platform_right = platform_left + platform->width;
         float platform_top = platform->y;
 
         // calc x-overlap
-        if (!(player_right > platform_left && player_left < platform_right) || !platform->has_physics)
+        if (!(player_right > platform_left && player_left < platform_right))
             continue;
 
         // snap player to platform
@@ -93,7 +103,7 @@ void check_ladder_collision(game_state_t *game_state) {
 
         float ladder_left = ladder->x;
         float ladder_right = ladder_left + ladder->width;
-        float ladder_top = ladder->y - LADDER_EXTRA;
+        float ladder_top = ladder->y - PHYSICS_EPSILON;
         float ladder_bottom = ladder_top + ladder->height;
 
         bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);
@@ -106,4 +116,100 @@ void check_ladder_collision(game_state_t *game_state) {
         }
     }
     player->on_ladder = is_on_ladder;
+}
+
+void barrel_collision(level_t *level, enemy_t *enemy) {
+    float enemy_top = enemy->base.y;
+    float enemy_bottom = enemy->base.y + PHYSICS_EPSILON;
+    float enemy_left = enemy->base.x;
+    float enemy_right = enemy->base.x + TILE_SIZE;
+
+    bool grounded = false;
+
+    for (int i = 0; i < level->num_platforms; i++) {
+        const geometry_t *platform = &level->platforms[i];
+
+        if (!platform->has_physics)
+            continue;
+
+        float platform_left = platform->x;
+        float platform_right = platform_left + platform->width;
+        float platform_top = platform->y;
+
+        // Check horizontal overlap
+        if (!(enemy_right >= platform_left && enemy_left <= platform_right))
+            continue;
+
+        // Check vertical collision (enemy falling onto platform)
+        if (enemy->base.velocity_y >= 0 &&
+            (enemy_bottom + 2) >= platform_top &&
+            enemy_top < platform_top)
+        {
+            enemy->base.y = platform_top - PHYSICS_EPSILON;
+            enemy->base.velocity_y = 0;
+            grounded = true;
+            break;
+        }
+    }
+
+    enemy->base.is_grounded = grounded;
+}
+
+void barrel_physics(level_t *level, float dt_seconds) {
+    // Gravitation Enemies
+    for (int i = 0; i < level->num_enemies; i++) {
+        enemy_t *enemy = &level->enemies[i];
+
+        player_barrel_collision(&level->player, enemy);
+
+        // Apply movement
+        if (enemy->base.velocity_y == 0) {
+            enemy->base.x += 2 * enemy->base.direction;
+        } else {
+            enemy->base.x += 0.1 * enemy->base.direction;
+        }
+        enemy->base.velocity_y += GRAVITY * dt_seconds;
+        enemy->base.y += enemy->base.velocity_y * dt_seconds;
+
+        if (!enemy->base.is_grounded) {
+            enemy->fly_time += dt_seconds;
+        }
+
+        if (enemy->fly_time > 0.1 && enemy->base.is_grounded) {
+            enemy->base.direction *= -1;
+            enemy->fly_time = 0;
+        }
+
+        // Apply physics
+        barrel_collision(level, enemy);
+
+        // Remove out of bound enemies
+        if (enemy->base.x < 0 || enemy->base.x > BASE_WIDTH) {
+            enemy_destroy(level, i);
+            i--;
+            continue;
+        }
+    }
+}
+
+void player_barrel_collision(player_t *player, enemy_t *enemy) {
+    float enemy_left = enemy->base.x;
+    float enemy_right = enemy->base.x + TILE_SIZE;
+    float enemy_top = enemy->base.y;
+    float enemy_bottom = enemy->base.y + 10;
+
+    float player_left = player->base.x;
+    float player_right = player->base.x + PLAYER_WIDTH;
+    float player_top = player->base.y;
+    float player_bottom = player->base.y + PLAYER_HEIGHT;
+
+    bool collision = !(player_right < enemy_left ||
+                       player_left > enemy_right ||
+                       player_bottom < enemy_top ||
+                       player_top > enemy_bottom);
+
+    if (collision) {
+        player->base.x = 120;
+        player->base.y = 530;
+    }
 }

@@ -71,7 +71,7 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         player->base.direction = 1;
     }
     if (key_up && player->on_ladder) {
-        float ladder_top = ladder->y - LADDER_EXTRA;
+        float ladder_top = ladder->y - PHYSICS_EPSILON;
         if ((player_bottom - 2) >= ladder_top) {
             player->base.y -= move_amount;
         }

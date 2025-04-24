@@ -532,10 +532,10 @@
             {
                 "id": "BARREL",
                 "x": 160,
-                "y": 170,
+                "y": 175,
                 "direction": 1,
-                "spawn_interval": 50.0,
-                "initial_delay": 2.0
+                "spawn_interval": 0,
+                "initial_delay": 0
             }
         ]
     }

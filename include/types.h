@@ -12,7 +12,8 @@
 #define TILE_SIZE 16
 #define PLAYER_HEIGHT (TILE_SIZE * SCALE)
 #define PLAYER_WIDTH (TILE_SIZE * SCALE)
-#define LADDER_EXTRA 19
+#define PHYSICS_EPSILON 19
+#define MAX_ENEMIES 50
 
 
 /* 
@@ -108,6 +109,7 @@ typedef struct {
 typedef struct {
     enemy_type_t type;
     movable_entity_t base;
+    float fly_time;
 } enemy_t;
 
 // Actors
@@ -119,6 +121,8 @@ typedef struct {
 
 typedef struct {
     movable_entity_t base;
+    bool throw;
+    bool has_thrown_this_cicle;
 } donkey_kong_t;
 
 typedef struct {

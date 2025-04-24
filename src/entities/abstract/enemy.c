@@ -10,6 +10,7 @@ void enemy_init(level_t *level, cJSON *json);
 enemy_type_t parse_enemy_type(const char *id);
 gboolean allocate_new_enemy(level_t *level);
 void new_enemy(level_t *level, enemy_type_t id ,float pos_x, float pos_y, int direction);
+void enemy_destroy(level_t *level, int index);
 void enemy_cleanup(level_t *level);
 void enemy_draw(cairo_t *cr, const level_t *level);
 void enemy_update(level_t *level, float dt_seconds);
@@ -77,6 +78,7 @@ void new_enemy(level_t *level, enemy_type_t enemy_type, float pos_x, float pos_y
     enemy->base.velocity_x = 0;
     enemy->base.velocity_y = 0;
     enemy->base.is_grounded = false;
+    enemy->fly_time = 0;
 
     enemy->base.animation.current_frame_index = 0;
     enemy->base.animation.frame_time = 0;
@@ -94,6 +96,26 @@ void new_enemy(level_t *level, enemy_type_t enemy_type, float pos_x, float pos_y
         case ERROR:
             g_warning("Unknown enemy type (%d). Skipping enemy creation.", enemy_type);
     }
+}
+
+void enemy_destroy(level_t *level, int index) {
+    if (index < 0 || index >= level->num_enemies) {
+        g_warning("Tried to destroy enemy at invalid index: %d", index);
+        return;
+    }
+
+    animation_t *animation = &level->enemies[index].base.animation;
+    if (animation->current_frame != NULL) {
+        cairo_surface_destroy(animation->current_frame);
+        animation->current_frame = NULL;
+    }
+
+    // Shift all remaining enemies left to fill the gap
+    for (int i = index; i < level->num_enemies - 1; i++) {
+        level->enemies[i] = level->enemies[i + 1];
+    }
+
+    level->num_enemies--;
 }
 
 void enemy_cleanup(level_t *level) {
@@ -121,21 +143,31 @@ void enemy_draw(cairo_t *cr, const level_t *level) {
 }
 
 void enemy_update(level_t *level, float dt_seconds) {
+    // spawn new enemies
     for (int i = 0; i < level->num_enemy_spawns; i++) {
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
-        enemy_t *enemy = &level->enemies[i];
 
-        // spawn new enemy
+        if (level->num_enemies >= MAX_ENEMIES) {
+            continue;
+        }
+
+        if (level->donkey_kong.throw && spawn->type == BARREL) {
+            new_enemy(level, spawn->type, spawn->x, spawn->y, spawn->direction);
+            level->donkey_kong.throw = false;
+            continue;
+        }
+
         spawn->spawn_timer -= dt_seconds;
-        if (spawn->spawn_timer <= 0.0f) {
+    
+        if (spawn->spawn_timer <= dt_seconds && !(spawn->type == BARREL)) {
             new_enemy(level, spawn->type, spawn->x, spawn->y, spawn->direction);
             spawn->spawn_timer = spawn->spawn_interval;
         }
+    }
 
-        switch (enemy->type) {
-            case BARREL:
-                break;
-        }
-        //update_animation_progress(&enemy->base.animation, dt_seconds); TODO: SEG FAULT!
+    // update spawned enemies
+    for (int i = 0; i < level->num_enemies; i++) {
+        enemy_t *enemy = &level->enemies[i];
+        update_animation_progress(&enemy->base.animation, dt_seconds);
     }
 }

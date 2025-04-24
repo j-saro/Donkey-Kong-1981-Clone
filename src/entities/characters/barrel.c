@@ -19,7 +19,7 @@ void barrel_init(barrel_t *barrel) {
     animation->current_frame = NULL;
     
     animation->current_animation = ANIM_BARREL_SIDE;
-    animation->frame_height = TILE_SIZE;
+    animation->frame_height = 10;
     animation->frame_width = TILE_SIZE;
 }
 

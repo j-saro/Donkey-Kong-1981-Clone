@@ -15,6 +15,8 @@ void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json) {
 
     // Donkey Kong Default Values
     donkey_kong->base.animation.current_animation = ANIM_THROWING_BARREL_DONKEY_KONG;
+    donkey_kong->throw = false;
+    donkey_kong->has_thrown_this_cicle = false;
 
     donkey_kong_load_sprites(&donkey_kong->base);
 }
@@ -40,9 +42,15 @@ void donkey_kong_update(donkey_kong_t *donkey_kong, float dt_seconds) {
 
     switch (animation->current_animation) {
         case ANIM_THROWING_BARREL_DONKEY_KONG:
+            if (animation->current_frame_index == sequence.frame_count - 1 &&
+                !donkey_kong->has_thrown_this_cicle) {
+                donkey_kong->throw = true;
+                donkey_kong->has_thrown_this_cicle = true;
+            }
             if (animation->current_frame_index == sequence.frame_count - 1 && 
-                animation->frame_time >= (sequence.frame_duration - 0.1)) {
+                animation->frame_time >= (sequence.frame_duration - 0.05)) {
                 animation_state_t new_anim = (rand() % 10 < 7) ? ANIM_IDLE_DONKEY_KONG : ANIM_BEATING_CHEST_DONKEY_KONG;
+                donkey_kong->has_thrown_this_cicle = false;
                 set_animation(animation, new_anim);
             }
             break;
@@ -50,7 +58,7 @@ void donkey_kong_update(donkey_kong_t *donkey_kong, float dt_seconds) {
         case ANIM_IDLE_DONKEY_KONG:
         case ANIM_BEATING_CHEST_DONKEY_KONG:
             if (animation->current_frame_index == sequence.frame_count - 1 && 
-                animation->frame_time >= (sequence.frame_duration - 0.1)) {
+                animation->frame_time >= (sequence.frame_duration - 0.05)) {
                 set_animation(animation, ANIM_THROWING_BARREL_DONKEY_KONG);
             }
             break;
