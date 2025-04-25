@@ -1,5 +1,227 @@
 {
     "level": {
+        "sprite_sheet": [
+            {
+                "id": "MARIO",
+                "path": "./assets/mario_sprite_sheet.png"
+            },
+            {
+                "id": "DONKEY_KONG",
+                "path": "./assets/donkey_kong_sprite_sheet.png"
+            },
+            {
+                "id": "PEACH",
+                "path": "./assets/peach_sprite_sheet.png"
+            },
+            {
+                "id": "BARREL",
+                "path": "./assets/barrels_sprite_sheet.png"
+            },
+            {
+                "id": "LADDER",
+                "path": "./assets/ladder.png"
+            },
+            {
+                "id": "PLATFORM",
+                "path": "./assets/platform.png"
+            },
+            {
+                "id": "STATIC_ENTITY",
+                "path": "./assets/static_entities_sprite_sheet.png"
+            }
+        ],
+        "animations": [
+            {
+                "key": "ANIM_IDLE_MARIO",
+                "entity_id": "MARIO",
+                "start_x": 1,
+                "start_y": 21,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_WALK_MARIO",
+                "entity_id": "MARIO",
+                "start_x": 1,
+                "start_y": 21,
+                "frame_count": 3,
+                "frame_duration": 0.1,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_JUMP_MARIO",
+                "entity_id": "MARIO",
+                "start_x": 63,
+                "start_y": 21,
+                "frame_count": 1,
+                "frame_duration": 0.15,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_CLIMB_MARIO",
+                "entity_id": "MARIO",
+                "start_x": 132,
+                "start_y": 21,
+                "frame_count": 2,
+                "frame_duration": 0.1,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_CLIMB_IDLE_MARIO",
+                "entity_id": "MARIO",
+                "start_x": 132,
+                "start_y": 21,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_IDLE_PEACH",
+                "entity_id": "PEACH",
+                "start_x": 0,
+                "start_y": 0,
+                "frame_count": 2,
+                "frame_duration": 0.3,
+                "frame_width": 16,
+                "frame_height": 24
+            },
+            {
+                "key": "ANIM_IDLE_DONKEY_KONG",
+                "entity_id": "DONKEY_KONG",
+                "start_x": 1,
+                "start_y": 21,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 48,
+                "frame_height": 32
+            },
+            {
+                "key": "ANIM_BEATING_CHEST_DONKEY_KONG",
+                "entity_id": "DONKEY_KONG",
+                "start_x": 54,
+                "start_y": 21,
+                "frame_count": 2,
+                "frame_duration": 0.5,
+                "frame_width": 48,
+                "frame_height": 32
+            },
+            {
+                "key": "ANIM_THROWING_BARREL_DONKEY_KONG",
+                "entity_id": "DONKEY_KONG",
+                "start_x": 156,
+                "start_y": 21,
+                "frame_count": 3,
+                "frame_duration": 0.5,
+                "frame_width": 48,
+                "frame_height": 32
+            },
+            {
+                "key": "ANIM_BARREL_SIDE",
+                "entity_id": "BARREL",
+                "start_x": 0,
+                "start_y": 0,
+                "frame_count": 4,
+                "frame_duration": 0.1,
+                "frame_width": 16,
+                "frame_height": 10
+            },
+            {
+                "key": "ANIM_BARREL_FRONT",
+                "entity_id": "BARREL",
+                "start_x": 68,
+                "start_y": 0,
+                "frame_count": 2,
+                "frame_duration": 0.1,
+                "frame_width": 16,
+                "frame_height": 10
+            },
+            {
+                "key": "ANIM_OIL_BARREL",
+                "entity_id": "STATIC_ENTITY",
+                "start_x": 0,
+                "start_y": 7,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 16,
+                "frame_height": 16
+            },
+            {
+                "key": "ANIM_BARREL_STACK",
+                "entity_id": "STATIC_ENTITY",
+                "start_x": 0,
+                "start_y": 26,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 21,
+                "frame_height": 32
+            }
+        ],
+        "static_entities": [
+            {
+                "key": "ANIM_OIL_BARREL",
+                "x": 60,
+                "y": 538,
+                "direction": 1,
+                "width": 16,
+                "height": 16
+            },
+            {
+                "key": "ANIM_BARREL_STACK",
+                "x": 30,
+                "y": 130,
+                "direction": 1,
+                "width": 21,
+                "height": 32
+            }
+        ],
+        "peach": {
+            "key": "ANIM_IDLE_PEACH",
+            "x": 250,
+            "y": 91,
+            "direction": 1,
+            "width": 16,
+            "height": 24
+        },
+        "donkey_kong": {
+            "key": "ANIM_THROWING_BARREL_DONKEY_KONG",
+            "x": 73,
+            "y": 131,
+            "direction": 1,
+            "width": 48,
+            "height": 32
+        },
+        "mario": {
+            "key": "ANIM_IDLE_MARIO",
+            "x": 120,
+            "y": 530,
+            "direction": 1,
+            "width": 16,
+            "height": 16
+        },
+        "enemys": [
+            {
+                "id": "BARREL",
+                "x": 160,
+                "y": 175,
+                "direction": 1,
+                "spawn_interval": 0,
+                "initial_delay": 0
+            }
+        ],
+        "items": [
+            {
+                "id": "HAMMER",
+                "x": 0,
+                "y": 0,
+                "points": 0
+            }
+        ],
         "platforms": [
             {
                 "x": 0,
@@ -348,7 +570,7 @@
                 "y": 139,
                 "width": 120,
                 "height": 16
-            }  
+            }
         ],
         "ladders": [
             {
@@ -464,8 +686,7 @@
                 "width": 19,
                 "height": 24,
                 "has_physics": false
-            }
-            ,
+            },
             {
                 "x": 221,
                 "y": 63,
@@ -486,70 +707,6 @@
                 "width": 19,
                 "height": 42
             }
-        ],
-        "static_entities": [
-            {
-                "x": 60,
-                "y": 538,
-                "width": 16,
-                "height": 16,
-                "sprite": "./assets/barrel_sprite_sheet.png",
-                "sprite_x": 0,
-                "sprite_y": 7
-            },
-            {
-                "x": 30,
-                "y": 130,
-                "width": 21,
-                "height": 32,
-                "sprite": "./assets/barrels.png",
-                "sprite_x": 0,
-                "sprite_y": 0
-            }
-        ],
-        "peach": {
-            "x": 250,
-            "y": 91,
-            "direction": 1,
-            "frame_width": 16,
-            "frame_height": 24
-        },
-        "donkey_kong": {
-            "x": 73,
-            "y": 131,
-            "direction": 1,
-            "frame_width": 48,
-            "frame_height": 32
-        },
-        "mario": {
-            "x": 120,
-            "y": 530,
-            "direction": 1,
-            "frame_width": 16,
-            "frame_height": 16
-        },
-        "enemys": [
-            {
-                "id": "BARREL",
-                "x": 160,
-                "y": 175,
-                "direction": 1,
-                "spawn_interval": 0,
-                "initial_delay": 0
-            }
-        ],
-        "animations": {
-            "ANIM_IDLE_MARIO": {"start_x": 1, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
-            "ANIM_WALK_MARIO": {"start_x": 1, "start_y": 21, "frame_count": 3, "frame_duration": 0.1},
-            "ANIM_JUMP_MARIO": {"start_x": 63, "start_y": 21, "frame_count": 1, "frame_duration": 0.15},
-            "ANIM_CLIMB_MARIO": {"start_x": 132, "start_y": 21, "frame_count": 2, "frame_duration": 0.1},
-            "ANIM_CLIMB_IDLE_MARIO": {"start_x": 132, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
-            "ANIM_IDLE_PEACH": {"start_x": 0, "start_y": 0, "frame_count": 2, "frame_duration": 0.3},
-            "ANIM_IDLE_DONKEY_KONG": {"start_x": 1, "start_y": 21, "frame_count": 1, "frame_duration": 1.0},
-            "ANIM_BEATING_CHEST_DONKEY_KONG": {"start_x": 54, "start_y": 21, "frame_count": 2, "frame_duration": 0.5},
-            "ANIM_THROWING_BARREL_DONKEY_KONG": {"start_x": 156, "start_y": 21, "frame_count": 3, "frame_duration": 0.5},
-            "ANIM_BARREL_SIDE": {"start_x": 0, "start_y": 0, "frame_count": 4, "frame_duration": 0.1},
-            "ANIM_BARREL_FRONT": {"start_x": 68, "start_y": 0, "frame_count": 2, "frame_duration": 0.1}
-        }
+        ]
     }
 }

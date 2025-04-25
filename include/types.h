@@ -21,6 +21,20 @@
 */
 
 typedef enum {
+    MARIO,
+    DONKEY_KONG,
+    PEACH,
+    BARREL,
+    HAMMER,
+    LADDER,
+    PLATFORM,
+    STATIC_ENTITY,
+
+    // size
+    ENTITY_COUNT
+} entities_t;
+
+typedef enum {
     // Mario
     ANIM_IDLE_MARIO,
     ANIM_WALK_MARIO,
@@ -40,24 +54,30 @@ typedef enum {
     ANIM_BARREL_SIDE,
     ANIM_BARREL_FRONT,
 
-    // Size
-    NUM_ANIMATIONS 
+    // STATIC OIL BARREL
+    ANIM_OIL_BARREL,
+
+    // Donky Kong Barrel Stack
+    ANIM_BARREL_STACK,
+
+    // size
+    ANIMATION_COUNT
 } animation_state_t;
 
 typedef struct {
+    entities_t type;
     int start_x;
     int start_y;
     int frame_count;
     float frame_duration;
+    int frame_width, frame_height;
 } animation_sequence_t;
 
 typedef struct {
-    cairo_surface_t *sprite_sheet;
     cairo_surface_t *current_frame;
     int current_animation;
     int current_frame_index;
     float frame_time;
-    int frame_width, frame_height;
 } animation_t;
 
 /* 
@@ -65,6 +85,7 @@ typedef struct {
 */
 
 typedef struct {
+    entities_t type;
     float x, y;
     float width;
     float height;
@@ -72,48 +93,43 @@ typedef struct {
 } geometry_t;
 
 typedef struct {
-    geometry_t entity;
-    cairo_surface_t *sprite_sheet;
-    cairo_surface_t *sprite;
-} static_entity_t;
+    entities_t type;
 
-typedef struct {
     float x, y;
     float velocity_x, velocity_y;
     int direction;
     bool is_grounded;
+    float width, height;
 
     animation_t animation;
 } movable_entity_t;
 
-typedef enum {
-    BARREL,
-    FIRE_SPIRIT,
-    ERROR,
-} enemy_type_t;
-
-/* 
-* Level related
-*/
-
-// Enemys
 typedef struct {
-    enemy_type_t type;
+    entities_t type;
     float x, y;
     int direction;
     float spawn_interval;
     float spawn_timer;
 } enemy_spawn_t;
 
-typedef struct {
-    animation_t animation;
-} barrel_t;
+/* 
+* Level related
+*/
 
 typedef struct {
-    enemy_type_t type;
     movable_entity_t base;
     float fly_time;
 } enemy_t;
+
+typedef struct {
+    movable_entity_t base;
+    float x, y;
+    int points;
+} item_t;
+
+typedef struct {
+    movable_entity_t base;
+} static_entity_t;
 
 // Actors
 typedef struct {
@@ -172,7 +188,9 @@ typedef struct {
     enemy_spawn_t *enemy_spawns;
     unsigned int num_enemy_spawns;
 
-    barrel_t barrel;
+    // Items
+    item_t *items;
+    unsigned int num_items;
 } level_t;
 
 

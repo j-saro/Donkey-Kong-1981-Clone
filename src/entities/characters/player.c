@@ -3,39 +3,28 @@
 #include "entities/abstract/movable_entity.h"
 
 void player_init(player_t *player, cJSON *json);
-void player_load_sprites(movable_entity_t *base);
-void player_cleanup(movable_entity_t *base);
 void player_draw(cairo_t *cr, const movable_entity_t *base);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
 
 void player_init(player_t *player, cJSON *json) {
+    player->base.type = MARIO;
+    
     // Json read Values
     movable_entity_parse(&player->base, json);
 
     // Player Default Values
     // Animation
-    player->base.animation.current_animation = ANIM_IDLE_MARIO;
+    player->base.animation.current_frame = NULL;
     
     // Position
     player->climbing = false;
     player->on_ladder = false;
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
-    
-
-    player_load_sprites(&player->base);
 }
 
-void player_load_sprites(movable_entity_t *base) {
-    const char *spritesheet = "./assets/mario_sprite_sheet.png";
-    movable_entity_load_sprites(base, spritesheet);
-}
-
-void player_cleanup(movable_entity_t *base) {
-    movable_entity_cleanup(&base->animation);
-}
 
 void player_draw(cairo_t *cr, const movable_entity_t *base) {
     movable_entity_draw(cr, base);
@@ -45,7 +34,7 @@ void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_s
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
     player_change_animation(game_state, dt_seconds);
-    update_animation_progress(&game_state->level.player.base.animation, dt_seconds);
+    update_animation_progress(&game_state->level.player.base, dt_seconds);
 }
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
@@ -110,26 +99,26 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
 
     if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_JUMP_MARIO);
+        set_animation(&player->base, ANIM_JUMP_MARIO);
     }
     else if (player->on_ladder && key_up && player_bottom > ladder_top) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB_MARIO);
+        set_animation(&player->base, ANIM_CLIMB_MARIO);
     }
     else if (player->on_ladder && key_down && player_bottom < ladder_bottom) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB_MARIO);
+        set_animation(&player->base, ANIM_CLIMB_MARIO);
     }
     else if (player->on_ladder && player->climbing && player_bottom > ladder_top) {
         player->climbing = true;
-        set_animation(&player->base.animation, ANIM_CLIMB_IDLE_MARIO);
+        set_animation(&player->base, ANIM_CLIMB_IDLE_MARIO);
     }
     else if (player->base.is_grounded && (key_left || key_right)) {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_WALK_MARIO);
+        set_animation(&player->base, ANIM_WALK_MARIO);
     }
     else {
         player->climbing = false;
-        set_animation(&player->base.animation, ANIM_IDLE_MARIO);
+        set_animation(&player->base, ANIM_IDLE_MARIO);
     }
 }

@@ -4,12 +4,11 @@
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/movable_entity.h"
 #include "core/animation.h"
-#include "entities/characters/barrel.h"
+#include "core/sprite.h"
 
 void enemy_init(level_t *level, cJSON *json);
-enemy_type_t parse_enemy_type(const char *id);
 gboolean allocate_new_enemy(level_t *level);
-void new_enemy(level_t *level, enemy_type_t id ,float pos_x, float pos_y, int direction);
+void new_enemy(level_t *level, entities_t id ,float pos_x, float pos_y, int direction);
 void enemy_destroy(level_t *level, int index);
 void enemy_cleanup(level_t *level);
 void enemy_draw(cairo_t *cr, const level_t *level);
@@ -24,14 +23,14 @@ void enemy_init(level_t *level, cJSON *json) {
 
     // Enemy Categories
     level->num_enemy_spawns = cJSON_GetArraySize(json);
-    level->enemy_spawns = malloc(level->num_enemy_spawns * sizeof(enemy_spawn_t));
+    level->enemy_spawns = calloc(level->num_enemy_spawns, sizeof(enemy_spawn_t));
 
     for (int i = 0; i < level->num_enemy_spawns; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
         
         const char *id_str = cJSON_GetObjectItem(item, "id")->valuestring;
-        spawn->type = parse_enemy_type(id_str);
+        spawn->type = get_type_by_name(id_str);
         spawn->x = cJSON_GetObjectItem(item, "x")->valuedouble;
         spawn->y = cJSON_GetObjectItem(item, "y")->valuedouble;
         spawn->direction = cJSON_GetObjectItem(item, "direction")->valueint;
@@ -40,10 +39,6 @@ void enemy_init(level_t *level, cJSON *json) {
     }
 }
 
-enemy_type_t parse_enemy_type(const char *id) {
-    if (strcmp(id, "BARREL") == 0) return BARREL;
-    return ERROR;
-}
 
 gboolean allocate_new_enemy(level_t *level) {
     if (level->num_enemies + 1 > level->enemy_capacity) {
@@ -62,7 +57,7 @@ gboolean allocate_new_enemy(level_t *level) {
     return TRUE;
 }
 
-void new_enemy(level_t *level, enemy_type_t enemy_type, float pos_x, float pos_y, int direction) {
+void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, int direction) {
     if (!allocate_new_enemy(level)) {
         return;
     }
@@ -82,18 +77,14 @@ void new_enemy(level_t *level, enemy_type_t enemy_type, float pos_x, float pos_y
 
     enemy->base.animation.current_frame_index = 0;
     enemy->base.animation.frame_time = 0;
-    enemy->base.animation.current_frame = NULL;
 
     switch (enemy_type) {
         case BARREL:
-            enemy->type = enemy_type;
-            enemy->base.animation.current_animation = level->barrel.animation.current_animation;
-            enemy->base.animation.frame_width = level->barrel.animation.frame_width;
-            enemy->base.animation.frame_height = level->barrel.animation.frame_height;
-            enemy->base.animation.sprite_sheet = level->barrel.animation.sprite_sheet;
-            barrel_load_sprite(enemy, level->num_enemies - 1);
+            enemy->base.type = enemy_type;
+            enemy->base.animation.current_animation = ANIM_BARREL_SIDE;
             break;
-        case ERROR:
+
+        default:
             g_warning("Unknown enemy type (%d). Skipping enemy creation.", enemy_type);
     }
 }
@@ -102,12 +93,6 @@ void enemy_destroy(level_t *level, int index) {
     if (index < 0 || index >= level->num_enemies) {
         g_warning("Tried to destroy enemy at invalid index: %d", index);
         return;
-    }
-
-    animation_t *animation = &level->enemies[index].base.animation;
-    if (animation->current_frame != NULL) {
-        cairo_surface_destroy(animation->current_frame);
-        animation->current_frame = NULL;
     }
 
     // Shift all remaining enemies left to fill the gap
@@ -119,11 +104,6 @@ void enemy_destroy(level_t *level, int index) {
 }
 
 void enemy_cleanup(level_t *level) {
-    for (int i = 0; i < level->num_enemies; i++) {
-        level->enemies[i].base.animation.sprite_sheet = NULL; // Gets properly destroyed in barrel.c
-        movable_entity_cleanup(&level->enemies[i].base.animation);
-    }
-
     // Spawned enemies
     free(level->enemies);
     level->enemies = NULL;
@@ -168,6 +148,6 @@ void enemy_update(level_t *level, float dt_seconds) {
     // update spawned enemies
     for (int i = 0; i < level->num_enemies; i++) {
         enemy_t *enemy = &level->enemies[i];
-        update_animation_progress(&enemy->base.animation, dt_seconds);
+        update_animation_progress(&enemy->base, dt_seconds);
     }
 }

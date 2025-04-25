@@ -10,10 +10,10 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 void window_collision(game_state_t *game_state, float screen_height);
 void platform_collision(game_state_t *game_state);
 void check_ladder_collision(game_state_t *game_state);
-void barrel_collision(level_t *level, enemy_t *enemy);
-void barrel_physics(level_t *level, float dt_seconds);
-void barrel_ladder_option(level_t *level, enemy_t *enemy);
-void player_barrel_collision(player_t *player, enemy_t *enemy);
+void enemy_platform_collision(level_t *level, enemy_t *enemy);
+void enemy_physics(level_t *level, float dt_seconds);
+void enemy_ladder_option(level_t *level, enemy_t *enemy);
+void enemy_player_collision(player_t *player, enemy_t *enemy);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     player_t *player = &game_state->level.player;
@@ -26,7 +26,7 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 
     window_collision(game_state, screen_height);
     platform_collision(game_state);
-    barrel_physics(&game_state->level, dt_seconds);
+    enemy_physics(&game_state->level, dt_seconds);
 }
 
 void window_collision(game_state_t *game_state, float screen_height) {
@@ -122,7 +122,7 @@ void check_ladder_collision(game_state_t *game_state) {
     player->on_ladder = is_on_ladder;
 }
 
-void barrel_collision(level_t *level, enemy_t *enemy) {
+void enemy_platform_collision(level_t *level, enemy_t *enemy) {
     float enemy_top = enemy->base.y;
     float enemy_bottom = enemy->base.y + PHYSICS_EPSILON;
     float enemy_left = enemy->base.x;
@@ -159,12 +159,12 @@ void barrel_collision(level_t *level, enemy_t *enemy) {
     enemy->base.is_grounded = grounded;
 }
 
-void barrel_physics(level_t *level, float dt_seconds) {
+void enemy_physics(level_t *level, float dt_seconds) {
     // Gravitation Enemies
     for (int i = 0; i < level->num_enemies; i++) {
         enemy_t *enemy = &level->enemies[i];
 
-        player_barrel_collision(&level->player, enemy);
+        enemy_player_collision(&level->player, enemy);
 
         // Apply movement
         if (enemy->base.velocity_y == 0) {
@@ -181,14 +181,14 @@ void barrel_physics(level_t *level, float dt_seconds) {
             enemy->fly_time += dt_seconds;
         }
 
-        barrel_collision(level, enemy);
-        barrel_ladder_option(level, enemy);
+        enemy_platform_collision(level, enemy);
+        enemy_ladder_option(level, enemy);
         
         if (enemy->fly_time > 0.1 && enemy->base.is_grounded) {
             enemy->base.direction *= -1;
             enemy->fly_time = 0;
             if (!(enemy->base.animation.current_animation == ANIM_BARREL_SIDE)) {
-                set_animation(&enemy->base.animation, ANIM_BARREL_SIDE);
+                set_animation(&enemy->base, ANIM_BARREL_SIDE);
             }
         }
 
@@ -201,7 +201,7 @@ void barrel_physics(level_t *level, float dt_seconds) {
     }
 }
 
-void barrel_ladder_option(level_t *level, enemy_t *enemy) {
+void enemy_ladder_option(level_t *level, enemy_t *enemy) {
     if (enemy->base.is_grounded) {
         float enemy_center_x = enemy->base.x + TILE_SIZE * 0.5f;
     
@@ -227,7 +227,7 @@ void barrel_ladder_option(level_t *level, enemy_t *enemy) {
                 if ((rand() % 200) < probability) {
                     enemy->base.y += 30;
                     enemy->base.is_grounded = false;
-                    set_animation(&enemy->base.animation, ANIM_BARREL_FRONT);
+                    set_animation(&enemy->base, ANIM_BARREL_FRONT);
                     break;
                 }
             }
@@ -235,7 +235,7 @@ void barrel_ladder_option(level_t *level, enemy_t *enemy) {
     }
 }
 
-void player_barrel_collision(player_t *player, enemy_t *enemy) {
+void enemy_player_collision(player_t *player, enemy_t *enemy) {
     float enemy_left = enemy->base.x;
     float enemy_right = enemy->base.x + TILE_SIZE;
     float enemy_top = enemy->base.y;

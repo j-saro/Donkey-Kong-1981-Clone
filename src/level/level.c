@@ -8,9 +8,9 @@
 #include "entities/characters/peach.h"
 #include "entities/characters/donkey_kong.h"
 #include "entities/characters/player.h"
-#include "entities/characters/barrel.h"
 #include "entities/abstract/enemy.h"
 #include "core/animation.h"
+#include "core/sprite.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
@@ -122,14 +122,21 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     }
 
     cJSON *animation_json = cJSON_GetObjectItem(level_json, "animations");
-    if (animation_json == NULL || !cJSON_IsObject(animation_json)) {
-        printf("Error: No 'animations' object found in JSON\n");
+    if (animation_json == NULL || !cJSON_IsArray(animation_json)) {
+        printf("Error: No 'animations' array found in JSON\n");
+        cJSON_Delete(json);
+        return FALSE;
+    }
+
+    cJSON *spritesheet_json = cJSON_GetObjectItem(level_json, "sprite_sheet");
+    if (spritesheet_json == NULL || !cJSON_IsArray(spritesheet_json)) {
+        printf("Error: No 'sprite_sheet' array found in JSON\n");
         cJSON_Delete(json);
         return FALSE;
     }
 
     // Animation
-    animation_load_form_json(level, animation_json);
+    sprite_init(spritesheet_json, animation_json);
 
     // Geometry
     platform_init(level, platforms_json);
@@ -144,7 +151,6 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     player_init(&level->player, mario_json);
 
     // Enemys
-    barrel_init(&level->barrel);
     enemy_init(level, enemy_json);
     
     cJSON_Delete(json);
@@ -159,17 +165,11 @@ void level_cleanup(level_t *level) {
     // Static entity
     static_entity_cleanup(level);
 
-    // Movable entity
-    peach_cleanup(&level->peach.base);
-    donkey_kong_cleanup(&level->donkey_kong.base);
-    player_cleanup(&level->player.base);
-
     // enemys
     enemy_cleanup(level);
-    barrel_cleanup(&level->barrel);
 
-    // Animation
-    animation_cleanup();
+    // Sprites
+    sprite_cleanup();
 }
 
 void level_draw(cairo_t *cr, const level_t *level) {
