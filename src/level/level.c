@@ -177,13 +177,13 @@ void level_draw(cairo_t *cr, const level_t *level) {
     platform_draw(cr, level);
     ladder_draw(cr, level);
 
-    // Static entity
-    static_entity_draw(cr, level);
-
     // Movable entity
     peach_draw(cr, &level->peach.base);
     donkey_kong_draw(cr, &level->donkey_kong.base);
     player_draw(cr, &level->player.base);
+
+    // Static entity
+    static_entity_draw(cr, level);
 
     // Enemy
     enemy_draw(cr, level);
@@ -191,6 +191,6 @@ void level_draw(cairo_t *cr, const level_t *level) {
 
 void level_update(level_t *level, float dt_seconds) {
     peach_update(&level->peach, dt_seconds);
-    donkey_kong_update(&level->donkey_kong, dt_seconds);
+    donkey_kong_update(level, dt_seconds);
     enemy_update(level, dt_seconds);
 }

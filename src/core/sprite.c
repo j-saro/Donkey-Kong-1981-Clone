@@ -9,6 +9,7 @@ void sprite_cleanup();
 void load_sprite_sheets(cJSON *json);
 void load_animation_sprites();
 void animation_load_form_json(cJSON *json);
+void free_animation_frames();
 void free_sprite_sheets();
 void animation_cleanup();
 int get_type_by_name(const char *name);
@@ -29,12 +30,13 @@ void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json) {
 }
 
 void sprite_cleanup() {
+    free_animation_frames();
     free_sprite_sheets();
     animation_cleanup();
 }
 
 void load_sprite_sheets(cJSON *json) {
-    sprite_sheets = malloc(ENTITY_COUNT * sizeof(cairo_surface_t *));
+    sprite_sheets = calloc(ENTITY_COUNT, sizeof(cairo_surface_t *));
     if (!sprite_sheets) {
         g_warning("Failed to allocate memory for sprite sheets");
         return;
@@ -100,14 +102,14 @@ void load_animation_sprites() {
     }
 
     // Allocate memory for the 3D array (entity -> animation -> frame)
-    animation_frame_sprites = malloc(ENTITY_COUNT * sizeof(cairo_surface_t ***));
+    animation_frame_sprites = calloc(ENTITY_COUNT, sizeof(cairo_surface_t ***));
     if (!animation_frame_sprites) {
         g_warning("Failed to allocate memory for animation frames");
         return;
     }
 
     for (int i = 0; i < ENTITY_COUNT; i++) {
-        animation_frame_sprites[i] = malloc(ANIMATION_COUNT * sizeof(cairo_surface_t **));
+        animation_frame_sprites[i] = calloc(ANIMATION_COUNT, sizeof(cairo_surface_t **));
         if (!animation_frame_sprites[i]) {
             g_warning("Failed to allocate memory for animation frames for entity %d", i);
             return;
@@ -117,7 +119,7 @@ void load_animation_sprites() {
             animation_frame_sprites[i][j] = NULL; // Initialize to NULL by default
         
             if (animations[j].type == i) {
-                animation_frame_sprites[i][j] = malloc(animations[j].frame_count * sizeof(cairo_surface_t *));
+                animation_frame_sprites[i][j] = calloc(animations[j].frame_count, sizeof(cairo_surface_t *));
                 if (!animation_frame_sprites[i][j]) {
                     g_warning("Failed to allocate memory for frames of animation %d (entity %d)", j, i);
                     return;
@@ -153,6 +155,33 @@ void load_animation_sprites() {
             }
         }
     }
+}
+
+void free_animation_frames() {
+    if (!animation_frame_sprites) return;
+
+    for (int i = 0; i < ENTITY_COUNT; i++) {
+        if (!animation_frame_sprites[i]) continue;
+
+        for (int j = 0; j < ANIMATION_COUNT; j++) {
+            if (!animation_frame_sprites[i][j]) continue;
+
+            for (int k = 0; k < animations[j].frame_count; k++) {
+                if (animation_frame_sprites[i][j][k]) {
+                    cairo_surface_destroy(animation_frame_sprites[i][j][k]);
+                }
+            }
+
+            free(animation_frame_sprites[i][j]);
+            animation_frame_sprites[i][j] = NULL;
+        }
+
+        free(animation_frame_sprites[i]);
+        animation_frame_sprites[i] = NULL;
+    }
+
+    free(animation_frame_sprites);
+    animation_frame_sprites = NULL;
 }
 
 void free_sprite_sheets() {
@@ -193,9 +222,11 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;
     if (strcmp(name, "ANIM_THROWING_BARREL_DONKEY_KONG") == 0) return ANIM_THROWING_BARREL_DONKEY_KONG;
     if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
+    if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
     if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
     if (strcmp(name, "ANIM_OIL_BARREL") == 0) return ANIM_OIL_BARREL;
     if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
+    if (strcmp(name, "ANIM_STATIC_ENTITY_HIDE") == 0) return ANIM_STATIC_ENTITY_HIDE;
 
     return -1;
 }

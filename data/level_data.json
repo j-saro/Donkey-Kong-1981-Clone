@@ -117,7 +117,7 @@
                 "start_x": 156,
                 "start_y": 21,
                 "frame_count": 3,
-                "frame_duration": 0.5,
+                "frame_duration": 0.7,
                 "frame_width": 48,
                 "frame_height": 32
             },
@@ -142,6 +142,16 @@
                 "frame_height": 10
             },
             {
+                "key": "ANIM_BARREL_FRONT_IDLE",
+                "entity_id": "STATIC_ENTITY",
+                "start_x": 24,
+                "start_y": 26,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 15,
+                "frame_height": 10
+            },
+            {
                 "key": "ANIM_OIL_BARREL",
                 "entity_id": "STATIC_ENTITY",
                 "start_x": 0,
@@ -160,6 +170,16 @@
                 "frame_duration": 1.0,
                 "frame_width": 21,
                 "frame_height": 32
+            },
+            {
+                "key": "ANIM_STATIC_ENTITY_HIDE",
+                "entity_id": "STATIC_ENTITY",
+                "start_x": 0,
+                "start_y": 0,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 0,
+                "frame_height": 0
             }
         ],
         "static_entities": [
@@ -175,6 +195,14 @@
                 "key": "ANIM_BARREL_STACK",
                 "x": 30,
                 "y": 130,
+                "direction": 1,
+                "width": 21,
+                "height": 32
+            },
+            {
+                "key": "ANIM_STATIC_ENTITY_HIDE",
+                "x": 107,
+                "y": 170,
                 "direction": 1,
                 "width": 21,
                 "height": 32

@@ -53,12 +53,16 @@ typedef enum {
     // Barrel
     ANIM_BARREL_SIDE,
     ANIM_BARREL_FRONT,
+    ANIM_BARREL_FRONT_IDLE,
 
     // STATIC OIL BARREL
     ANIM_OIL_BARREL,
 
     // Donky Kong Barrel Stack
     ANIM_BARREL_STACK,
+
+    // Hide
+    ANIM_STATIC_ENTITY_HIDE,
 
     // size
     ANIMATION_COUNT
