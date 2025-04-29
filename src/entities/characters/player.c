@@ -1,9 +1,9 @@
 #include "entities/characters/player.h"
 #include "core/animation.h"
-#include "entities/abstract/movable_entity.h"
+#include "entities/abstract/entity.h"
 
 void player_init(player_t *player, cJSON *json);
-void player_draw(cairo_t *cr, const movable_entity_t *base);
+void player_draw(cairo_t *cr, const entity_t *base);
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
@@ -12,13 +12,9 @@ void player_init(player_t *player, cJSON *json) {
     player->base.type = MARIO;
     
     // Json read Values
-    movable_entity_parse(&player->base, json);
+    entity_parse(&player->base, json);
 
     // Player Default Values
-    // Animation
-    player->base.animation.current_frame = NULL;
-    
-    // Position
     player->climbing = false;
     player->on_ladder = false;
     player->current_ladder_index = 0;
@@ -26,8 +22,8 @@ void player_init(player_t *player, cJSON *json) {
 }
 
 
-void player_draw(cairo_t *cr, const movable_entity_t *base) {
-    movable_entity_draw(cr, base);
+void player_draw(cairo_t *cr, const entity_t *base) {
+    entity_draw(cr, base);
 }
 
 void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
@@ -60,13 +56,13 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         player->base.direction = 1;
     }
     if (key_up && player->on_ladder) {
-        float ladder_top = ladder->y - PHYSICS_EPSILON;
+        float ladder_top = ladder->base.y - PHYSICS_EPSILON;
         if ((player_bottom - 2) >= ladder_top) {
             player->base.y -= move_amount;
         }
     }
     if (key_down && player->on_ladder) {
-        float ladder_bottom = ladder->y + ladder->height;
+        float ladder_bottom = ladder->base.y + ladder->base.height;
         if (player_bottom <= ladder_bottom - 2) {
             player->base.y += move_amount;
         }
@@ -94,8 +90,8 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     int current_platform = player->current_platform_index;
     geometry_t *platform = &game_state->level.platforms[current_platform];
     
-    float ladder_top = ladder->y - platform->height;
-    float ladder_bottom = ladder->y + ladder->height - 2;
+    float ladder_top = ladder->base.y - platform->base.height;
+    float ladder_bottom = ladder->base.y + ladder->base.height - 2;
 
     if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;

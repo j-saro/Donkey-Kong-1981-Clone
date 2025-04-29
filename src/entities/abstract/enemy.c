@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "entities/abstract/enemy.h"
-#include "entities/abstract/movable_entity.h"
+#include "entities/abstract/entity.h"
 #include "core/animation.h"
 #include "core/sprite.h"
 
@@ -82,6 +82,8 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
         case BARREL:
             enemy->base.type = enemy_type;
             enemy->base.animation.current_animation = ANIM_BARREL_SIDE;
+            enemy->base.animation.frames = get_animation_frames(enemy->base.animation.current_animation);
+            enemy->base.animation.current_frame = enemy->base.animation.frames[enemy->base.animation.current_frame_index];
             break;
 
         default:
@@ -118,7 +120,7 @@ void enemy_cleanup(level_t *level) {
 
 void enemy_draw(cairo_t *cr, const level_t *level) {
     for (int i = 0; i < level->num_enemies; i++) { 
-        movable_entity_draw(cr, &level->enemies[i].base);
+        entity_draw(cr, &level->enemies[i].base);
     }
 }
 

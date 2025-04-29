@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "entities/abstract/static_entity.h"
 #include "entities/abstract/geometry.h"
-#include "entities/abstract/movable_entity.h"
+#include "entities/abstract/entity.h"
 #include "core/sprite.h"
 #include "core/animation.h"
 
@@ -29,7 +29,7 @@ void static_entity_init(level_t *level, cJSON *static_entities_json) {
         static_entity->base.type = STATIC_ENTITY;
 
         cJSON *entity_json = cJSON_GetArrayItem(static_entities_json, i);
-        movable_entity_parse(&static_entity->base, entity_json);
+        entity_parse(&static_entity->base, entity_json);
     }
 }
 
@@ -59,6 +59,6 @@ void show_static_entity(level_t *level) {
 
 void static_entity_draw(cairo_t *cr, const level_t *level) {
     for (int i = 0; i < level->num_static_entities; ++i) {
-        movable_entity_draw(cr, &level->static_entities[i].base);
+        entity_draw(cr, &level->static_entities[i].base);
     }
 }

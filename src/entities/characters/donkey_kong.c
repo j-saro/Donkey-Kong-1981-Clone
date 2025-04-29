@@ -1,28 +1,26 @@
 #include "entities/characters/donkey_kong.h"
-#include "entities/abstract/movable_entity.h"
+#include "entities/abstract/entity.h"
 #include "core/animation.h"
 #include "core/sprite.h"
 #include "entities/abstract/static_entity.h"
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json);
-void donkey_kong_draw(cairo_t *cr, const movable_entity_t *base);
+void donkey_kong_draw(cairo_t *cr, const entity_t *base);
 void donkey_kong_update(level_t *level, float dt_seconds);
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json) {
     donkey_kong->base.type = DONKEY_KONG;
     
     // Load Values form Json
-    movable_entity_parse(&donkey_kong->base, json);
+    entity_parse(&donkey_kong->base, json);
 
     // Donkey Kong Default Values
-    donkey_kong->base.animation.current_frame = NULL;
     donkey_kong->throw = false;
     donkey_kong->has_thrown_this_cicle = false;
 }
 
-
-void donkey_kong_draw(cairo_t *cr, const movable_entity_t *base) {
-    movable_entity_draw(cr, base);
+void donkey_kong_draw(cairo_t *cr, const entity_t *base) {
+    entity_draw(cr, base);
 }
 
 void donkey_kong_update(level_t *level, float dt_seconds) {

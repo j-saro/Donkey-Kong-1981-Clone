@@ -1,13 +1,13 @@
-#include "entities/abstract/movable_entity.h"
+#include "entities/abstract/entity.h"
 #include <gtk/gtk.h>
 #include "core/animation.h"
 #include "cJSON.h"
 #include "core/sprite.h"
 
-void movable_entity_parse(movable_entity_t *base, cJSON *json);
-void movable_entity_draw(cairo_t *cr, const movable_entity_t *base);
+void entity_parse(entity_t *base, cJSON *json);
+void entity_draw(cairo_t *cr, const entity_t *base);
 
-void movable_entity_parse(movable_entity_t *base, cJSON *json) {
+void entity_parse(entity_t *base, cJSON *json) {
     // Json read Values
     cJSON *id_item = cJSON_GetObjectItem(json, "id");
     if (cJSON_IsString(id_item)) {
@@ -16,7 +16,11 @@ void movable_entity_parse(movable_entity_t *base, cJSON *json) {
     }
 
     const char *key_str = cJSON_GetObjectItem(json, "key")->valuestring;
-    base->animation.current_animation = get_type_by_name(key_str);
+    animation_state_t anim_state = get_type_by_name(key_str);
+    if (anim_state == -1) {
+        g_warning("Unknown animation state: %s", key_str);
+    }
+    base->animation.current_animation = anim_state;
 
     base->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
     base->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
@@ -31,10 +35,13 @@ void movable_entity_parse(movable_entity_t *base, cJSON *json) {
 
     base->animation.current_frame_index = 0;
     base->animation.frame_time = 0;
+
+    base->animation.frames = get_animation_frames(base->animation.current_animation);
+    base->animation.current_frame = base->animation.frames[base->animation.current_frame_index];
 }
 
 
-void movable_entity_draw(cairo_t *cr, const movable_entity_t *base) {
+void entity_draw(cairo_t *cr, const entity_t *base) {
     cairo_save(cr);
 
     float scale_x = SCALE * base->direction;
@@ -45,7 +52,7 @@ void movable_entity_draw(cairo_t *cr, const movable_entity_t *base) {
     cairo_translate(cr, draw_x, base->y);
     cairo_scale(cr, scale_x, scale_y);
 
-    cairo_surface_t *frame_surface = animation_frame_sprites[base->type][base->animation.current_animation][base->animation.current_frame_index];
+    cairo_surface_t *frame_surface = base->animation.current_frame;
     if (frame_surface != NULL) {
         cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
         cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);

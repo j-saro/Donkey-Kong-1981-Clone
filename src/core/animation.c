@@ -1,13 +1,13 @@
 #include "core/animation.h"
 #include "core/sprite.h"
 
-void update_animation_progress(movable_entity_t *base, float dt_seconds);
-void update_animation_frame(movable_entity_t *base);
-void set_animation(movable_entity_t *base, animation_state_t new_anim);
+void update_animation_progress(entity_t *base, float dt_seconds);
+void update_animation_frame(entity_t *base);
+void set_animation(entity_t *base, animation_state_t new_anim);
 
 
 // keeps the animation frame_time updated
-void update_animation_progress(movable_entity_t *base, float dt_seconds) {
+void update_animation_progress(entity_t *base, float dt_seconds) {
     animation_t *animation = &base->animation;
     animation_sequence_t anim = animations[animation->current_animation];
     
@@ -25,16 +25,30 @@ void update_animation_progress(movable_entity_t *base, float dt_seconds) {
     }
 }
 
-void update_animation_frame(movable_entity_t *base) {
-    base->animation.current_frame = animation_frame_sprites[base->type][base->animation.current_animation][base->animation.current_frame_index];
+void update_animation_frame(entity_t *base) {
+    if (base->animation.frames) {
+        base->animation.current_frame = base->animation.frames[base->animation.current_frame_index];
+    }
 }
 
 // sets a new Animation
-void set_animation(movable_entity_t *base, animation_state_t new_anim) {
+void set_animation(entity_t *base, animation_state_t new_anim) {
+    if (new_anim == -1) {
+        g_warning("Attempt to set invalid animation state");
+        return;
+    }
+
     if (base->animation.current_animation != new_anim) {
         base->animation.current_animation = new_anim;
         base->animation.current_frame_index = 0;
         base->animation.frame_time = 0;
+        base->animation.frames = get_animation_frames(new_anim);
+        
+        if (!base->animation.frames) {
+            g_warning("No frames found for animation %d", new_anim);
+            return;
+        }
+        
         update_animation_frame(base);
     }
 }

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
 
 void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json);
 void sprite_cleanup();
@@ -13,15 +14,18 @@ void free_animation_frames();
 void free_sprite_sheets();
 void animation_cleanup();
 int get_type_by_name(const char *name);
+cairo_surface_t **get_animation_frames(animation_state_t anim_state);
+cairo_surface_t *get_spritesheet(entities_t entity);
 
-// Stores the animation frames (3D array: entity -> animation -> frame)
-cairo_surface_t ****animation_frame_sprites = NULL;
-unsigned int num_animations = 0;
+// Stores the animation frames (animation -> frame)
+animation_frames_t *loaded_animations = NULL;
 
-// Stores the sprite sheets (2D array: entity -> sprite sheet)
-cairo_surface_t **sprite_sheets = NULL;
+// Stores the sprite sheets (entity -> sprite sheet)
+spritesheet_t *sprite_sheets = NULL;
+unsigned int num_sprite_sheets = 0;
 
 animation_sequence_t *animations = NULL;
+unsigned int num_animations = 0;
 
 void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json) {
     animation_load_form_json(animation_json);
@@ -36,21 +40,18 @@ void sprite_cleanup() {
 }
 
 void load_sprite_sheets(cJSON *json) {
-    sprite_sheets = calloc(ENTITY_COUNT, sizeof(cairo_surface_t *));
+    num_sprite_sheets = cJSON_GetArraySize(json);
+    sprite_sheets = calloc(num_sprite_sheets, sizeof(spritesheet_t));
     if (!sprite_sheets) {
         g_warning("Failed to allocate memory for sprite sheets");
         return;
     }
 
-    for (int i = 0; i < ENTITY_COUNT; i++) {
-        sprite_sheets[i] = NULL;
-    }
-
-    for (int i = 0; i < ENTITY_COUNT; i++) {
+    for (int i = 0; i < num_sprite_sheets; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         if (item) {
             const char *id_str = cJSON_GetObjectItem(item, "id")->valuestring;
-            entities_t id = get_type_by_name(id_str);
+            sprite_sheets[i].type = get_type_by_name(id_str);
 
             cJSON *path_item = cJSON_GetObjectItem(item, "path");
             if (!cJSON_IsString(path_item) || strlen(path_item->valuestring) == 0) {
@@ -67,7 +68,7 @@ void load_sprite_sheets(cJSON *json) {
                 continue;
             }
 
-            sprite_sheets[id] = surface;
+            sprite_sheets[i].sprite_sheet = surface;
         }
     }
 }
@@ -80,7 +81,7 @@ void animation_load_form_json(cJSON *json) {
         cJSON *item = cJSON_GetArrayItem(json, i);
 
         const char *key_str = cJSON_GetObjectItem(item, "key")->valuestring;
-        animation_state_t id = get_type_by_name(key_str);
+        animations[i].anim_key = get_type_by_name(key_str);
 
         const char *id_str = cJSON_GetObjectItem(item, "entity_id")->valuestring;
         animations[i].type = get_type_by_name(id_str);
@@ -95,110 +96,109 @@ void animation_load_form_json(cJSON *json) {
 }
 
 void load_animation_sprites() {
-    // Ensure animations array exists and has been populated
-    if (animations == NULL) {
-        g_warning("Animations array is not initialized.");
+    if (animations == NULL || sprite_sheets == NULL) {
+        g_warning("Animations or spritesheets are not initialized.");
         return;
     }
 
-    // Allocate memory for the 3D array (entity -> animation -> frame)
-    animation_frame_sprites = calloc(ENTITY_COUNT, sizeof(cairo_surface_t ***));
-    if (!animation_frame_sprites) {
-        g_warning("Failed to allocate memory for animation frames");
+    loaded_animations = calloc(num_animations, sizeof(animation_frames_t));
+    if (!loaded_animations) {
+        g_warning("Failed to allocate memory for animation frame containers");
         return;
     }
 
-    for (int i = 0; i < ENTITY_COUNT; i++) {
-        animation_frame_sprites[i] = calloc(ANIMATION_COUNT, sizeof(cairo_surface_t **));
-        if (!animation_frame_sprites[i]) {
-            g_warning("Failed to allocate memory for animation frames for entity %d", i);
-            return;
+    for (int i = 0; i < num_animations; i++) {
+        animation_sequence_t *anim = &animations[i];
+        loaded_animations[i].anim_key = anim->anim_key;
+        loaded_animations[i].frame_count = anim->frame_count;
+
+        // Allocate memory for the frames
+        loaded_animations[i].frames = calloc(anim->frame_count, sizeof(cairo_surface_t *));
+        if (!loaded_animations[i].frames) {
+            g_warning("Failed to allocate memory for frames of animation %d", i);
+            continue;
         }
 
-        for (int j = 0; j < ANIMATION_COUNT; j++) {
-            animation_frame_sprites[i][j] = NULL; // Initialize to NULL by default
-        
-            if (animations[j].type == i) {
-                animation_frame_sprites[i][j] = calloc(animations[j].frame_count, sizeof(cairo_surface_t *));
-                if (!animation_frame_sprites[i][j]) {
-                    g_warning("Failed to allocate memory for frames of animation %d (entity %d)", j, i);
-                    return;
-                }
-        
-                // Initialize to NULL to avoid invalid free later
-                for (int k = 0; k < animations[j].frame_count; k++) {
-                    animation_frame_sprites[i][j][k] = NULL;
-                }
+        // Find matching sprite sheet
+        cairo_surface_t *sheet = NULL;
+        for (int j = 0; j < num_sprite_sheets; j++) {
+            if (sprite_sheets[j].type == anim->type) {
+                sheet = sprite_sheets[j].sprite_sheet;
+                break;
             }
         }
-    }
 
-    for (int i = 0; i < ENTITY_COUNT; i++) {
-        // Iterate through animations
-        for (int j = 0; j < num_animations; j++) {
+        if (!sheet) {
+            g_warning("No matching sprite sheet found for animation type %d", anim->type);
+            continue;
+        }
 
-            // Check if the animation is for the current entity (e.g., MARIO)
-            if (animations[j].type == i) {
-
-                // Loop through each frame of the animation
-                for (int k = 0; k < animations[j].frame_count; k++) {
-
-                    // Create the frame for the animation from the sprite sheet
-                    animation_frame_sprites[i][j][k] = cairo_surface_create_for_rectangle(
-                        sprite_sheets[i],  // Sprite sheet for the current entity
-                        animations[j].start_x + k * animations[j].frame_width,
-                        animations[j].start_y,
-                        animations[j].frame_width,
-                        animations[j].frame_height
-                    );
-                }
-            }
+        // Create each frame
+        for (int k = 0; k < anim->frame_count; k++) {
+            loaded_animations[i].frames[k] = cairo_surface_create_for_rectangle(
+                sheet,
+                anim->start_x + k * anim->frame_width,
+                anim->start_y,
+                anim->frame_width,
+                anim->frame_height
+            );
         }
     }
 }
 
 void free_animation_frames() {
-    if (!animation_frame_sprites) return;
+    if (!loaded_animations) return;
 
-    for (int i = 0; i < ENTITY_COUNT; i++) {
-        if (!animation_frame_sprites[i]) continue;
+    for (int i = 0; i < num_animations; i++) {
+        if (!loaded_animations[i].frames) continue;
 
-        for (int j = 0; j < ANIMATION_COUNT; j++) {
-            if (!animation_frame_sprites[i][j]) continue;
-
-            for (int k = 0; k < animations[j].frame_count; k++) {
-                if (animation_frame_sprites[i][j][k]) {
-                    cairo_surface_destroy(animation_frame_sprites[i][j][k]);
-                }
+        for (int k = 0; k < loaded_animations[i].frame_count; k++) {
+            if (loaded_animations[i].frames[k]) {
+                cairo_surface_destroy(loaded_animations[i].frames[k]);
             }
-
-            free(animation_frame_sprites[i][j]);
-            animation_frame_sprites[i][j] = NULL;
         }
 
-        free(animation_frame_sprites[i]);
-        animation_frame_sprites[i] = NULL;
+        free(loaded_animations[i].frames);
+        loaded_animations[i].frames = NULL;
     }
 
-    free(animation_frame_sprites);
-    animation_frame_sprites = NULL;
+    free(loaded_animations);
+    loaded_animations = NULL;
 }
 
 void free_sprite_sheets() {
-    if (sprite_sheets) {
-        for (int i = 0; i < ENTITY_COUNT; i++) {
-            if (sprite_sheets[i]) {
-                cairo_surface_destroy(sprite_sheets[i]);
-            }
+    for (int i = 0; i < num_sprite_sheets; i++) {
+        if (sprite_sheets[i].sprite_sheet) {
+            cairo_surface_destroy(sprite_sheets[i].sprite_sheet);
         }
-        free(sprite_sheets);
     }
+    free(sprite_sheets);
+    sprite_sheets = NULL;
 }
 
 void animation_cleanup() {
     free(animations);
     animations = NULL;
 }
+
+cairo_surface_t **get_animation_frames(animation_state_t anim_state) {
+    for (int i = 0; i < num_animations; i++) {
+        if (animations[i].anim_key == anim_state) {
+            return loaded_animations[i].frames;
+        }
+    }
+    return NULL;
+}
+
+cairo_surface_t *get_spritesheet(entities_t entity) {
+    for (int i = 0; i < num_sprite_sheets; i++) {
+        if (sprite_sheets[i].type == entity) {
+            return sprite_sheets[i].sprite_sheet;
+        }
+    }
+    return NULL;
+}
+
 
 int get_type_by_name(const char *name) {
     // Entities

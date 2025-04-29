@@ -4,6 +4,6 @@
 #include "types.h"
 
 
-void update_animation_progress(movable_entity_t *base, float dt_seconds);
-void update_animation_frame(movable_entity_t *base);
-void set_animation(movable_entity_t *base, animation_state_t new_anim);
+void update_animation_progress(entity_t *base, float dt_seconds);
+void update_animation_frame(entity_t *base);
+void set_animation(entity_t *base, animation_state_t new_anim);

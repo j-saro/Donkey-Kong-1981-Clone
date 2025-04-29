@@ -67,9 +67,9 @@ void platform_collision(game_state_t *game_state) {
         if (!platform->has_physics)
             continue;
 
-        float platform_left = platform->x;
-        float platform_right = platform_left + platform->width;
-        float platform_top = platform->y;
+        float platform_left = platform->base.x;
+        float platform_right = platform_left + platform->base.width;
+        float platform_top = platform->base.y;
 
         // calc x-overlap
         if (!(player_right > platform_left && player_left < platform_right))
@@ -105,10 +105,10 @@ void check_ladder_collision(game_state_t *game_state) {
             continue;
         }
 
-        float ladder_left = ladder->x;
-        float ladder_right = ladder_left + ladder->width;
-        float ladder_top = ladder->y - PHYSICS_EPSILON;
-        float ladder_bottom = ladder_top + ladder->height;
+        float ladder_left = ladder->base.x;
+        float ladder_right = ladder_left + ladder->base.width;
+        float ladder_top = ladder->base.y - PHYSICS_EPSILON;
+        float ladder_bottom = ladder_top + ladder->base.height;
 
         bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);
         bool overlap_ladder = (player_bottom > ladder_top && player_top < ladder_bottom);
@@ -136,9 +136,9 @@ void enemy_platform_collision(level_t *level, enemy_t *enemy) {
         if (!platform->has_physics)
             continue;
 
-        float platform_left = platform->x;
-        float platform_right = platform_left + platform->width;
-        float platform_top = platform->y;
+        float platform_left = platform->base.x;
+        float platform_right = platform_left + platform->base.width;
+        float platform_top = platform->base.y;
 
         // Check horizontal overlap
         if (!(enemy_right >= platform_left && enemy_left <= platform_right))
@@ -212,10 +212,10 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                 continue;
             }
 
-            float ladder_center = ladder->x - 5;
-            float ladder_left = ladder->x;
-            float ladder_right = ladder_left + ladder->width;
-            float ladder_top = ladder->y - PHYSICS_EPSILON;
+            float ladder_center = ladder->base.x - 5;
+            float ladder_left = ladder->base.x;
+            float ladder_right = ladder_left + ladder->base.width;
+            float ladder_top = ladder->base.y - PHYSICS_EPSILON;
 
             float barrel_bottom = enemy->base.y + 10;
     

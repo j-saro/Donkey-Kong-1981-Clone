@@ -29,9 +29,6 @@ typedef enum {
     LADDER,
     PLATFORM,
     STATIC_ENTITY,
-
-    // size
-    ENTITY_COUNT
 } entities_t;
 
 typedef enum {
@@ -63,13 +60,11 @@ typedef enum {
 
     // Hide
     ANIM_STATIC_ENTITY_HIDE,
-
-    // size
-    ANIMATION_COUNT
 } animation_state_t;
 
 typedef struct {
     entities_t type;
+    animation_state_t anim_key;
     int start_x;
     int start_y;
     int frame_count;
@@ -78,24 +73,27 @@ typedef struct {
 } animation_sequence_t;
 
 typedef struct {
+    cairo_surface_t **frames;
     cairo_surface_t *current_frame;
-    int current_animation;
+    animation_state_t current_animation;
     int current_frame_index;
     float frame_time;
 } animation_t;
 
+typedef struct {
+    entities_t type;
+    cairo_surface_t *sprite_sheet;
+} spritesheet_t;
+
+typedef struct {
+    animation_state_t anim_key;
+    cairo_surface_t **frames;
+    float frame_count;
+} animation_frames_t;
+
 /* 
 * Abstract 'Classes'
 */
-
-typedef struct {
-    entities_t type;
-    float x, y;
-    float width;
-    float height;
-    bool has_physics;
-} geometry_t;
-
 typedef struct {
     entities_t type;
 
@@ -106,7 +104,16 @@ typedef struct {
     float width, height;
 
     animation_t animation;
-} movable_entity_t;
+} entity_t;
+
+typedef struct {
+    entity_t base;
+    bool has_physics;
+} geometry_t;
+
+typedef struct {
+    entity_t base;
+} static_entity_t;
 
 typedef struct {
     entities_t type;
@@ -121,35 +128,32 @@ typedef struct {
 */
 
 typedef struct {
-    movable_entity_t base;
+    entity_t base;
     float fly_time;
 } enemy_t;
 
 typedef struct {
-    movable_entity_t base;
+    entity_t base;
     float x, y;
     int points;
 } item_t;
 
-typedef struct {
-    movable_entity_t base;
-} static_entity_t;
 
 // Actors
 typedef struct {
-    movable_entity_t base;
+    entity_t base;
     float anim_interval;
     float anim_time;
 } peach_t;
 
 typedef struct {
-    movable_entity_t base;
+    entity_t base;
     bool throw;
     bool has_thrown_this_cicle;
 } donkey_kong_t;
 
 typedef struct {
-    movable_entity_t base;
+    entity_t base;
     float previous_y;
 
     // Ladder 

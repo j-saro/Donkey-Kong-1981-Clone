@@ -10,15 +10,17 @@ void geometry_array_cleanup(geometry_t **array, int *count);
 void geometry_draw(cairo_t *cr, const geometry_t *array, int count);
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
-    structure->type = type;
+    structure->base.type = type;
 
-    structure->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
-    structure->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
-    structure->width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
-    structure->height = (float)cJSON_GetObjectItem(json, "height")->valuedouble;
+    structure->base.x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
+    structure->base.y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
+    structure->base.width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
+    structure->base.height = (float)cJSON_GetObjectItem(json, "height")->valuedouble;
 
     cJSON *physics = cJSON_GetObjectItem(json, "has_physics");
     structure->has_physics = (physics == NULL) ? true : cJSON_IsTrue(physics);
+
+    structure->base.animation.current_frame = get_spritesheet(structure->base.type);
 }
 
 void geometry_array_cleanup(geometry_t **array, int *count) {
@@ -33,17 +35,17 @@ void geometry_draw(cairo_t *cr, const geometry_t *array, int count) {
 
         cairo_save(cr);
 
-        cairo_surface_t *frame_surface = sprite_sheets[array->type];
+        cairo_surface_t *frame_surface = array->base.animation.current_frame;
         if (frame_surface != NULL) { 
             cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
             cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
 
             cairo_matrix_t matrix;
-            cairo_matrix_init_translate(&matrix, -structure->x, -structure->y);
+            cairo_matrix_init_translate(&matrix, -structure->base.x, -structure->base.y);
             cairo_pattern_set_matrix(pattern, &matrix);
 
             cairo_set_source(cr, pattern);
-            cairo_rectangle(cr, structure->x, structure->y, structure->width, structure->height);
+            cairo_rectangle(cr, structure->base.x, structure->base.y, structure->base.width, structure->base.height);
             cairo_fill(cr);
 
             cairo_pattern_destroy(pattern);
