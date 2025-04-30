@@ -4,7 +4,7 @@
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/entity.h"
 #include "core/animation.h"
-#include "core/sprite.h"
+#include "core/utils.h"
 
 void enemy_init(level_t *level, cJSON *json);
 gboolean allocate_new_enemy(level_t *level);
@@ -82,13 +82,13 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
         case BARREL:
             enemy->base.type = enemy_type;
             enemy->base.animation.current_animation = ANIM_BARREL_SIDE;
-            enemy->base.animation.frames = get_animation_frames(enemy->base.animation.current_animation);
-            enemy->base.animation.current_frame = enemy->base.animation.frames[enemy->base.animation.current_frame_index];
             break;
 
         default:
             g_warning("Unknown enemy type (%d). Skipping enemy creation.", enemy_type);
     }
+
+    set_animation_frames(&enemy->base);
 }
 
 void enemy_destroy(level_t *level, int index) {

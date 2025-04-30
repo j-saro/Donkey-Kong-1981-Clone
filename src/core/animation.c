@@ -1,5 +1,5 @@
 #include "core/animation.h"
-#include "core/sprite.h"
+#include "core/utils.h"
 
 void update_animation_progress(entity_t *base, float dt_seconds);
 void update_animation_frame(entity_t *base);
@@ -9,13 +9,13 @@ void set_animation(entity_t *base, animation_state_t new_anim);
 // keeps the animation frame_time updated
 void update_animation_progress(entity_t *base, float dt_seconds) {
     animation_t *animation = &base->animation;
-    animation_sequence_t anim = animations[animation->current_animation];
+    animation_sequence_t anim = get_animation_by_key(animation->current_animation);
     
     animation->frame_time += dt_seconds;
     
     if (animation->frame_time >= anim.frame_duration) {
         animation->frame_time = 0;
-
+        
         int new_index = (animation->current_frame_index + 1) % anim.frame_count;
     
         if (new_index != animation->current_frame_index) {
@@ -42,13 +42,7 @@ void set_animation(entity_t *base, animation_state_t new_anim) {
         base->animation.current_animation = new_anim;
         base->animation.current_frame_index = 0;
         base->animation.frame_time = 0;
-        base->animation.frames = get_animation_frames(new_anim);
-        
-        if (!base->animation.frames) {
-            g_warning("No frames found for animation %d", new_anim);
-            return;
-        }
-        
+        set_animation_frames(base);
         update_animation_frame(base);
     }
 }

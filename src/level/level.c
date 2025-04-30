@@ -11,13 +11,14 @@
 #include "entities/abstract/enemy.h"
 #include "core/animation.h"
 #include "core/sprite.h"
+#include "core/physics.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
 gboolean level_parse_from_json(level_t *level, const char *json_str);
 void level_cleanup(level_t *level);
 void level_draw(cairo_t *cr, const level_t *level);
-void level_update(level_t *level, float dt_seconds);
+void level_update(game_state_t *game_state, float dt_seconds);
 
 gboolean level_init(game_state_t *game_state) {
     const char *filename = "data/level_data.json";
@@ -177,20 +178,24 @@ void level_draw(cairo_t *cr, const level_t *level) {
     platform_draw(cr, level);
     ladder_draw(cr, level);
 
+    // Static entity
+    static_entity_draw(cr, level);
+
     // Movable entity
     peach_draw(cr, &level->peach.base);
     donkey_kong_draw(cr, &level->donkey_kong.base);
     player_draw(cr, &level->player.base);
 
-    // Static entity
-    static_entity_draw(cr, level);
-
     // Enemy
     enemy_draw(cr, level);
 }
 
-void level_update(level_t *level, float dt_seconds) {
-    peach_update(&level->peach, dt_seconds);
-    donkey_kong_update(level, dt_seconds);
-    enemy_update(level, dt_seconds);
+void level_update(game_state_t *game_state, float dt_seconds) {
+    check_ladder_collision(game_state);
+    player_update(game_state, dt_seconds);
+    apply_physics(game_state, dt_seconds, BASE_HEIGHT);
+
+    peach_update(&game_state->level.peach, dt_seconds);
+    donkey_kong_update(&game_state->level, dt_seconds);
+    enemy_update(&game_state->level, dt_seconds);
 }

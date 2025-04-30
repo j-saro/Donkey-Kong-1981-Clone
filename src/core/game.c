@@ -1,9 +1,6 @@
 #include <math.h>
 #include "core/game.h"
-#include "entities/characters/player.h"
 #include "level/level.h"
-#include "core/physics.h"
-#include <gtk/gtk.h>
 
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -65,11 +62,7 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 
     game_state->level.player.previous_y = game_state->level.player.base.y;
 
-    // Physics/Collisons/Updates
-    check_ladder_collision(game_state);
-    player_update(drawing_area, game_state, dt_seconds);
-    apply_physics(game_state, dt_seconds, BASE_HEIGHT);
-    level_update(&game_state->level, dt_seconds);
+    level_update(game_state, dt_seconds);
 
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;

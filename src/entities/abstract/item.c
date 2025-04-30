@@ -1,7 +1,7 @@
 #include "entities/abstract/item.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "core/sprite.h"
+#include "core/utils.h"
 
 void item_init(level_t *level, cJSON *json) {
     level->num_items = cJSON_GetArraySize(json);

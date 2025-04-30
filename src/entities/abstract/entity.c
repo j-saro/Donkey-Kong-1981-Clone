@@ -2,7 +2,7 @@
 #include <gtk/gtk.h>
 #include "core/animation.h"
 #include "cJSON.h"
-#include "core/sprite.h"
+#include "core/utils.h"
 
 void entity_parse(entity_t *base, cJSON *json);
 void entity_draw(cairo_t *cr, const entity_t *base);
@@ -36,8 +36,7 @@ void entity_parse(entity_t *base, cJSON *json) {
     base->animation.current_frame_index = 0;
     base->animation.frame_time = 0;
 
-    base->animation.frames = get_animation_frames(base->animation.current_animation);
-    base->animation.current_frame = base->animation.frames[base->animation.current_frame_index];
+    set_animation_frames(base);
 }
 
 
@@ -54,6 +53,11 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
 
     cairo_surface_t *frame_surface = base->animation.current_frame;
     if (frame_surface != NULL) {
+        // Debug info
+        //g_message("entity_draw: type=%d, anim=%d, frame=%d, surface=%p",
+        //base->type, base->animation.current_animation,
+        //base->animation.current_frame_index, (void*)frame_surface);
+
         cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
         cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
 
@@ -62,7 +66,7 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
 
         cairo_pattern_destroy(pattern);
     } else {
-        g_warning("Invalid frame surface for entity type %d, animation %d, frame %d", base->type, base->animation.current_animation, base->animation.current_frame_index);
+        g_warning("(entity draw) Invalid frame surface for entity type %d, animation %d, frame %d", base->type, base->animation.current_animation, base->animation.current_frame_index);
     }
 
     cairo_restore(cr);

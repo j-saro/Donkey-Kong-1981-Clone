@@ -3,7 +3,7 @@
 #include "entities/abstract/geometry.h"
 #include "core/sprite.h"
 #include <gtk/gtk.h>
-#include "core/sprite.h"
+#include "core/utils.h"
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type);
 void geometry_array_cleanup(geometry_t **array, int *count);
@@ -20,7 +20,14 @@ void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
     cJSON *physics = cJSON_GetObjectItem(json, "has_physics");
     structure->has_physics = (physics == NULL) ? true : cJSON_IsTrue(physics);
 
-    structure->base.animation.current_frame = get_spritesheet(structure->base.type);
+    cairo_surface_t *surface = get_spritesheet(structure->base.type);
+    if (surface != NULL) {
+        structure->base.animation.current_frame = surface;
+    } else {
+        structure->base.animation.current_frame = NULL;
+        g_warning("No geometry spritesheet found for %d", structure->base.type);
+    }
+    
 }
 
 void geometry_array_cleanup(geometry_t **array, int *count) {

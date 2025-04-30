@@ -7,14 +7,16 @@
 
 void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json);
 void sprite_cleanup();
-void load_sprite_sheets(cJSON *json);
+void load_sprite_sheets_from_json(cJSON *json);
 void load_animation_sprites();
 void animation_load_form_json(cJSON *json);
 void free_animation_frames();
 void free_sprite_sheets();
 void animation_cleanup();
 int get_type_by_name(const char *name);
+animation_sequence_t get_animation_by_key(animation_state_t anim_state);
 cairo_surface_t **get_animation_frames(animation_state_t anim_state);
+void set_animation_frames(entity_t *base);
 cairo_surface_t *get_spritesheet(entities_t entity);
 
 // Stores the animation frames (animation -> frame)
@@ -29,7 +31,7 @@ unsigned int num_animations = 0;
 
 void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json) {
     animation_load_form_json(animation_json);
-    load_sprite_sheets(sprite_sheet_json);
+    load_sprite_sheets_from_json(sprite_sheet_json);
     load_animation_sprites();
 }
 
@@ -39,7 +41,7 @@ void sprite_cleanup() {
     animation_cleanup();
 }
 
-void load_sprite_sheets(cJSON *json) {
+void load_sprite_sheets_from_json(cJSON *json) {
     num_sprite_sheets = cJSON_GetArraySize(json);
     sprite_sheets = calloc(num_sprite_sheets, sizeof(spritesheet_t));
     if (!sprite_sheets) {
@@ -107,6 +109,9 @@ void load_animation_sprites() {
         return;
     }
 
+    // Debug info
+    //g_message("Number of loaded animations: %d", num_animations);
+
     for (int i = 0; i < num_animations; i++) {
         animation_sequence_t *anim = &animations[i];
         loaded_animations[i].anim_key = anim->anim_key;
@@ -120,14 +125,7 @@ void load_animation_sprites() {
         }
 
         // Find matching sprite sheet
-        cairo_surface_t *sheet = NULL;
-        for (int j = 0; j < num_sprite_sheets; j++) {
-            if (sprite_sheets[j].type == anim->type) {
-                sheet = sprite_sheets[j].sprite_sheet;
-                break;
-            }
-        }
-
+        cairo_surface_t *sheet = get_spritesheet(anim->type);
         if (!sheet) {
             g_warning("No matching sprite sheet found for animation type %d", anim->type);
             continue;
@@ -142,6 +140,10 @@ void load_animation_sprites() {
                 anim->frame_width,
                 anim->frame_height
             );
+
+            // Debug info
+            //g_message("Animation %d (anim_key=%d), frame %d -> surface address: %p",
+            //    i, anim->anim_key, k, (void*)loaded_animations[i].frames[k]);
         }
     }
 }
@@ -179,54 +181,4 @@ void free_sprite_sheets() {
 void animation_cleanup() {
     free(animations);
     animations = NULL;
-}
-
-cairo_surface_t **get_animation_frames(animation_state_t anim_state) {
-    for (int i = 0; i < num_animations; i++) {
-        if (animations[i].anim_key == anim_state) {
-            return loaded_animations[i].frames;
-        }
-    }
-    return NULL;
-}
-
-cairo_surface_t *get_spritesheet(entities_t entity) {
-    for (int i = 0; i < num_sprite_sheets; i++) {
-        if (sprite_sheets[i].type == entity) {
-            return sprite_sheets[i].sprite_sheet;
-        }
-    }
-    return NULL;
-}
-
-
-int get_type_by_name(const char *name) {
-    // Entities
-    if (strcmp(name, "MARIO") == 0) return MARIO;
-    if (strcmp(name, "DONKEY_KONG") == 0) return DONKEY_KONG;
-    if (strcmp(name, "PEACH") == 0) return PEACH;
-    if (strcmp(name, "BARREL") == 0) return BARREL;
-    if (strcmp(name, "HAMMER") == 0) return HAMMER;
-    if (strcmp(name, "LADDER") == 0) return LADDER;
-    if (strcmp(name, "PLATFORM") == 0) return PLATFORM;
-    if (strcmp(name, "STATIC_ENTITY") == 0) return STATIC_ENTITY;
-
-    // Animations
-    if (strcmp(name, "ANIM_IDLE_MARIO") == 0) return ANIM_IDLE_MARIO;
-    if (strcmp(name, "ANIM_WALK_MARIO") == 0) return ANIM_WALK_MARIO;
-    if (strcmp(name, "ANIM_JUMP_MARIO") == 0) return ANIM_JUMP_MARIO;
-    if (strcmp(name, "ANIM_CLIMB_MARIO") == 0) return ANIM_CLIMB_MARIO;
-    if (strcmp(name, "ANIM_CLIMB_IDLE_MARIO") == 0) return ANIM_CLIMB_IDLE_MARIO;
-    if (strcmp(name, "ANIM_IDLE_PEACH") == 0) return ANIM_IDLE_PEACH;
-    if (strcmp(name, "ANIM_IDLE_DONKEY_KONG") == 0) return ANIM_IDLE_DONKEY_KONG;
-    if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;
-    if (strcmp(name, "ANIM_THROWING_BARREL_DONKEY_KONG") == 0) return ANIM_THROWING_BARREL_DONKEY_KONG;
-    if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
-    if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
-    if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
-    if (strcmp(name, "ANIM_OIL_BARREL") == 0) return ANIM_OIL_BARREL;
-    if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
-    if (strcmp(name, "ANIM_STATIC_ENTITY_HIDE") == 0) return ANIM_STATIC_ENTITY_HIDE;
-
-    return -1;
 }

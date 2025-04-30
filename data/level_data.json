@@ -180,6 +180,16 @@
                 "frame_duration": 1.0,
                 "frame_width": 0,
                 "frame_height": 0
+            },
+            {
+                "key": "ANIM_STATIC_HAMMER",
+                "entity_id": "STATIC_ENTITY",
+                "start_x": 24,
+                "start_y": 39,
+                "frame_count": 1,
+                "frame_duration": 1.0,
+                "frame_width": 7,
+                "frame_height": 15
             }
         ],
         "static_entities": [
@@ -194,7 +204,7 @@
             {
                 "key": "ANIM_BARREL_STACK",
                 "x": 30,
-                "y": 130,
+                "y": 131,
                 "direction": 1,
                 "width": 21,
                 "height": 32
@@ -206,6 +216,14 @@
                 "direction": 1,
                 "width": 21,
                 "height": 32
+            },
+            {
+                "key": "ANIM_STATIC_HAMMER",
+                "x": 440,
+                "y": 440,
+                "direction": 1,
+                "width": 7,
+                "height": 15
             }
         ],
         "peach": {

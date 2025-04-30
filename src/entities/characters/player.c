@@ -4,7 +4,7 @@
 
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);
-void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds);
+void player_update(game_state_t *game_state, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
 
@@ -19,6 +19,7 @@ void player_init(player_t *player, cJSON *json) {
     player->on_ladder = false;
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
+    player->has_hammer = false;
 }
 
 
@@ -26,7 +27,7 @@ void player_draw(cairo_t *cr, const entity_t *base) {
     entity_draw(cr, base);
 }
 
-void player_update(GtkWidget *drawing_area, game_state_t *game_state, float dt_seconds) {
+void player_update(game_state_t *game_state, float dt_seconds) {
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
     player_change_animation(game_state, dt_seconds);
@@ -93,6 +94,12 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     float ladder_top = ladder->base.y - platform->base.height;
     float ladder_bottom = ladder->base.y + ladder->base.height - 2;
 
+    //if (player->has_hammer && (key_right || key_left)) {
+    //    set_animation(&player->base, ANIM_HAMMER_MARIO_WALK);
+    //}
+    //else if (player->has_hammer && !(key_right || key_left)) {
+    //    set_animation(&player->base, ANIM_HAMMER_MARIO_STAND);
+    //}
     if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;
         set_animation(&player->base, ANIM_JUMP_MARIO);

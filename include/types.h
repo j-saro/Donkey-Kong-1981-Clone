@@ -38,6 +38,8 @@ typedef enum {
     ANIM_JUMP_MARIO,
     ANIM_CLIMB_MARIO,
     ANIM_CLIMB_IDLE_MARIO,
+    //ANIM_HAMMER_MARIO_STAND,
+    //ANIM_HAMMER_MARIO_WALK,
 
     // Peach
     ANIM_IDLE_PEACH,
@@ -60,6 +62,9 @@ typedef enum {
 
     // Hide
     ANIM_STATIC_ENTITY_HIDE,
+
+    // Hammer
+    ANIM_STATIC_HAMMER,
 } animation_state_t;
 
 typedef struct {
@@ -155,6 +160,9 @@ typedef struct {
 typedef struct {
     entity_t base;
     float previous_y;
+
+    // Hammer
+    bool has_hammer;
 
     // Ladder 
     bool on_ladder;
