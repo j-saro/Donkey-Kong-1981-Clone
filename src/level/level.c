@@ -8,10 +8,12 @@
 #include "entities/characters/peach.h"
 #include "entities/characters/donkey_kong.h"
 #include "entities/characters/player.h"
+#include "entities/abstract/item.h"
 #include "entities/abstract/enemy.h"
 #include "core/animation.h"
 #include "core/sprite.h"
-#include "core/physics.h"
+#include "core/sprite_utils.h"
+#include "core/physics/physics.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
@@ -136,6 +138,13 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
+    cJSON *items_json = cJSON_GetObjectItem(level_json, "items");
+    if (items_json == NULL || !cJSON_IsArray(items_json)) {
+        printf("Error: No 'items' array found in JSON\n");
+        cJSON_Delete(json);
+        return FALSE;
+    }
+
     // Animation
     sprite_init(spritesheet_json, animation_json);
 
@@ -150,6 +159,9 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     peach_init(&level->peach, peach_json);
     donkey_kong_init(&level->donkey_kong, donkey_kong_json);
     player_init(&level->player, mario_json);
+
+    // Items
+    item_init(level, items_json);
 
     // Enemys
     enemy_init(level, enemy_json);
@@ -169,6 +181,9 @@ void level_cleanup(level_t *level) {
     // enemys
     enemy_cleanup(level);
 
+    // items
+    item_cleanup(level);
+
     // Sprites
     sprite_cleanup();
 }
@@ -178,12 +193,16 @@ void level_draw(cairo_t *cr, const level_t *level) {
     platform_draw(cr, level);
     ladder_draw(cr, level);
 
+    donkey_kong_draw(cr, &level->donkey_kong.base);
+
     // Static entity
     static_entity_draw(cr, level);
 
+    // Items
+    item_draw(cr, level);
+
     // Movable entity
     peach_draw(cr, &level->peach.base);
-    donkey_kong_draw(cr, &level->donkey_kong.base);
     player_draw(cr, &level->player.base);
 
     // Enemy

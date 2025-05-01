@@ -5,6 +5,7 @@
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);
 void player_update(game_state_t *game_state, float dt_seconds);
+void player_hammer_update(player_t *player, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
 
@@ -28,10 +29,22 @@ void player_draw(cairo_t *cr, const entity_t *base) {
 }
 
 void player_update(game_state_t *game_state, float dt_seconds) {
+    player_hammer_update(&game_state->level.player, dt_seconds);
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
     player_change_animation(game_state, dt_seconds);
     update_animation_progress(&game_state->level.player.base, dt_seconds);
+}
+
+void player_hammer_update(player_t *player, float dt_seconds) {
+    if (player->has_hammer) {
+        player->hammer_time -= dt_seconds;
+        if (player->hammer_time <= 0.0f) {
+            player->has_hammer = false;
+            player->hammer_time = 0.0f;
+        }
+    }    
+
 }
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
@@ -44,7 +57,7 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
     
-    float player_bottom = player->base.y + PLAYER_HEIGHT;
+    float player_bottom = player->base.y + player->base.height;
     int current_ladder = player->current_ladder_index;
     geometry_t *ladder = &game_state->level.ladders[current_ladder];
 
@@ -83,7 +96,7 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
     bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
 
-    float player_bottom = player->base.y + PLAYER_HEIGHT;
+    float player_bottom = player->base.y + player->base.height;
 
     int current_ladder = player->current_ladder_index;
     geometry_t *ladder = &game_state->level.ladders[current_ladder];
@@ -94,13 +107,15 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     float ladder_top = ladder->base.y - platform->base.height;
     float ladder_bottom = ladder->base.y + ladder->base.height - 2;
 
-    //if (player->has_hammer && (key_right || key_left)) {
-    //    set_animation(&player->base, ANIM_HAMMER_MARIO_WALK);
-    //}
-    //else if (player->has_hammer && !(key_right || key_left)) {
-    //    set_animation(&player->base, ANIM_HAMMER_MARIO_STAND);
-    //}
-    if (!player->base.is_grounded && !player->on_ladder) {
+    if (player->has_hammer && (key_right || key_left)) {
+        player->climbing = false;
+        set_animation(&player->base, ANIM_HAMMER_MARIO_WALK);
+    }
+    else if (player->has_hammer && !(key_right || key_left)) {
+        player->climbing = false;
+        set_animation(&player->base, ANIM_HAMMER_MARIO_STAND);
+    }
+    else if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;
         set_animation(&player->base, ANIM_JUMP_MARIO);
     }

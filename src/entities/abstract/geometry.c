@@ -3,7 +3,8 @@
 #include "entities/abstract/geometry.h"
 #include "core/sprite.h"
 #include <gtk/gtk.h>
-#include "core/utils.h"
+#include "core/sprite_utils.h"
+#include "entities/abstract/entity.h"
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type);
 void geometry_array_cleanup(geometry_t **array, int *count);

@@ -2,7 +2,7 @@
 #include <gtk/gtk.h>
 #include "core/animation.h"
 #include "cJSON.h"
-#include "core/utils.h"
+#include "core/sprite_utils.h"
 
 void entity_parse(entity_t *base, cJSON *json);
 void entity_draw(cairo_t *cr, const entity_t *base);
@@ -24,15 +24,19 @@ void entity_parse(entity_t *base, cJSON *json) {
 
     base->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
     base->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
-    base->direction = cJSON_GetObjectItem(json, "direction")->valueint;
-    base->width = cJSON_GetObjectItem(json, "width")->valueint;
-    base->height = cJSON_GetObjectItem(json, "height")->valueint;
+    base->width = cJSON_GetObjectItem(json, "width")->valueint * SCALE;
+    base->height = cJSON_GetObjectItem(json, "height")->valueint * SCALE;
+
+    cJSON *dir_item = cJSON_GetObjectItem(json, "direction");
+    base->direction = (dir_item && cJSON_IsNumber(dir_item)) ? dir_item->valueint : 1;
+
 
     // Default Values
     base->velocity_x = 0;
     base->velocity_y = 0;
-    base->is_grounded = true;
+    base->is_grounded = false;
 
+    base->animation.current_animation_index = -1;
     base->animation.current_frame_index = 0;
     base->animation.frame_time = 0;
 

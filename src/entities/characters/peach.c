@@ -2,6 +2,7 @@
 #include "entities/abstract/entity.h"
 #include "core/animation.h"
 #include "core/sprite.h"
+#include "core/sprite_utils.h"
 
 
 void peach_init(peach_t *peach, cJSON *json);
@@ -15,7 +16,7 @@ void peach_init(peach_t *peach, cJSON *json) {
     entity_parse(&peach->base, json);
 
     // Peach Animation Default Values
-    peach->anim_interval = 3.0f;
+    peach->anim_interval = 6.0f;
     peach->anim_time = 0;
 }
 
@@ -26,7 +27,7 @@ void peach_draw(cairo_t *cr, const entity_t *base) {
 
 void peach_update(peach_t *peach, float dt_seconds) {
     animation_t *animation = &peach->base.animation;
-    animation_sequence_t sequence = animations[animation->current_animation];
+    animation_sequence_t sequence = get_animation_by_key(&peach->base, animation->current_animation);
 
     peach->anim_time += dt_seconds;
 

@@ -4,7 +4,7 @@
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/entity.h"
 #include "core/animation.h"
-#include "core/utils.h"
+#include "core/sprite_utils.h"
 
 void enemy_init(level_t *level, cJSON *json);
 gboolean allocate_new_enemy(level_t *level);
@@ -33,7 +33,10 @@ void enemy_init(level_t *level, cJSON *json) {
         spawn->type = get_type_by_name(id_str);
         spawn->x = cJSON_GetObjectItem(item, "x")->valuedouble;
         spawn->y = cJSON_GetObjectItem(item, "y")->valuedouble;
-        spawn->direction = cJSON_GetObjectItem(item, "direction")->valueint;
+
+        cJSON *dir_item = cJSON_GetObjectItem(item, "direction");
+        spawn->direction = (dir_item && cJSON_IsNumber(dir_item)) ? dir_item->valueint : 1;      
+
         spawn->spawn_interval = cJSON_GetObjectItem(item, "spawn_interval")->valuedouble;
         spawn->spawn_timer = cJSON_GetObjectItem(item, "initial_delay")->valuedouble;
     }
@@ -75,6 +78,7 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
     enemy->base.is_grounded = false;
     enemy->fly_time = 0;
 
+    enemy->base.animation.current_animation_index = -1;
     enemy->base.animation.current_frame_index = 0;
     enemy->base.animation.frame_time = 0;
 

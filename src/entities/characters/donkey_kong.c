@@ -3,6 +3,7 @@
 #include "core/animation.h"
 #include "core/sprite.h"
 #include "entities/abstract/static_entity.h"
+#include "core/sprite_utils.h"
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json);
 void donkey_kong_draw(cairo_t *cr, const entity_t *base);
@@ -28,7 +29,7 @@ void donkey_kong_update(level_t *level, float dt_seconds) {
     donkey_kong_t *donkey_kong = &level->donkey_kong;
     
     update_animation_progress(&donkey_kong->base, dt_seconds);
-    animation_sequence_t sequence = animations[animation->current_animation];
+    animation_sequence_t sequence = get_animation_by_key(&donkey_kong->base, animation->current_animation);
 
     switch (animation->current_animation) {
         case ANIM_THROWING_BARREL_DONKEY_KONG:

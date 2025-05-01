@@ -1,39 +1,47 @@
-#include "core/utils.h"
+#include "core/sprite_utils.h"
 #include "core/sprite.h"
 #include <gtk/gtk.h>
 
 
-int find_animation_index(animation_state_t anim_state);
-animation_sequence_t get_animation_by_key(animation_state_t anim_state);
-cairo_surface_t **get_animation_frames(animation_state_t anim_state);
+int find_animation_index(entity_t *base, animation_state_t anim_state);
+animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim_state);
+cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_state);
 void set_animation_frames(entity_t *base);
 cairo_surface_t *get_spritesheet(entities_t entity);
 int get_type_by_name(const char *name);
 
-int find_animation_index(animation_state_t anim_state) {
+int find_animation_index(entity_t *base, animation_state_t anim_state) {
+    if (base->animation.current_animation == anim_state &&
+        base->animation.current_animation_index != -1) {
+        return base->animation.current_animation_index;
+    }
+
     for (int i = 0; i < num_animations; i++) {
-        if (animations[i].anim_key == anim_state) return i;
+        if (animations[i].anim_key == anim_state) {
+            base->animation.current_animation_index = i;
+            return i;
+        }
     }
     return -1;
 }
 
-animation_sequence_t get_animation_by_key(animation_state_t anim_state) {
-    int index = find_animation_index(anim_state);
+animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim_state) {
+    int index = find_animation_index(base, anim_state);
     if (index >= 0) return animations[index];
     g_warning("Animation not found for state %d", anim_state);
     animation_sequence_t empty = {0};
     return empty;
 }
 
-cairo_surface_t **get_animation_frames(animation_state_t anim_state) {
-    int index = find_animation_index(anim_state);
+cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_state) {
+    int index = find_animation_index(base, anim_state);
     if (index >= 0) return loaded_animations[index].frames;
     g_warning("No animation frames found for animation state %d", anim_state);
     return NULL;
 }
 
 void set_animation_frames(entity_t *base) {
-    base->animation.frames = get_animation_frames(base->animation.current_animation);
+    base->animation.frames = get_animation_frames(base, base->animation.current_animation);
     int index = base->animation.current_frame_index;
     if (base->animation.frames != NULL && index >= 0) {
         base->animation.current_frame = base->animation.frames[index];
@@ -71,8 +79,8 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_JUMP_MARIO") == 0) return ANIM_JUMP_MARIO;
     if (strcmp(name, "ANIM_CLIMB_MARIO") == 0) return ANIM_CLIMB_MARIO;
     if (strcmp(name, "ANIM_CLIMB_IDLE_MARIO") == 0) return ANIM_CLIMB_IDLE_MARIO;
-    //if (strcmp(name, "ANIM_HAMMER_MARIO_STAND") == 0) return ANIM_HAMMER_MARIO_STAND;
-    //if (strcmp(name, "ANIM_HAMMER_MARIO_WALK") == 0) return ANIM_HAMMER_MARIO_WALK;
+    if (strcmp(name, "ANIM_HAMMER_MARIO_STAND") == 0) return ANIM_HAMMER_MARIO_STAND;
+    if (strcmp(name, "ANIM_HAMMER_MARIO_WALK") == 0) return ANIM_HAMMER_MARIO_WALK;
     if (strcmp(name, "ANIM_IDLE_PEACH") == 0) return ANIM_IDLE_PEACH;
     if (strcmp(name, "ANIM_IDLE_DONKEY_KONG") == 0) return ANIM_IDLE_DONKEY_KONG;
     if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;

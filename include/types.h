@@ -10,8 +10,6 @@
 #define JUMP_FORCE 250.0f
 #define SCALE 2.0f
 #define TILE_SIZE 16
-#define PLAYER_HEIGHT (TILE_SIZE * SCALE)
-#define PLAYER_WIDTH (TILE_SIZE * SCALE)
 #define PHYSICS_EPSILON 19
 #define MAX_ENEMIES 50
 
@@ -38,8 +36,8 @@ typedef enum {
     ANIM_JUMP_MARIO,
     ANIM_CLIMB_MARIO,
     ANIM_CLIMB_IDLE_MARIO,
-    //ANIM_HAMMER_MARIO_STAND,
-    //ANIM_HAMMER_MARIO_WALK,
+    ANIM_HAMMER_MARIO_STAND,
+    ANIM_HAMMER_MARIO_WALK,
 
     // Peach
     ANIM_IDLE_PEACH,
@@ -81,6 +79,7 @@ typedef struct {
     cairo_surface_t **frames;
     cairo_surface_t *current_frame;
     animation_state_t current_animation;
+    int current_animation_index;
     int current_frame_index;
     float frame_time;
 } animation_t;
@@ -163,6 +162,7 @@ typedef struct {
 
     // Hammer
     bool has_hammer;
+    float hammer_time;
 
     // Ladder 
     bool on_ladder;
