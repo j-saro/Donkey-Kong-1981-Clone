@@ -1,5 +1,5 @@
-#include "core/sprite.h"
-#include "core/animation.h"
+#include "core/sprite/sprite.h"
+#include "core/sprite/animation.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

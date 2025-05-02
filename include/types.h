@@ -14,20 +14,28 @@
 #define MAX_ENEMIES 50
 
 
-/* 
-* Animation related
-*/
+typedef enum {
+    GAME_MODE_NORMAL,
+    GAME_MODE_CUTSCENE,
+    GAME_MODE_MENU,
+    GAME_MODE_PAUSED,
+} game_mode_t;
 
 typedef enum {
     MARIO,
     DONKEY_KONG,
     PEACH,
     BARREL,
+    ENEMY_DEATH,
     HAMMER,
     LADDER,
     PLATFORM,
     STATIC_ENTITY,
 } entities_t;
+
+/* 
+* Animation related
+*/
 
 typedef enum {
     // Mario
@@ -41,11 +49,13 @@ typedef enum {
 
     // Peach
     ANIM_IDLE_PEACH,
+    ANIM_HELP_PEACH,
 
     // Donkey Kong
     ANIM_IDLE_DONKEY_KONG,
     ANIM_BEATING_CHEST_DONKEY_KONG,
     ANIM_THROWING_BARREL_DONKEY_KONG,
+    ANIM_CLIMB_DONKEY_KONG,
 
     // Barrel
     ANIM_BARREL_SIDE,
@@ -59,10 +69,13 @@ typedef enum {
     ANIM_BARREL_STACK,
 
     // Hide
-    ANIM_STATIC_ENTITY_HIDE,
+    ANIM_HIDE,
 
     // Hammer
     ANIM_STATIC_HAMMER,
+
+    // Enemy death animation
+    ANIM_ENEMY_DEATH,
 } animation_state_t;
 
 typedef struct {
@@ -113,6 +126,8 @@ typedef struct {
 typedef struct {
     entity_t base;
     bool has_physics;
+    bool is_cutscene_entity;
+    int cutscene_id;
 } geometry_t;
 
 typedef struct {
@@ -214,8 +229,19 @@ typedef struct {
 * Game State
 */
 typedef struct {
+    // Input
     int *pressed_keys;
     unsigned int num_pressed_keys;
+
+    // Level data
     level_t level;
 
+    // Game mode
+    game_mode_t mode;
+    float game_time;
+
+    // Cutscene
+    int current_cutscene;
+    float cutscene_time;
+    int cutscene_step;
 } game_state_t;

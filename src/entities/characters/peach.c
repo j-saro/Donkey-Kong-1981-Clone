@@ -1,8 +1,8 @@
 #include "entities/characters/peach.h"
 #include "entities/abstract/entity.h"
-#include "core/animation.h"
-#include "core/sprite.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/animation.h"
+#include "core/sprite/sprite.h"
+#include "core/sprite/sprite_utils.h"
 
 
 void peach_init(peach_t *peach, cJSON *json);

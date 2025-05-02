@@ -6,7 +6,7 @@
 
 void ladder_init(level_t *level, cJSON *ladders_json);
 void ladder_cleanup(level_t *level);
-void ladder_draw(cairo_t *cr, const level_t *level);
+void ladder_draw(cairo_t *cr, game_state_t *game_state);
 
 void ladder_init(level_t *level, cJSON *ladders_json) {
     level->num_ladders = cJSON_GetArraySize(ladders_json);
@@ -24,6 +24,7 @@ void ladder_cleanup(level_t *level) {
 }
 
 
-void ladder_draw(cairo_t *cr, const level_t *level) {
-    geometry_draw(cr, level->ladders, level->num_ladders);
+void ladder_draw(cairo_t *cr, game_state_t *game_state) {
+    level_t *level = &game_state->level;
+    geometry_draw(cr, level->ladders, level->num_ladders, game_state);
 }

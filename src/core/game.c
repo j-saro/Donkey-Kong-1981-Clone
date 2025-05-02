@@ -1,10 +1,22 @@
 #include <math.h>
 #include "core/game.h"
 #include "level/level.h"
+#include "level/cutscene.h"
 
-
+void game_init(game_state_t *game_state);
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
 gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_data);
+void game_update(game_state_t *game_state, float dt_seconds);
+
+void game_init(game_state_t *game_state) {
+    game_state->mode = GAME_MODE_CUTSCENE;
+    game_state->game_time = 0.2f;
+
+    // Cutscene
+    game_state->current_cutscene = 1;
+    game_state->cutscene_time = 0.0f;
+    game_state->cutscene_step = 0;
+}
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     game_state_t *game_state = (game_state_t*) user_data;
@@ -40,7 +52,7 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     cairo_fill(cr);
 
     // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
-    level_draw(cr, &game_state->level);
+    level_draw(cr, game_state);
     
     cairo_restore(cr);
 
@@ -59,11 +71,53 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     gint64 time_delta = current_time - previous_time;
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
+    game_state->game_time -= dt_seconds;
 
-    game_state->level.player.previous_y = game_state->level.player.base.y;
-
-    level_update(game_state, dt_seconds);
+    game_update(game_state, dt_seconds);
 
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;
+}
+
+void game_update(game_state_t *game_state, float dt_seconds) {
+    bool key_pause = game_state->pressed_keys['p'] || game_state->pressed_keys['P'];
+    bool key_skip = game_state->pressed_keys['c'] || game_state->pressed_keys['C'];
+    
+    if (key_pause && game_state->game_time <= 0) {
+        if (game_state->mode == GAME_MODE_NORMAL) {
+            game_state->mode = GAME_MODE_PAUSED;
+        } else if (game_state->mode == GAME_MODE_PAUSED) {
+            game_state->mode = GAME_MODE_NORMAL;
+        }
+        game_state->game_time = 0.2f;
+    }
+    
+    if (key_skip && game_state->game_time <= 0) {
+        if (game_state->mode == GAME_MODE_CUTSCENE) {
+            cutscene_init_characters(&game_state->level);
+            game_state->mode = GAME_MODE_NORMAL;
+        }
+        game_state->game_time = 0.2f;
+    }
+
+    switch (game_state->mode) {
+        case GAME_MODE_NORMAL:
+            donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
+            donkey_kong->base.x = 73;
+            donkey_kong->base.y = 131;
+            game_state->level.player.previous_y = game_state->level.player.base.y;
+            level_update(game_state, dt_seconds);
+            break;
+    
+        case GAME_MODE_CUTSCENE:
+            switch (game_state->current_cutscene) {
+                case 1:
+                    cutscene_1(game_state, dt_seconds);
+                    break;
+            }
+            break;
+    
+        case GAME_MODE_PAUSED:
+            break;
+    }
 }

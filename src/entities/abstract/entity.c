@@ -1,8 +1,8 @@
 #include "entities/abstract/entity.h"
 #include <gtk/gtk.h>
-#include "core/animation.h"
+#include "core/sprite/animation.h"
 #include "cJSON.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/sprite_utils.h"
 
 void entity_parse(entity_t *base, cJSON *json);
 void entity_draw(cairo_t *cr, const entity_t *base);
@@ -34,7 +34,7 @@ void entity_parse(entity_t *base, cJSON *json) {
     // Default Values
     base->velocity_x = 0;
     base->velocity_y = 0;
-    base->is_grounded = false;
+    base->is_grounded = true;
 
     base->animation.current_animation_index = -1;
     base->animation.current_frame_index = 0;
@@ -69,7 +69,9 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
         cairo_paint(cr);
 
         cairo_pattern_destroy(pattern);
-    } else {
+    }
+    else if (base->animation.current_animation == ANIM_HIDE) {}
+    else {
         g_warning("(entity draw) Invalid frame surface for entity type %d, animation %d, frame %d", base->type, base->animation.current_animation, base->animation.current_frame_index);
     }
 

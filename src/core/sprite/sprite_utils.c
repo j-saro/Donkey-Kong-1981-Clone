@@ -1,5 +1,5 @@
-#include "core/sprite_utils.h"
-#include "core/sprite.h"
+#include "core/sprite/sprite_utils.h"
+#include "core/sprite/sprite.h"
 #include <gtk/gtk.h>
 
 
@@ -41,12 +41,17 @@ cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_st
 }
 
 void set_animation_frames(entity_t *base) {
+    if (base->animation.current_animation == ANIM_HIDE) {
+        base->animation.current_frame = NULL;
+        return;
+    }
+
     base->animation.frames = get_animation_frames(base, base->animation.current_animation);
     int index = base->animation.current_frame_index;
     if (base->animation.frames != NULL && index >= 0) {
         base->animation.current_frame = base->animation.frames[index];
     } else {
-        g_warning("Invalid animation frame access: state=%d, index=%d", base->animation.current_animation, index);
+        g_warning("(set animation frames) Invalid animation frame access: state=%d, index=%d", base->animation.current_animation, index);
         base->animation.current_frame = NULL;
     }
 }
@@ -68,6 +73,7 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "DONKEY_KONG") == 0) return DONKEY_KONG;
     if (strcmp(name, "PEACH") == 0) return PEACH;
     if (strcmp(name, "BARREL") == 0) return BARREL;
+    if (strcmp(name, "ENEMY_DEATH") == 0) return ENEMY_DEATH;
     if (strcmp(name, "HAMMER") == 0) return HAMMER;
     if (strcmp(name, "LADDER") == 0) return LADDER;
     if (strcmp(name, "PLATFORM") == 0) return PLATFORM;
@@ -82,16 +88,19 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_HAMMER_MARIO_STAND") == 0) return ANIM_HAMMER_MARIO_STAND;
     if (strcmp(name, "ANIM_HAMMER_MARIO_WALK") == 0) return ANIM_HAMMER_MARIO_WALK;
     if (strcmp(name, "ANIM_IDLE_PEACH") == 0) return ANIM_IDLE_PEACH;
+    if (strcmp(name, "ANIM_HELP_PEACH") == 0) return ANIM_HELP_PEACH;
     if (strcmp(name, "ANIM_IDLE_DONKEY_KONG") == 0) return ANIM_IDLE_DONKEY_KONG;
     if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;
     if (strcmp(name, "ANIM_THROWING_BARREL_DONKEY_KONG") == 0) return ANIM_THROWING_BARREL_DONKEY_KONG;
+    if (strcmp(name, "ANIM_CLIMB_DONKEY_KONG") == 0) return ANIM_CLIMB_DONKEY_KONG; 
     if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
     if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
     if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
     if (strcmp(name, "ANIM_OIL_BARREL") == 0) return ANIM_OIL_BARREL;
     if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
-    if (strcmp(name, "ANIM_STATIC_ENTITY_HIDE") == 0) return ANIM_STATIC_ENTITY_HIDE;
+    if (strcmp(name, "ANIM_HIDE") == 0) return ANIM_HIDE;
     if (strcmp(name, "ANIM_STATIC_HAMMER") == 0) return ANIM_STATIC_HAMMER;
+    if (strcmp(name, "ANIM_ENEMY_DEATH") == 0) return ANIM_ENEMY_DEATH;
 
     g_warning("Type did not match any name");
     return -1;

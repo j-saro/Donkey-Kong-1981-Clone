@@ -3,8 +3,8 @@
 #include <string.h>
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/entity.h"
-#include "core/animation.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/animation.h"
+#include "core/sprite/sprite_utils.h"
 
 void enemy_init(level_t *level, cJSON *json);
 gboolean allocate_new_enemy(level_t *level);

@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     srand((unsigned)time(NULL)); // seed for rand function
 
     // init
+    game_init(&game_state);
     input_init(&game_state);
     level_init(&game_state);
 

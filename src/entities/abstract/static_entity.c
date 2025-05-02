@@ -4,8 +4,8 @@
 #include "entities/abstract/static_entity.h"
 #include "entities/abstract/geometry.h"
 #include "entities/abstract/entity.h"
-#include "core/sprite.h"
-#include "core/animation.h"
+#include "core/sprite/sprite.h"
+#include "core/sprite/animation.h"
 
 void static_entity_init(level_t *level, cJSON *static_entities_json);
 void static_entity_cleanup(level_t *level);
@@ -44,14 +44,14 @@ void static_entity_cleanup(level_t *level) {
 void hide_static_entity(level_t *level) {
     for (int i = 0; i < level->num_static_entities; i++) {
         if (level->static_entities[i].base.animation.current_animation == ANIM_BARREL_FRONT_IDLE) {
-            set_animation(&level->static_entities[i].base, ANIM_STATIC_ENTITY_HIDE);
+            set_animation(&level->static_entities[i].base, ANIM_HIDE);
         }
     }
 }
 
 void show_static_entity(level_t *level) {
     for (int i = 0; i < level->num_static_entities; i++) {
-        if (level->static_entities[i].base.animation.current_animation == ANIM_STATIC_ENTITY_HIDE) {
+        if (level->static_entities[i].base.animation.current_animation == ANIM_HIDE) {
             set_animation(&level->static_entities[i].base, ANIM_BARREL_FRONT_IDLE);
         }
     }

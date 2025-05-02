@@ -1,7 +1,7 @@
 #include "core/physics/physics_enemy.h"
 #include "core/physics/physics_utils.h"
 #include "entities/abstract/enemy.h"
-#include "core/animation.h"
+#include "core/sprite/animation.h"
 #include <math.h>
 
 void enemy_physics(level_t *level, float dt_seconds);

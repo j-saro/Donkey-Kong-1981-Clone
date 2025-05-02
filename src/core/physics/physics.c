@@ -3,7 +3,7 @@
 #include "core/physics/physics_enemy.h"
 #include "core/physics/physics_geometry.h"
 #include "core/physics/physics_utils.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/sprite_utils.h"
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
 void player_gravity(player_t *player, float dt_seconds);

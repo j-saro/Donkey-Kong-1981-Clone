@@ -10,17 +10,18 @@
 #include "entities/characters/player.h"
 #include "entities/abstract/item.h"
 #include "entities/abstract/enemy.h"
-#include "core/animation.h"
-#include "core/sprite.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/animation.h"
+#include "core/sprite/sprite.h"
+#include "core/sprite/sprite_utils.h"
 #include "core/physics/physics.h"
 
 gboolean level_init(game_state_t *game_state);
 gboolean level_load_from_json(level_t *level, const char *filename);
 gboolean level_parse_from_json(level_t *level, const char *json_str);
 void level_cleanup(level_t *level);
-void level_draw(cairo_t *cr, const level_t *level);
+void level_draw(cairo_t *cr, game_state_t *game_state);
 void level_update(game_state_t *game_state, float dt_seconds);
+void level_complete(game_state_t *game_state);
 
 gboolean level_init(game_state_t *game_state) {
     const char *filename = "data/level_data.json";
@@ -188,10 +189,11 @@ void level_cleanup(level_t *level) {
     sprite_cleanup();
 }
 
-void level_draw(cairo_t *cr, const level_t *level) {
+void level_draw(cairo_t *cr, game_state_t *game_state) {
+    level_t *level = &game_state->level;
     // Geometry
-    platform_draw(cr, level);
-    ladder_draw(cr, level);
+    platform_draw(cr, game_state);
+    ladder_draw(cr, game_state);
 
     donkey_kong_draw(cr, &level->donkey_kong.base);
 
@@ -210,6 +212,7 @@ void level_draw(cairo_t *cr, const level_t *level) {
 }
 
 void level_update(game_state_t *game_state, float dt_seconds) {
+    level_complete(game_state);
     check_ladder_collision(game_state);
     player_update(game_state, dt_seconds);
     apply_physics(game_state, dt_seconds, BASE_HEIGHT);
@@ -217,4 +220,20 @@ void level_update(game_state_t *game_state, float dt_seconds) {
     peach_update(&game_state->level.peach, dt_seconds);
     donkey_kong_update(&game_state->level, dt_seconds);
     enemy_update(&game_state->level, dt_seconds);
+}
+
+void level_complete(game_state_t *game_state) {
+    player_t *player = &game_state->level.player;
+    peach_t *peach = &game_state->level.peach;
+    float player_bottom = player->base.y + player->base.height;
+    float peach_bottom = peach->base.y + peach->base.height;
+    if (player_bottom < peach_bottom) {
+        set_animation(&peach->base, ANIM_IDLE_PEACH);
+        game_state->current_cutscene += 1;
+        game_state->mode = GAME_MODE_CUTSCENE;
+        for (int i = 0; i < game_state->level.num_enemies; i++) {
+            enemy_destroy(&game_state->level, i);
+            i--;
+        }
+    }
 }

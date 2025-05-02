@@ -1,5 +1,5 @@
 #include "entities/characters/player.h"
-#include "core/animation.h"
+#include "core/sprite/animation.h"
 #include "entities/abstract/entity.h"
 
 void player_init(player_t *player, cJSON *json);

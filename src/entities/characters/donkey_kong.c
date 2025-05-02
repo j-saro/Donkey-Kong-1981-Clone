@@ -1,9 +1,9 @@
 #include "entities/characters/donkey_kong.h"
 #include "entities/abstract/entity.h"
-#include "core/animation.h"
-#include "core/sprite.h"
+#include "core/sprite/animation.h"
+#include "core/sprite/sprite.h"
 #include "entities/abstract/static_entity.h"
-#include "core/sprite_utils.h"
+#include "core/sprite/sprite_utils.h"
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json);
 void donkey_kong_draw(cairo_t *cr, const entity_t *base);

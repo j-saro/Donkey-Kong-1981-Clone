@@ -28,6 +28,10 @@
             {
                 "id": "STATIC_ENTITY",
                 "path": "./assets/static_entities_sprite_sheet.png"
+            },
+            {
+                "id": "ENEMY_DEATH",
+                "path": "./assets/enemy_death_sprite_sheet.png"
             }
         ],
         "animations": [
@@ -102,12 +106,22 @@
                 "frame_height": 27
             },
             {
-                "key": "ANIM_IDLE_PEACH",
+                "key": "ANIM_HELP_PEACH",
                 "entity_id": "PEACH",
                 "start_x": 0,
                 "start_y": 0,
                 "frame_count": 4,
                 "frame_duration": 0.5,
+                "frame_width": 39,
+                "frame_height": 23
+            },
+            {
+                "key": "ANIM_IDLE_PEACH",
+                "entity_id": "PEACH",
+                "start_x": 0,
+                "start_y": 0,
+                "frame_count": 1,
+                "frame_duration": 1.0,
                 "frame_width": 39,
                 "frame_height": 23
             },
@@ -140,6 +154,16 @@
                 "frame_duration": 0.7,
                 "frame_width": 48,
                 "frame_height": 32
+            },
+            {
+                "key": "ANIM_CLIMB_DONKEY_KONG",
+                "entity_id": "DONKEY_KONG",
+                "start_x": 159,
+                "start_y": 78,
+                "frame_count": 2,
+                "frame_duration": 0.4,
+                "frame_width": 43,
+                "frame_height": 40
             },
             {
                 "key": "ANIM_BARREL_SIDE",
@@ -192,16 +216,6 @@
                 "frame_height": 32
             },
             {
-                "key": "ANIM_STATIC_ENTITY_HIDE",
-                "entity_id": "STATIC_ENTITY",
-                "start_x": 0,
-                "start_y": 0,
-                "frame_count": 1,
-                "frame_duration": 1.0,
-                "frame_width": 0,
-                "frame_height": 0
-            },
-            {
                 "key": "ANIM_STATIC_HAMMER",
                 "entity_id": "STATIC_ENTITY",
                 "start_x": 24,
@@ -210,6 +224,16 @@
                 "frame_duration": 1.0,
                 "frame_width": 9,
                 "frame_height": 11
+            },
+            {
+                "key": "ANIM_ENEMY_DEATH",
+                "entity_id": "ENEMY_DEATH",
+                "start_x": 1,
+                "start_y": 1,
+                "frame_count": 8,
+                "frame_duration": 0.2,
+                "frame_width": 16,
+                "frame_height": 16
             }
         ],
         "static_entities": [
@@ -228,7 +252,7 @@
                 "height": 32
             },
             {
-                "key": "ANIM_STATIC_ENTITY_HIDE",
+                "key": "ANIM_HIDE",
                 "x": 107,
                 "y": 170,
                 "width": 21,
@@ -236,23 +260,23 @@
             }
         ],
         "peach": {
-            "key": "ANIM_IDLE_PEACH",
+            "key": "ANIM_HIDE",
             "x": 250,
-            "y": 91,
+            "y": 92,
             "width": 39,
             "height": 23
         },
         "donkey_kong": {
-            "key": "ANIM_THROWING_BARREL_DONKEY_KONG",
+            "key": "ANIM_HIDE",
             "x": 73,
             "y": 131,
             "width": 48,
             "height": 32
         },
         "mario": {
-            "key": "ANIM_IDLE_MARIO",
+            "key": "ANIM_HIDE",
             "x": 120,
-            "y": 530,
+            "y": 538,
             "width": 16,
             "height": 16
         },
@@ -769,6 +793,62 @@
                 "y": 155,
                 "width": 19,
                 "height": 42
+            },
+            {
+                "x": 311,
+                "y": 213,
+                "width": 19,
+                "height": 354,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 341,
+                "y": 213,
+                "width": 19,
+                "height": 354,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 221,
+                "y": 171,
+                "width": 19,
+                "height": 24,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 180,
+                "y": 171,
+                "width": 19,
+                "height": 24,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 221,
+                "y": 63,
+                "width": 19,
+                "height": 92,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 180,
+                "y": 63,
+                "width": 19,
+                "height": 92,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
+            },
+            {
+                "x": 341,
+                "y": 155,
+                "width": 19,
+                "height": 42,
+                "is_cutscene_entity": true,
+                "cutscene_id": 1
             }
         ]
     }
