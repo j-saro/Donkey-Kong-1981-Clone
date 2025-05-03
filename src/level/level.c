@@ -195,6 +195,8 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
     platform_draw(cr, game_state);
     ladder_draw(cr, game_state);
 
+    // NPCs
+    peach_draw(cr, &level->peach.base);
     donkey_kong_draw(cr, &level->donkey_kong.base);
 
     // Static entity
@@ -203,8 +205,7 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
     // Items
     item_draw(cr, level);
 
-    // Movable entity
-    peach_draw(cr, &level->peach.base);
+    // Player
     player_draw(cr, &level->player.base);
 
     // Enemy
@@ -220,6 +221,8 @@ void level_update(game_state_t *game_state, float dt_seconds) {
     peach_update(&game_state->level.peach, dt_seconds);
     donkey_kong_update(&game_state->level, dt_seconds);
     enemy_update(&game_state->level, dt_seconds);
+
+    player_check_death(&game_state->level.player);
 }
 
 void level_complete(game_state_t *game_state) {
@@ -227,13 +230,18 @@ void level_complete(game_state_t *game_state) {
     peach_t *peach = &game_state->level.peach;
     float player_bottom = player->base.y + player->base.height;
     float peach_bottom = peach->base.y + peach->base.height;
-    if (player_bottom < peach_bottom) {
+    if (player_bottom < peach_bottom && game_state->mode == GAME_MODE_NORMAL) {
+        set_animation(&game_state->level.donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
         set_animation(&peach->base, ANIM_IDLE_PEACH);
-        game_state->current_cutscene += 1;
-        game_state->mode = GAME_MODE_CUTSCENE;
         for (int i = 0; i < game_state->level.num_enemies; i++) {
             enemy_destroy(&game_state->level, i);
             i--;
         }
+        hide_static_entity(&game_state->level);
+
+        game_state->mode = GAME_MODE_CUTSCENE;
+        game_state->current_cutscene = 2;
+        game_state->cutscene_time = 0;
+        game_state->cutscene_step = 0;
     }
 }

@@ -55,7 +55,8 @@ typedef enum {
     ANIM_IDLE_DONKEY_KONG,
     ANIM_BEATING_CHEST_DONKEY_KONG,
     ANIM_THROWING_BARREL_DONKEY_KONG,
-    ANIM_CLIMB_DONKEY_KONG,
+    ANIM_CLIMB_WITH_PEACH_DONKEY_KONG,
+    ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG,
 
     // Barrel
     ANIM_BARREL_SIDE,
@@ -113,7 +114,8 @@ typedef struct {
 */
 typedef struct {
     entities_t type;
-
+    
+    float previous_y;
     float x, y;
     float velocity_x, velocity_y;
     int direction;
@@ -173,7 +175,7 @@ typedef struct {
 
 typedef struct {
     entity_t base;
-    float previous_y;
+    bool is_dead;
 
     // Hammer
     bool has_hammer;

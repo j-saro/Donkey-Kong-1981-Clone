@@ -29,8 +29,8 @@ void enemy_init(level_t *level, cJSON *json) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
         
-        const char *id_str = cJSON_GetObjectItem(item, "id")->valuestring;
-        spawn->type = get_type_by_name(id_str);
+        const char *type_str = cJSON_GetObjectItem(item, "type")->valuestring;
+        spawn->type = get_type_by_name(type_str);
         spawn->x = cJSON_GetObjectItem(item, "x")->valuedouble;
         spawn->y = cJSON_GetObjectItem(item, "y")->valuedouble;
 

@@ -1,10 +1,12 @@
 #include "entities/characters/player.h"
 #include "core/sprite/animation.h"
 #include "entities/abstract/entity.h"
+#include "core/physics/physics.h"
 
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);
 void player_update(game_state_t *game_state, float dt_seconds);
+void player_check_death(player_t *player);
 void player_hammer_update(player_t *player, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
@@ -44,7 +46,14 @@ void player_hammer_update(player_t *player, float dt_seconds) {
             player->hammer_time = 0.0f;
         }
     }    
+}
 
+void player_check_death(player_t *player) {
+    if (player->is_dead) {
+        player->is_dead = false;
+        player->base.x = 120;
+        player->base.y = 530 - player->base.height / 2.0f;   
+    }
 }
 
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width) {
@@ -81,9 +90,8 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
             player->base.y += move_amount;
         }
     }
-    if (game_state->pressed_keys[GDK_KEY_space] && player->base.is_grounded) {
-        player->base.velocity_y = -JUMP_FORCE;
-        player->base.is_grounded = false;
+    if (game_state->pressed_keys[GDK_KEY_space]) {
+        entity_jump(&player->base, JUMP_FORCE);
     }
 }
 

@@ -2,35 +2,35 @@
     "level": {
         "sprite_sheet": [
             {
-                "id": "MARIO",
+                "type": "MARIO",
                 "path": "./assets/mario_sprite_sheet.png"
             },
             {
-                "id": "DONKEY_KONG",
+                "type": "DONKEY_KONG",
                 "path": "./assets/donkey_kong_sprite_sheet.png"
             },
             {
-                "id": "PEACH",
+                "type": "PEACH",
                 "path": "./assets/peach_sprite_sheet.png"
             },
             {
-                "id": "BARREL",
+                "type": "BARREL",
                 "path": "./assets/barrels_sprite_sheet.png"
             },
             {
-                "id": "LADDER",
+                "type": "LADDER",
                 "path": "./assets/ladder.png"
             },
             {
-                "id": "PLATFORM",
+                "type": "PLATFORM",
                 "path": "./assets/platform.png"
             },
             {
-                "id": "STATIC_ENTITY",
+                "type": "STATIC_ENTITY",
                 "path": "./assets/static_entities_sprite_sheet.png"
             },
             {
-                "id": "ENEMY_DEATH",
+                "type": "ENEMY_DEATH",
                 "path": "./assets/enemy_death_sprite_sheet.png"
             }
         ],
@@ -156,14 +156,24 @@
                 "frame_height": 32
             },
             {
-                "key": "ANIM_CLIMB_DONKEY_KONG",
+                "key": "ANIM_CLIMB_WITH_PEACH_DONKEY_KONG",
                 "entity_id": "DONKEY_KONG",
                 "start_x": 159,
                 "start_y": 78,
                 "frame_count": 2,
-                "frame_duration": 0.4,
+                "frame_duration": 0.3,
                 "frame_width": 43,
                 "frame_height": 40
+            },
+            {
+                "key": "ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG",
+                "entity_id": "DONKEY_KONG",
+                "start_x": 251,
+                "start_y": 82,
+                "frame_count": 2,
+                "frame_duration": 0.3,
+                "frame_width": 33,
+                "frame_height": 36
             },
             {
                 "key": "ANIM_BARREL_SIDE",
@@ -182,7 +192,7 @@
                 "start_y": 0,
                 "frame_count": 2,
                 "frame_duration": 0.1,
-                "frame_width": 15,
+                "frame_width": 16,
                 "frame_height": 10
             },
             {
@@ -192,7 +202,7 @@
                 "start_y": 26,
                 "frame_count": 1,
                 "frame_duration": 1.0,
-                "frame_width": 15,
+                "frame_width": 16,
                 "frame_height": 10
             },
             {
@@ -212,8 +222,8 @@
                 "start_y": 26,
                 "frame_count": 1,
                 "frame_duration": 1.0,
-                "frame_width": 21,
-                "frame_height": 32
+                "frame_width": 10,
+                "frame_height": 16
             },
             {
                 "key": "ANIM_STATIC_HAMMER",
@@ -248,8 +258,29 @@
                 "key": "ANIM_BARREL_STACK",
                 "x": 30,
                 "y": 131,
-                "width": 21,
-                "height": 32
+                "width": 10,
+                "height": 16
+            },
+            {
+                "key": "ANIM_BARREL_STACK",
+                "x": 50,
+                "y": 131,
+                "width": 10,
+                "height": 16
+            },
+            {
+                "key": "ANIM_BARREL_STACK",
+                "x": 30,
+                "y": 163,
+                "width": 10,
+                "height": 16
+            },
+            {
+                "key": "ANIM_BARREL_STACK",
+                "x": 50,
+                "y": 163,
+                "width": 10,
+                "height": 16
             },
             {
                 "key": "ANIM_HIDE",
@@ -282,7 +313,7 @@
         },
         "enemys": [
             {
-                "id": "BARREL",
+                "type": "BARREL",
                 "x": 160,
                 "y": 175,
                 "spawn_interval": 0,
@@ -291,7 +322,7 @@
         ],
         "items": [
             {
-                "id": "HAMMER",
+                "type": "HAMMER",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 440,
                 "y": 440,
@@ -300,7 +331,7 @@
                 "points": 0
             },
             {
-                "id": "HAMMER",
+                "type": "HAMMER",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 70,
                 "y": 220,

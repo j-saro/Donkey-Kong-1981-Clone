@@ -82,11 +82,19 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds) {
     bool key_pause = game_state->pressed_keys['p'] || game_state->pressed_keys['P'];
     bool key_skip = game_state->pressed_keys['c'] || game_state->pressed_keys['C'];
+    bool top = game_state->pressed_keys['t'];
+
+    // for debug
+    if (top) {
+        game_state->level.player.base.x = 300;
+        game_state->level.player.base.y = 150;
+    }
     
     if (key_pause && game_state->game_time <= 0) {
         if (game_state->mode == GAME_MODE_NORMAL) {
             game_state->mode = GAME_MODE_PAUSED;
         } else if (game_state->mode == GAME_MODE_PAUSED) {
+            cutscene_init_characters(&game_state->level);
             game_state->mode = GAME_MODE_NORMAL;
         }
         game_state->game_time = 0.2f;
@@ -105,7 +113,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
             donkey_kong->base.x = 73;
             donkey_kong->base.y = 131;
-            game_state->level.player.previous_y = game_state->level.player.base.y;
+            game_state->level.player.base.previous_y = game_state->level.player.base.y;
             level_update(game_state, dt_seconds);
             break;
     
@@ -113,6 +121,9 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             switch (game_state->current_cutscene) {
                 case 1:
                     cutscene_1(game_state, dt_seconds);
+                    break;
+                case 2:
+                    cutscene_2(game_state, dt_seconds);
                     break;
             }
             break;

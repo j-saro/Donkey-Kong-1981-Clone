@@ -1,17 +1,20 @@
 #include "core/physics/physics_geometry.h"
 
-void platform_collision(game_state_t *game_state);
+void platform_player_collision(game_state_t *game_state);
+bool platform_entity_collison(game_state_t *game_state, entity_t *base);
 void check_ladder_collision(game_state_t *game_state);
 
-void platform_collision(game_state_t *game_state) {
+void platform_player_collision(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
-
-    float old_bottom = player->previous_y + player->base.height;
-    float new_bottom = player->base.y + player->base.height;
-    float player_left = player->base.x;
-    float player_right = player->base.x + player->base.width;
-
     player->base.height = player->has_hammer ? 27 * SCALE : TILE_SIZE * SCALE;
+    player->base.is_grounded = platform_entity_collison(game_state, &player->base);
+}
+
+bool platform_entity_collison(game_state_t *game_state, entity_t *base) {
+    float old_bottom = base->previous_y + base->height;
+    float new_bottom = base->y + base->height;
+    float entity_left = base->x;
+    float entity_right = base->x + base->width;
 
     bool grounded = false;
     for (int i = 0; i < game_state->level.num_platforms; i++) {
@@ -25,22 +28,24 @@ void platform_collision(game_state_t *game_state) {
         float platform_top = platform->base.y;
 
         // calc x-overlap
-        if (!(player_right > platform_left && player_left < platform_right))
+        if (!(entity_right > platform_left && entity_left < platform_right))
             continue;
 
         // snap player to platform
-        if (player->base.velocity_y > 0 &&
+        if (base->velocity_y > 0 &&
             (old_bottom - 4) <= platform_top &&
             new_bottom >= platform_top)
         {
-            player->base.y = platform_top - player->base.height;
-            player->base.velocity_y = 0;
-            player->current_platform_index = i;
+            base->y = platform_top - base->height;
+            base->velocity_y = 0;
+            if (base->type == MARIO) {
+                game_state->level.player.current_platform_index = i;
+            }
             grounded = true;
             break;
         }
     }
-    player->base.is_grounded = grounded;
+    return grounded;
 }
 
 void check_ladder_collision(game_state_t *game_state) {

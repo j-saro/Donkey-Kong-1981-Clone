@@ -1,7 +1,10 @@
 #include "level/cutscene.h"
 #include "core/sprite/animation.h"
+#include "core/physics/physics.h"
+#include "core/physics/physics_geometry.h"
 
 void cutscene_1(game_state_t *game_state, float dt_seconds);
+void cutscene_2(game_state_t *game_state, float dt_seconds);
 void cutscene_init_characters(level_t *level);
 
 void cutscene_1(game_state_t *game_state, float dt_seconds) {
@@ -12,37 +15,101 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
 
     switch (game_state->cutscene_step) {
         case 0:
-            if (game_state->cutscene_time < 0.2) {
+            // Start cutscene after 1 seconds
+            if (game_state->cutscene_time >= 1.0f) {
                 donkey_kong->base.x = 297;
-                donkey_kong->base.y = 506;
-                set_animation(&donkey_kong->base, ANIM_CLIMB_DONKEY_KONG);
-                break;
+                donkey_kong->base.y = 490;
+                set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step++;
             }
+            break;
+        case 1:
             // Donkey Kong climbs ladders
-            donkey_kong->base.y -= 75 * dt_seconds;
+            donkey_kong->base.y -= 80 * dt_seconds;
 
             if (donkey_kong->base.y <= 133) {
-                set_animation(&donkey_kong->base, ANIM_BEATING_CHEST_DONKEY_KONG);
+                set_animation(&donkey_kong->base, ANIM_IDLE_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HELP_PEACH);
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step++;
             }
             break;
 
-        case 1:
-            // Donkey Kong beats chest for 2 seconds
-            if (game_state->cutscene_time >= 2.0f) {
-                set_animation(&donkey_kong->base, ANIM_IDLE_DONKEY_KONG);
+        case 2:
+            // Wait for 1 second
+            if (game_state->cutscene_time >= 1.0f) {
                 game_state->cutscene_step++;
                 game_state->cutscene_time = 0;
             }
             break;
 
-        case 2:
+        case 3:
             // Donky Kong goes to the left
             donkey_kong->base.x -= MOVE_SPEED * dt_seconds;
 
+            if (donkey_kong->base.x >= 130) {
+                entity_jump(&donkey_kong->base, 150.0f);
+            }
+            apply_gravity(&donkey_kong->base, dt_seconds, 600);
+            if (donkey_kong->base.y >= 133) {
+                donkey_kong->base.y = 133;
+                donkey_kong->base.is_grounded = true;
+            }
+
             if (donkey_kong->base.x <= 73) {
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step++;
+            }
+            break;
+
+        case 4:
+            // End of cutscene - switch back to game mode
+            if (game_state->cutscene_time > 1.0f) {
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step = 0;
+                set_animation(&game_state->level.player.base, ANIM_IDLE_MARIO);
+                game_state->mode = GAME_MODE_NORMAL;
+            }
+            break;
+    }
+}
+
+void cutscene_2(game_state_t *game_state, float dt_seconds) {
+    donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
+
+    game_state->cutscene_time += dt_seconds;
+
+    update_animation_progress(&donkey_kong->base, dt_seconds);
+
+    switch (game_state->cutscene_step) {
+        case 0:
+            set_animation(&donkey_kong->base, ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG);
+            donkey_kong->base.x = 178;
+            donkey_kong->base.y = 131;
+            game_state->cutscene_time = 0;
+            game_state->cutscene_step++;
+            break;
+        case 1:
+            // Donkey Kong climb to peach
+            donkey_kong->base.y -= 80 * dt_seconds;
+
+            if (donkey_kong->base.y <= game_state->level.peach.base.y) {
+                donkey_kong->base.x = 174;
+                set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
+                set_animation(&game_state->level.peach.base, ANIM_HIDE);
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step++;
+            }
+            break;
+
+        case 2:
+            // Donkey Kong climb to further
+            donkey_kong->base.y -= 80 * dt_seconds;
+
+            if (donkey_kong->base.y <= 40) {
+                set_animation(&donkey_kong->base, ANIM_HIDE);
+                set_animation(&game_state->level.peach.base, ANIM_HIDE);
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step++;
             }
@@ -53,8 +120,7 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
             if (game_state->cutscene_time > 1.0f) {
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step = 0;
-                set_animation(&game_state->level.player.base, ANIM_IDLE_MARIO);
-                game_state->mode = GAME_MODE_NORMAL;
+                game_state->mode = GAME_MODE_PAUSED;
             }
             break;
     }

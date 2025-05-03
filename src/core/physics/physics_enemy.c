@@ -5,6 +5,7 @@
 #include <math.h>
 
 void enemy_physics(level_t *level, float dt_seconds);
+void enemy_movement(enemy_t *enemy, float dt_seconds);
 void enemy_platform_collision(level_t *level, enemy_t *enemy);
 void enemy_ladder_option(level_t *level, enemy_t *enemy);
 void enemy_player_collision(player_t *player, enemy_t *enemy);
@@ -24,21 +25,7 @@ void enemy_physics(level_t *level, float dt_seconds) {
         }
 
         enemy_player_collision(&level->player, enemy);
-
-        // Apply movement
-        if (enemy->base.velocity_y == 0) {
-            enemy->base.x += MOVE_SPEED * enemy->base.direction * dt_seconds;
-        } 
-        else {
-
-            enemy->base.x += 0.1 * enemy->base.direction;
-        }        
-        enemy->base.velocity_y += GRAVITY * dt_seconds;
-        enemy->base.y += enemy->base.velocity_y * dt_seconds;
-
-        if (!enemy->base.is_grounded) {
-            enemy->fly_time += dt_seconds;
-        }
+        enemy_movement(enemy, dt_seconds);
 
         enemy_platform_collision(level, enemy);
         enemy_ladder_option(level, enemy);
@@ -50,6 +37,21 @@ void enemy_physics(level_t *level, float dt_seconds) {
                 set_animation(&enemy->base, ANIM_BARREL_SIDE);
             }
         }
+    }
+}
+
+void enemy_movement(enemy_t *enemy, float dt_seconds) {
+    if (enemy->base.velocity_y == 0) {
+        enemy->base.x += 120 * enemy->base.direction * dt_seconds;
+    } 
+    else {
+        enemy->base.x += 0.1 * enemy->base.direction;
+    }        
+    enemy->base.velocity_y += GRAVITY * dt_seconds;
+    enemy->base.y += enemy->base.velocity_y * dt_seconds;
+
+    if (!enemy->base.is_grounded) {
+        enemy->fly_time += dt_seconds;
     }
 }
 
@@ -97,7 +99,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
         for (int j = 0; j < level->num_ladders; j++) {
             const geometry_t *ladder = &level->ladders[j];
 
-            if (!ladder->has_physics) {
+            if (!ladder->has_physics || ladder->is_cutscene_entity) {
                 continue;
             }
 
@@ -127,8 +129,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
 void enemy_player_collision(player_t *player, enemy_t *enemy) {
     if (player_object_collision(player, &enemy->base, TILE_SIZE, 10)) {
         player->has_hammer = false;
-        player->base.x = 120;
-        player->base.y = 530 - player->base.height / 2.0f;
+        player->is_dead = true;
     }
 }
 

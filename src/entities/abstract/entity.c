@@ -9,9 +9,9 @@ void entity_draw(cairo_t *cr, const entity_t *base);
 
 void entity_parse(entity_t *base, cJSON *json) {
     // Json read Values
-    cJSON *id_item = cJSON_GetObjectItem(json, "id");
-    if (cJSON_IsString(id_item)) {
-        const char *id_str = id_item->valuestring;
+    cJSON *type_str = cJSON_GetObjectItem(json, "type");
+    if (cJSON_IsString(type_str)) {
+        const char *id_str = type_str->valuestring;
         base->type = get_type_by_name(id_str);
     }
 

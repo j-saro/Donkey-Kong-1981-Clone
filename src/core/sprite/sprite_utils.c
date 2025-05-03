@@ -92,7 +92,8 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_IDLE_DONKEY_KONG") == 0) return ANIM_IDLE_DONKEY_KONG;
     if (strcmp(name, "ANIM_BEATING_CHEST_DONKEY_KONG") == 0) return ANIM_BEATING_CHEST_DONKEY_KONG;
     if (strcmp(name, "ANIM_THROWING_BARREL_DONKEY_KONG") == 0) return ANIM_THROWING_BARREL_DONKEY_KONG;
-    if (strcmp(name, "ANIM_CLIMB_DONKEY_KONG") == 0) return ANIM_CLIMB_DONKEY_KONG; 
+    if (strcmp(name, "ANIM_CLIMB_WITH_PEACH_DONKEY_KONG") == 0) return ANIM_CLIMB_WITH_PEACH_DONKEY_KONG;
+    if (strcmp(name, "ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG") == 0) return ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG;
     if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
     if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
     if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;

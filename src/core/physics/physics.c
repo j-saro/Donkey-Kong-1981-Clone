@@ -6,22 +6,45 @@
 #include "core/sprite/sprite_utils.h"
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
+void apply_gravity(entity_t *base, float dt_seconds, float gravity_force);
+void entity_jump(entity_t *base, float jump_force);
+void player_donkey_kong_collision(level_t *level);
 void player_gravity(player_t *player, float dt_seconds);
 void window_collision(game_state_t *game_state, float screen_height);
 void item_player_collision(level_t *level);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     player_gravity(&game_state->level.player, dt_seconds);
+    player_donkey_kong_collision(&game_state->level);
     window_collision(game_state, screen_height);
-    platform_collision(game_state);
+    platform_player_collision(game_state);
     enemy_physics(&game_state->level, dt_seconds);
     item_player_collision(&game_state->level);
 }
 
 void player_gravity(player_t *player, float dt_seconds) {
     if (!player->climbing) {
-        player->base.velocity_y += GRAVITY * dt_seconds;
-        player->base.y += player->base.velocity_y * dt_seconds;
+        apply_gravity(&player->base, dt_seconds, GRAVITY);
+    }
+}
+
+void apply_gravity(entity_t *base, float dt_seconds, float gravity_force) {
+    base->velocity_y += gravity_force * dt_seconds;
+    base->y += base->velocity_y * dt_seconds;
+}
+
+void entity_jump(entity_t *base, float jump_force) {
+    if (base->is_grounded) {
+        base->velocity_y = -jump_force;
+        base->is_grounded = false;
+    }
+}
+
+void player_donkey_kong_collision(level_t *level) {
+    donkey_kong_t *donkey_kong = &level->donkey_kong;
+    player_t *player = &level->player;
+    if (player_object_collision(player, &donkey_kong->base, donkey_kong->base.width, donkey_kong->base.height)) {
+        player->is_dead = true;
     }
 }
 

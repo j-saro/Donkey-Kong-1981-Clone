@@ -60,7 +60,7 @@ void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game
                     continue;
             }
             else {
-                // Optionally hide certain non-cutscene entities during specific cutscenes
+                // Optionally hide non-cutscene entities during cutscenes 1
                 if (game_state->current_cutscene == 1 &&
                     structure->base.type == LADDER)
                 {

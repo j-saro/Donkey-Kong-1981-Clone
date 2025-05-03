@@ -52,12 +52,12 @@ void load_sprite_sheets_from_json(cJSON *json) {
     for (int i = 0; i < num_sprite_sheets; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         if (item) {
-            const char *id_str = cJSON_GetObjectItem(item, "id")->valuestring;
-            sprite_sheets[i].type = get_type_by_name(id_str);
+            const char *type_str = cJSON_GetObjectItem(item, "type")->valuestring;
+            sprite_sheets[i].type = get_type_by_name(type_str);
 
             cJSON *path_item = cJSON_GetObjectItem(item, "path");
             if (!cJSON_IsString(path_item) || strlen(path_item->valuestring) == 0) {
-                g_warning("sprite_sheet[%d] missing or invalid 'path' field for '%s'", i, id_str);
+                g_warning("sprite_sheet[%d] missing or invalid 'path' field for '%s'", i, type_str);
                 continue;
             }
 
@@ -85,8 +85,8 @@ void animation_load_form_json(cJSON *json) {
         const char *key_str = cJSON_GetObjectItem(item, "key")->valuestring;
         animations[i].anim_key = get_type_by_name(key_str);
 
-        const char *id_str = cJSON_GetObjectItem(item, "entity_id")->valuestring;
-        animations[i].type = get_type_by_name(id_str);
+        const char *type_str = cJSON_GetObjectItem(item, "entity_id")->valuestring;
+        animations[i].type = get_type_by_name(type_str);
 
         animations[i].start_x = cJSON_GetObjectItem(item, "start_x")->valueint;
         animations[i].start_y = cJSON_GetObjectItem(item, "start_y")->valueint;
