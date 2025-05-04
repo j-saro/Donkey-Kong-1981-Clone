@@ -8,9 +8,9 @@ game_SOURCES = \
 	$(top_srcdir)/src/core/physics/physics_geometry.c \
 	$(top_srcdir)/src/core/physics/physics_utils.c \
 	$(top_srcdir)/src/core/physics/physics.c \
-    $(top_srcdir)/src/core/sprite/animation.c \
-    $(top_srcdir)/src/core/sprite/sprite.c \
-    $(top_srcdir)/src/core/sprite/sprite_utils.c \
+	$(top_srcdir)/src/core/sprite/animation.c \
+	$(top_srcdir)/src/core/sprite/sprite.c \
+	$(top_srcdir)/src/core/sprite/sprite_utils.c \
 	$(top_srcdir)/src/entities/abstract/enemy.c \
 	$(top_srcdir)/src/entities/abstract/entity.c \
 	$(top_srcdir)/src/entities/abstract/geometry.c \
