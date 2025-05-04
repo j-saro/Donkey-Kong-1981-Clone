@@ -2,6 +2,17 @@
 .vscode/
 game
 
+# Build files
+*.in
+*.m4
+compile
+configure*
+depcomp
+install-sh
+missing
+build/
+autom4te.cache/
+
 # Prerequisites
 *.d
 
