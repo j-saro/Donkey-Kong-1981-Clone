@@ -131,7 +131,7 @@
                 "start_x": 1,
                 "start_y": 21,
                 "frame_count": 1,
-                "frame_duration": 1.0,
+                "frame_duration": 0.8,
                 "frame_width": 48,
                 "frame_height": 32
             },
@@ -141,7 +141,7 @@
                 "start_x": 54,
                 "start_y": 21,
                 "frame_count": 2,
-                "frame_duration": 0.5,
+                "frame_duration": 0.4,
                 "frame_width": 48,
                 "frame_height": 32
             },
@@ -151,7 +151,7 @@
                 "start_x": 156,
                 "start_y": 21,
                 "frame_count": 3,
-                "frame_duration": 0.7,
+                "frame_duration": 0.6,
                 "frame_width": 48,
                 "frame_height": 32
             },

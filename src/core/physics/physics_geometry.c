@@ -64,7 +64,9 @@ void check_ladder_collision(game_state_t *game_state) {
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const geometry_t *ladder = &game_state->level.ladders[i];
 
-        if (!ladder->has_physics || player->base.animation.current_animation == ANIM_JUMP_MARIO) {
+        if (!ladder->has_physics || 
+            player->base.animation.current_animation == ANIM_JUMP_MARIO ||
+            ladder->is_cutscene_entity) {
             continue;
         }
 

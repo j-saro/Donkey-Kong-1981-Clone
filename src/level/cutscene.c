@@ -1,6 +1,7 @@
 #include "level/cutscene.h"
 #include "core/sprite/animation.h"
 #include "core/physics/physics.h"
+#include "core/physics/physics_utils.h"
 #include "core/physics/physics_geometry.h"
 #include "entities/abstract/effect.h"
 

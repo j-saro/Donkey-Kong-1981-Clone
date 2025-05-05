@@ -52,6 +52,7 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
 
     init_new_entity_base(&enemy->base, pos_x, pos_y, direction);
     enemy->fly_time = 0;
+    enemy->jumping = false;
 
     switch (enemy_type) {
         case BARREL:

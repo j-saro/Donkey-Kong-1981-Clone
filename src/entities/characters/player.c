@@ -1,7 +1,7 @@
 #include "entities/characters/player.h"
 #include "core/sprite/animation.h"
 #include "entities/abstract/entity.h"
-#include "core/physics/physics.h"
+#include "core/physics/physics_utils.h"
 
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);

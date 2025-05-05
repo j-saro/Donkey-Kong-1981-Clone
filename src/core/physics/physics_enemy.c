@@ -36,7 +36,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
         enemy_platform_collision(level, enemy);
         enemy_ladder_option(level, enemy);
         
-        if (enemy->fly_time > 0.1 && enemy->base.is_grounded) {
+        if (enemy->fly_time > 0.1 && enemy->base.is_grounded && !enemy->jumping) {
             enemy->base.direction *= -1;
             enemy->fly_time = 0;
             if (!(enemy->base.animation.current_animation == ANIM_BARREL_SIDE)) {
@@ -47,8 +47,22 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
 }
 
 void enemy_movement(enemy_t *enemy, float dt_seconds) {
-    if (enemy->base.velocity_y == 0) {
-        enemy->base.x += 120 * enemy->base.direction * dt_seconds;
+    float no_jump_zone = 100;
+    if (enemy->base.is_grounded && 
+        (rand() % 300) < 2 && 
+        enemy->base.x > no_jump_zone && 
+        enemy->base.x < (BASE_WIDTH - no_jump_zone) &&
+        enemy->base.y > 200) {
+        entity_jump(&enemy->base, JUMP_FORCE);
+        enemy->jumping = true;
+    }
+
+    if (enemy->base.is_grounded) {
+        enemy->jumping = false;
+    }
+
+    if (enemy->base.velocity_y == 0 || enemy->jumping) {
+        enemy->base.x += 130 * enemy->base.direction * dt_seconds;
     } 
     else {
         enemy->base.x += 0.1 * enemy->base.direction;
@@ -56,7 +70,7 @@ void enemy_movement(enemy_t *enemy, float dt_seconds) {
     enemy->base.velocity_y += GRAVITY * dt_seconds;
     enemy->base.y += enemy->base.velocity_y * dt_seconds;
 
-    if (!enemy->base.is_grounded) {
+    if (!enemy->base.is_grounded && !enemy->jumping) {
         enemy->fly_time += dt_seconds;
     }
 }

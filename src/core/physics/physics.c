@@ -7,7 +7,6 @@
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
 void apply_gravity(entity_t *base, float dt_seconds, float gravity_force);
-void entity_jump(entity_t *base, float jump_force);
 void player_donkey_kong_collision(level_t *level);
 void player_gravity(player_t *player, float dt_seconds);
 void window_collision(game_state_t *game_state, float screen_height);
@@ -31,13 +30,6 @@ void player_gravity(player_t *player, float dt_seconds) {
 void apply_gravity(entity_t *base, float dt_seconds, float gravity_force) {
     base->velocity_y += gravity_force * dt_seconds;
     base->y += base->velocity_y * dt_seconds;
-}
-
-void entity_jump(entity_t *base, float jump_force) {
-    if (base->is_grounded) {
-        base->velocity_y = -jump_force;
-        base->is_grounded = false;
-    }
 }
 
 void player_donkey_kong_collision(level_t *level) {
@@ -78,7 +70,7 @@ void item_player_collision(level_t *level) {
         if (player_object_collision(&level->player, &item->base, level->player.base.width, level->player.base.height / 2.0f)) {
             item_destroy(level, i);
             level->player.has_hammer = true;
-            level->player.hammer_time = 8.0f;
+            level->player.hammer_time = HAMMER_TIME;
             i--;
             continue;
         }

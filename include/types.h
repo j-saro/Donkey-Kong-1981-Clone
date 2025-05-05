@@ -12,6 +12,7 @@
 #define BASIC_TILE_SIZE 16
 #define PHYSICS_EPSILON 19
 #define MAX_ENEMIES 50
+#define HAMMER_TIME 6.0f
 
 
 typedef enum {
@@ -153,6 +154,7 @@ typedef struct {
 typedef struct {
     entity_t base;
     float fly_time;
+    bool jumping;
 } enemy_t;
 
 typedef struct {
