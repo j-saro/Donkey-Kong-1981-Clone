@@ -2,4 +2,4 @@
 
 #include "types.h"
 
-void enemy_physics(level_t *level, float dt_seconds);
+void enemy_physics(game_state_t *game_state, float dt_seconds);

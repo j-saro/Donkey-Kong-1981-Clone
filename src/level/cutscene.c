@@ -2,6 +2,7 @@
 #include "core/sprite/animation.h"
 #include "core/physics/physics.h"
 #include "core/physics/physics_geometry.h"
+#include "entities/abstract/effect.h"
 
 void cutscene_1(game_state_t *game_state, float dt_seconds);
 void cutscene_2(game_state_t *game_state, float dt_seconds);
@@ -84,13 +85,22 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
 
     switch (game_state->cutscene_step) {
         case 0:
+            if (game_state->level.num_effects == 0) {
+                new_effect(&game_state->level, ANIM_HEART_FULL, 295, 86, 1);
+            }
+            if (game_state->cutscene_time > 1.0f) {
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step++;
+            }
+            break;
+        case 1:
             set_animation(&donkey_kong->base, ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG);
             donkey_kong->base.x = 178;
             donkey_kong->base.y = 131;
             game_state->cutscene_time = 0;
             game_state->cutscene_step++;
             break;
-        case 1:
+        case 2:
             // Donkey Kong climb to peach
             donkey_kong->base.y -= 80 * dt_seconds;
 
@@ -98,12 +108,16 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
                 donkey_kong->base.x = 174;
                 set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
+                effect_destroy(&game_state->level, 0);
+                if (game_state->level.num_effects == 0) {
+                    new_effect(&game_state->level, ANIM_HEART_BROKEN, 295, 86, 1);
+                }
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step++;
             }
             break;
 
-        case 2:
+        case 3:
             // Donkey Kong climb to further
             donkey_kong->base.y -= 80 * dt_seconds;
 
@@ -115,7 +129,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
             }
             break;
 
-        case 3:
+        case 4:
             // End of cutscene – switch back to game mode
             if (game_state->cutscene_time > 1.0f) {
                 game_state->cutscene_time = 0;

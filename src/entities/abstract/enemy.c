@@ -3,11 +3,11 @@
 #include <string.h>
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/entity.h"
+#include "entities/abstract/entity_utils.h"
 #include "core/sprite/animation.h"
 #include "core/sprite/sprite_utils.h"
 
 void enemy_init(level_t *level, cJSON *json);
-gboolean allocate_new_enemy(level_t *level);
 void new_enemy(level_t *level, entities_t id ,float pos_x, float pos_y, int direction);
 void enemy_destroy(level_t *level, int index);
 void enemy_cleanup(level_t *level);
@@ -42,45 +42,16 @@ void enemy_init(level_t *level, cJSON *json) {
     }
 }
 
-
-gboolean allocate_new_enemy(level_t *level) {
-    if (level->num_enemies + 1 > level->enemy_capacity) {
-        unsigned int new_capacity = level->enemy_capacity == 0 ? 4 : level->enemy_capacity + 4;
-
-        enemy_t *tmp = realloc(level->enemies, new_capacity * sizeof(enemy_t));
-
-        if (!tmp) {
-            g_warning("Failed to allocate space for new enemy");
-            return FALSE;
-        }
-
-        level->enemies = tmp;
-        level->enemy_capacity = new_capacity;
-    }
-    return TRUE;
-}
-
 void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, int direction) {
-    if (!allocate_new_enemy(level)) {
+    if (!allocate_new_entity((void**)&level->enemies, &level->num_enemies, &level->enemy_capacity, sizeof(enemy_t))) {
         return;
     }
+
     level->num_enemies += 1;
     enemy_t *enemy = &level->enemies[level->num_enemies - 1];
 
-    // Position Vaulues
-    enemy->base.x = pos_x;
-    enemy->base.y = pos_y;
-    enemy->base.direction = direction;
-
-    // Default Values
-    enemy->base.velocity_x = 0;
-    enemy->base.velocity_y = 0;
-    enemy->base.is_grounded = false;
+    init_new_entity_base(&enemy->base, pos_x, pos_y, direction);
     enemy->fly_time = 0;
-
-    enemy->base.animation.current_animation_index = -1;
-    enemy->base.animation.current_frame_index = 0;
-    enemy->base.animation.frame_time = 0;
 
     switch (enemy_type) {
         case BARREL:
@@ -96,17 +67,7 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
 }
 
 void enemy_destroy(level_t *level, int index) {
-    if (index < 0 || index >= level->num_enemies) {
-        g_warning("Tried to destroy enemy at invalid index: %d", index);
-        return;
-    }
-
-    // Shift all remaining enemies left to fill the gap
-    for (int i = index; i < level->num_enemies - 1; i++) {
-        level->enemies[i] = level->enemies[i + 1];
-    }
-
-    level->num_enemies--;
+    destroy_entity(level->enemies, &level->num_enemies, sizeof(enemy_t), index);
 }
 
 void enemy_cleanup(level_t *level) {

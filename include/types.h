@@ -9,7 +9,7 @@
 #define MOVE_SPEED 100.0f
 #define JUMP_FORCE 250.0f
 #define SCALE 2.0f
-#define TILE_SIZE 16
+#define BASIC_TILE_SIZE 16
 #define PHYSICS_EPSILON 19
 #define MAX_ENEMIES 50
 
@@ -17,8 +17,8 @@
 typedef enum {
     GAME_MODE_NORMAL,
     GAME_MODE_CUTSCENE,
-    GAME_MODE_MENU,
     GAME_MODE_PAUSED,
+    GAME_MODE_EFFECT,
 } game_mode_t;
 
 typedef enum {
@@ -26,11 +26,11 @@ typedef enum {
     DONKEY_KONG,
     PEACH,
     BARREL,
-    ENEMY_DEATH,
     HAMMER,
     LADDER,
     PLATFORM,
     STATIC_ENTITY,
+    EFFECT,
 } entities_t;
 
 /* 
@@ -75,8 +75,10 @@ typedef enum {
     // Hammer
     ANIM_STATIC_HAMMER,
 
-    // Enemy death animation
+    // Effects
     ANIM_ENEMY_DEATH,
+    ANIM_HEART_FULL,
+    ANIM_HEART_BROKEN,
 } animation_state_t;
 
 typedef struct {
@@ -155,6 +157,10 @@ typedef struct {
 
 typedef struct {
     entity_t base;
+} effect_t;
+
+typedef struct {
+    entity_t base;
     float x, y;
     int points;
 } item_t;
@@ -224,6 +230,11 @@ typedef struct {
     // Items
     item_t *items;
     unsigned int num_items;
+
+    // Effects
+    effect_t *effects;
+    unsigned int num_effects;
+    unsigned int effects_capacity;
 } level_t;
 
 

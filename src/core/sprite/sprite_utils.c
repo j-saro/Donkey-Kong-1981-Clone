@@ -73,11 +73,11 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "DONKEY_KONG") == 0) return DONKEY_KONG;
     if (strcmp(name, "PEACH") == 0) return PEACH;
     if (strcmp(name, "BARREL") == 0) return BARREL;
-    if (strcmp(name, "ENEMY_DEATH") == 0) return ENEMY_DEATH;
     if (strcmp(name, "HAMMER") == 0) return HAMMER;
     if (strcmp(name, "LADDER") == 0) return LADDER;
     if (strcmp(name, "PLATFORM") == 0) return PLATFORM;
     if (strcmp(name, "STATIC_ENTITY") == 0) return STATIC_ENTITY;
+    if (strcmp(name, "EFFECT") == 0) return EFFECT;
 
     // Animations
     if (strcmp(name, "ANIM_IDLE_MARIO") == 0) return ANIM_IDLE_MARIO;
@@ -102,6 +102,8 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_HIDE") == 0) return ANIM_HIDE;
     if (strcmp(name, "ANIM_STATIC_HAMMER") == 0) return ANIM_STATIC_HAMMER;
     if (strcmp(name, "ANIM_ENEMY_DEATH") == 0) return ANIM_ENEMY_DEATH;
+    if (strcmp(name, "ANIM_HEART_FULL") == 0) return ANIM_HEART_FULL;
+    if (strcmp(name, "ANIM_HEART_BROKEN") == 0) return ANIM_HEART_BROKEN;
 
     g_warning("Type did not match any name");
     return -1;

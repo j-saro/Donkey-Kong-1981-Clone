@@ -50,7 +50,7 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
     float scale_x = SCALE * base->direction;
     float scale_y = SCALE;
 
-    float draw_x = base->direction == -1 ? base->x + TILE_SIZE * SCALE : base->x;
+    float draw_x = base->direction == -1 ? base->x + BASIC_TILE_SIZE * SCALE : base->x;
 
     cairo_translate(cr, draw_x, base->y);
     cairo_scale(cr, scale_x, scale_y);

@@ -5,6 +5,7 @@
 #include "entities/environment/platform.h"
 #include "entities/environment/ladder.h"
 #include "entities/abstract/static_entity.h"
+#include "entities/abstract/effect.h"
 #include "entities/characters/peach.h"
 #include "entities/characters/donkey_kong.h"
 #include "entities/characters/player.h"
@@ -166,6 +167,9 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
 
     // Enemys
     enemy_init(level, enemy_json);
+
+    // Effects
+    effect_init(level);
     
     cJSON_Delete(json);
     return TRUE;
@@ -210,6 +214,9 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
 
     // Enemy
     enemy_draw(cr, level);
+
+    //
+    effect_draw(cr, level);
 }
 
 void level_update(game_state_t *game_state, float dt_seconds) {
@@ -238,6 +245,9 @@ void level_complete(game_state_t *game_state) {
             i--;
         }
         hide_static_entity(&game_state->level);
+        effect_clear_all(&game_state->level);
+
+        player->base.direction = -1;
 
         game_state->mode = GAME_MODE_CUTSCENE;
         game_state->current_cutscene = 2;

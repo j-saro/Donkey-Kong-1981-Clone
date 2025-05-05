@@ -5,6 +5,7 @@
 #include "core/game.h"
 #include "core/input.h"
 #include "level/level.h"
+#include "entities/abstract/effect.h"
 
 static void activate(GtkApplication* app, gpointer user_data);
 
@@ -45,6 +46,7 @@ int main(int argc, char **argv) {
     // Clean up
     input_cleanup(&game_state);
     level_cleanup(&game_state.level);
+    effect_cleanup(&game_state.level);
 
     return status;
 }

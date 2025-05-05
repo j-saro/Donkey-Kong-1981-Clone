@@ -2,6 +2,7 @@
 #include "core/game.h"
 #include "level/level.h"
 #include "level/cutscene.h"
+#include "entities/abstract/effect.h"
 
 void game_init(game_state_t *game_state);
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -95,6 +96,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             game_state->mode = GAME_MODE_PAUSED;
         } else if (game_state->mode == GAME_MODE_PAUSED) {
             cutscene_init_characters(&game_state->level);
+            effect_clear_all(&game_state->level);
             game_state->mode = GAME_MODE_NORMAL;
         }
         game_state->game_time = 0.2f;
@@ -103,6 +105,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
     if (key_skip && game_state->game_time <= 0) {
         if (game_state->mode == GAME_MODE_CUTSCENE) {
             cutscene_init_characters(&game_state->level);
+            effect_clear_all(&game_state->level);
             game_state->mode = GAME_MODE_NORMAL;
         }
         game_state->game_time = 0.2f;
@@ -127,6 +130,12 @@ void game_update(game_state_t *game_state, float dt_seconds) {
                     break;
             }
             break;
+
+        case GAME_MODE_EFFECT:
+            effect_update(&game_state->level, dt_seconds);
+            if (game_state->level.num_effects == 0) {
+                game_state->mode = GAME_MODE_NORMAL;
+            }
     
         case GAME_MODE_PAUSED:
             break;

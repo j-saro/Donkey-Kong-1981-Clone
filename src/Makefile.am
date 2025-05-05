@@ -11,6 +11,8 @@ game_SOURCES = \
 	$(top_srcdir)/src/core/sprite/animation.c \
 	$(top_srcdir)/src/core/sprite/sprite.c \
 	$(top_srcdir)/src/core/sprite/sprite_utils.c \
+	$(top_srcdir)/src/entities/abstract/effect.c \
+	$(top_srcdir)/src/entities/abstract/entity_utils.c \
 	$(top_srcdir)/src/entities/abstract/enemy.c \
 	$(top_srcdir)/src/entities/abstract/entity.c \
 	$(top_srcdir)/src/entities/abstract/geometry.c \
