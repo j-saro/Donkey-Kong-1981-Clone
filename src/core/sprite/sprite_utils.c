@@ -73,12 +73,13 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "DONKEY_KONG") == 0) return DONKEY_KONG;
     if (strcmp(name, "PEACH") == 0) return PEACH;
     if (strcmp(name, "BARREL") == 0) return BARREL;
+    if (strcmp(name, "FIRE_SPIRIT") == 0) return FIRE_SPIRIT;
     if (strcmp(name, "HAMMER") == 0) return HAMMER;
     if (strcmp(name, "LADDER") == 0) return LADDER;
     if (strcmp(name, "PLATFORM") == 0) return PLATFORM;
     if (strcmp(name, "STATIC_ENTITY") == 0) return STATIC_ENTITY;
     if (strcmp(name, "EFFECT") == 0) return EFFECT;
-
+    
     // Animations
     if (strcmp(name, "ANIM_IDLE_MARIO") == 0) return ANIM_IDLE_MARIO;
     if (strcmp(name, "ANIM_WALK_MARIO") == 0) return ANIM_WALK_MARIO;
@@ -97,6 +98,7 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_BARREL_SIDE") == 0) return ANIM_BARREL_SIDE;
     if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
     if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
+    if (strcmp(name, "ANIM_FIRE_SPIRIT_WALK") == 0) return ANIM_FIRE_SPIRIT_WALK;
     if (strcmp(name, "ANIM_OIL_BARREL") == 0) return ANIM_OIL_BARREL;
     if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
     if (strcmp(name, "ANIM_HIDE") == 0) return ANIM_HIDE;

@@ -37,17 +37,27 @@ void init_new_entity_base(entity_t *base, float pos_x, float pos_y, int directio
 }
 
 void destroy_entity(void *array, unsigned int *count, size_t entity_size, int index) {
+    // Check if index is within valid bounds
     if (index < 0 || index >= (int)(*count)) {
         g_warning("Tried to destroy entity at invalid index: %d", index);
         return;
     }
 
+    // Cast array to char* to allow byte-wise pointer arithmetic
     char *char_array = (char*)array;
+
+    // Shift all entities after the one being removed to the left
     for (int i = index; i < (int)(*count) - 1; i++) {
+        // Destination: current entity's memory location
         void *dest = char_array + i * entity_size;
+
+        // Source: next entity's memory location
         void *src  = char_array + (i + 1) * entity_size;
+
+        // Copy the next entity into the current one (shift left)
         memcpy(dest, src, entity_size);
     }
 
+    // Decrease the entity count after removal
     (*count)--;
 }

@@ -1,4 +1,5 @@
 #include "level/cutscene.h"
+#include "level/level.h"
 #include "core/sprite/animation.h"
 #include "core/physics/physics.h"
 #include "core/physics/physics_utils.h"
@@ -135,7 +136,10 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
             if (game_state->cutscene_time > 1.0f) {
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step = 0;
-                game_state->mode = GAME_MODE_PAUSED;
+                game_state->mode = GAME_MODE_NORMAL;
+                
+                level_next(game_state);
+                cutscene_init_characters(&game_state->level);
             }
             break;
     }

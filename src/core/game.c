@@ -13,6 +13,9 @@ void game_init(game_state_t *game_state) {
     game_state->mode = GAME_MODE_CUTSCENE;
     game_state->game_time = 0.2f;
 
+    // Level
+    game_state->current_level = 1;
+
     // Cutscene
     game_state->current_cutscene = 1;
     game_state->cutscene_time = 0.0f;

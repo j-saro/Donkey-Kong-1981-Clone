@@ -22,7 +22,10 @@ void player_init(player_t *player, cJSON *json) {
     player->on_ladder = false;
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
+
+    player->hammer_time = 0.0f;
     player->has_hammer = false;
+    player->is_dead = false;
 }
 
 
@@ -45,7 +48,7 @@ void player_hammer_update(player_t *player, float dt_seconds) {
             player->has_hammer = false;
             player->hammer_time = 0.0f;
         }
-    }    
+    }
 }
 
 void player_check_death(player_t *player) {

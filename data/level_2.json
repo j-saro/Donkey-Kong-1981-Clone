@@ -1,0 +1,211 @@
+{
+    "level": {
+        "static_entities": [],
+        "peach": {
+            "key": "ANIM_HIDE",
+            "x": 250,
+            "y": 92,
+            "width": 39,
+            "height": 23
+        },
+        "donkey_kong": {
+            "key": "ANIM_HIDE",
+            "x": 73,
+            "y": 131,
+            "width": 48,
+            "height": 32
+        },
+        "mario": {
+            "key": "ANIM_HIDE",
+            "x": 120,
+            "y": 538,
+            "width": 16,
+            "height": 16
+        },
+        "enemys": [
+            {
+                "type": "FIRE_SPIRIT",
+                "x": 200,
+                "y": 400,
+                "width": 16,
+                "height": 16,
+                "spawn_interval": 5,
+                "initial_delay": 1
+            }
+        ],
+        "items": [
+            {
+                "type": "HAMMER",
+                "key": "ANIM_STATIC_HAMMER",
+                "x": 440,
+                "y": 440,
+                "width": 7,
+                "height": 15,
+                "points": 0
+            },
+            {
+                "type": "HAMMER",
+                "key": "ANIM_STATIC_HAMMER",
+                "x": 70,
+                "y": 220,
+                "width": 7,
+                "height": 15,
+                "points": 0
+            }
+        ],
+        "platforms": [
+            {
+                "x": 0,
+                "y": 570,
+                "width": 600,
+                "height": 16
+            },
+            {
+                "x": 20,
+                "y": 480,
+                "width": 560,
+                "height": 16
+            },
+            {
+                "x": 40,
+                "y": 390,
+                "width": 100,
+                "height": 16
+            },
+            {
+                "x": 180,
+                "y": 390,
+                "width": 240,
+                "height": 16
+            },
+            {
+                "x": 460,
+                "y": 390,
+                "width": 100,
+                "height": 16
+            },
+            {
+                "x": 20,
+                "y": 300,
+                "width": 260,
+                "height": 16
+            },
+            {
+                "x": 320,
+                "y": 300,
+                "width": 260,
+                "height": 16
+            },
+            {
+                "x": 40,
+                "y": 195,
+                "width": 520,
+                "height": 16
+            },
+            {
+                "x": 180,
+                "y": 155,
+                "width": 60,
+                "height": 16
+            },
+            {
+                "x": 240,
+                "y": 139,
+                "width": 120,
+                "height": 16
+            }
+        ],
+        "ladders": [
+            {
+                "x": 70,
+                "y": 496,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 220,
+                "y": 496,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 360,
+                "y": 496,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 500,
+                "y": 496,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 180,
+                "y": 406,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 70,
+                "y": 316,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 220,
+                "y": 316,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 360,
+                "y": 316,
+                "width": 19,
+                "height": 74
+            },
+            {
+                "x": 500,
+                "y": 316,
+                "width": 19,
+                "height": 74
+            },
+
+            {
+                "x": 221,
+                "y": 171,
+                "width": 19,
+                "height": 24,
+                "has_physics": false
+            },
+            {
+                "x": 180,
+                "y": 171,
+                "width": 19,
+                "height": 24,
+                "has_physics": false
+            },
+            {
+                "x": 221,
+                "y": 63,
+                "width": 19,
+                "height": 92,
+                "has_physics": false
+            },
+            {
+                "x": 180,
+                "y": 63,
+                "width": 19,
+                "height": 92,
+                "has_physics": false
+            },
+            {
+                "x": 341,
+                "y": 155,
+                "width": 19,
+                "height": 42,
+                "has_physics": false
+            }
+        ]
+    }
+}

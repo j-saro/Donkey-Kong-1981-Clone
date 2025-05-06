@@ -2,6 +2,7 @@ AC_INIT([game], [1.0])
 AC_CONFIG_SRCDIR([src/main.c])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
+AC_PROG_RANLIB
 
 # Find GTK and Cairo
 PKG_CHECK_MODULES([GTK], [gtk+-3.0 cairo], [], [
@@ -21,5 +22,6 @@ AC_SUBST([GTK_LIBS])
 AC_CONFIG_FILES([
   Makefile
   src/Makefile
+  lib/cjson/Makefile
 ])
 AC_OUTPUT

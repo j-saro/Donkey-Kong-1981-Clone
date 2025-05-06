@@ -5,7 +5,8 @@
 #include "core/game.h"
 #include "core/input.h"
 #include "level/level.h"
-#include "entities/abstract/effect.h"
+#include "core/sprite/sprite.h"
+#include "level/loader.h"
 
 static void activate(GtkApplication* app, gpointer user_data);
 
@@ -32,21 +33,26 @@ int main(int argc, char **argv) {
     int status;
     game_state_t game_state;
     srand((unsigned)time(NULL)); // seed for rand function
+    const char *sprites_json = "data/assets.json";
 
     // init
     game_init(&game_state);
     input_init(&game_state);
-    level_init(&game_state);
 
-    app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
-    g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);
-    status = g_application_run(G_APPLICATION(app), argc, argv);
-    g_object_unref(app);
+    if (sprite_load_from_json(sprites_json)) {
+        level_init(&game_state);
+
+        app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
+        g_signal_connect(app, "activate", G_CALLBACK(activate), &game_state);
+        status = g_application_run(G_APPLICATION(app), argc, argv);
+        g_object_unref(app);
+
+        level_cleanup(&game_state.level);
+    }
 
     // Clean up
     input_cleanup(&game_state);
-    level_cleanup(&game_state.level);
-    effect_cleanup(&game_state.level);
+    sprite_cleanup();
 
     return status;
 }

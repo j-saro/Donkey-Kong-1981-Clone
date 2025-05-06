@@ -24,14 +24,14 @@ game_SOURCES = \
 	$(top_srcdir)/src/entities/environment/ladder.c \
 	$(top_srcdir)/src/entities/environment/platform.c \
 	$(top_srcdir)/src/level/cutscene.c \
-	$(top_srcdir)/src/level/level.c \
-	$(top_srcdir)/lib/cjson/cJSON.c
+	$(top_srcdir)/src/level/loader.c \
+	$(top_srcdir)/src/level/level.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/lib/cjson \
 	$(GTK_CFLAGS)
 
-game_LDADD = $(GTK_LIBS)
+game_LDADD = ../lib/cjson/libcjson.a $(GTK_LIBS)
 
 bindir = $(top_srcdir)

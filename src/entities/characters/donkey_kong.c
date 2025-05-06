@@ -7,7 +7,7 @@
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json);
 void donkey_kong_draw(cairo_t *cr, const entity_t *base);
-void donkey_kong_update(level_t *level, float dt_seconds);
+void donkey_kong_update(game_state_t *game_state, float dt_seconds);
 
 void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json) {
     donkey_kong->base.type = DONKEY_KONG;
@@ -24,21 +24,24 @@ void donkey_kong_draw(cairo_t *cr, const entity_t *base) {
     entity_draw(cr, base);
 }
 
-void donkey_kong_update(level_t *level, float dt_seconds) {
-    animation_t *animation = &level->donkey_kong.base.animation;
-    donkey_kong_t *donkey_kong = &level->donkey_kong;
+void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
+    animation_t *animation = &game_state->level.donkey_kong.base.animation;
+    donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
     
     update_animation_progress(&donkey_kong->base, dt_seconds);
+
+    if (game_state->current_cutscene > 1) return;
+
     animation_sequence_t sequence = get_animation_by_key(&donkey_kong->base, animation->current_animation);
 
     switch (animation->current_animation) {
         case ANIM_THROWING_BARREL_DONKEY_KONG:
             if (animation->current_frame_index == 1 && animation->frame_time < 0.05) {
-                show_static_entity(level);
+                show_static_entity(&game_state->level);
             }
             if (animation->current_frame_index == sequence.frame_count - 1
                 && animation->frame_time < 0.05) {
-                hide_static_entity(level);
+                hide_static_entity(&game_state->level);
             }
             if (animation->current_frame_index == sequence.frame_count - 1 &&
                 !donkey_kong->has_thrown_this_cicle) {

@@ -11,7 +11,7 @@
 #define SCALE 2.0f
 #define BASIC_TILE_SIZE 16
 #define PHYSICS_EPSILON 19
-#define MAX_ENEMIES 50
+#define MAX_ENEMIES 7
 #define HAMMER_TIME 6.0f
 
 
@@ -27,6 +27,7 @@ typedef enum {
     DONKEY_KONG,
     PEACH,
     BARREL,
+    FIRE_SPIRIT,
     HAMMER,
     LADDER,
     PLATFORM,
@@ -63,6 +64,9 @@ typedef enum {
     ANIM_BARREL_SIDE,
     ANIM_BARREL_FRONT,
     ANIM_BARREL_FRONT_IDLE,
+
+    // Fire spirit
+    ANIM_FIRE_SPIRIT_WALK,
 
     // STATIC OIL BARREL
     ANIM_OIL_BARREL,
@@ -142,6 +146,7 @@ typedef struct {
 typedef struct {
     entities_t type;
     float x, y;
+    float width, height;
     int direction;
     float spawn_interval;
     float spawn_timer;
@@ -250,6 +255,7 @@ typedef struct {
 
     // Level data
     level_t level;
+    int current_level;
 
     // Game mode
     game_mode_t mode;

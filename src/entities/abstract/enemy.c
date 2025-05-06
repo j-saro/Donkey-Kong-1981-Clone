@@ -8,7 +8,7 @@
 #include "core/sprite/sprite_utils.h"
 
 void enemy_init(level_t *level, cJSON *json);
-void new_enemy(level_t *level, entities_t id ,float pos_x, float pos_y, int direction);
+void new_enemy(level_t *level, enemy_spawn_t *spawn);
 void enemy_destroy(level_t *level, int index);
 void enemy_cleanup(level_t *level);
 void enemy_draw(cairo_t *cr, const level_t *level);
@@ -34,6 +34,9 @@ void enemy_init(level_t *level, cJSON *json) {
         spawn->x = cJSON_GetObjectItem(item, "x")->valuedouble;
         spawn->y = cJSON_GetObjectItem(item, "y")->valuedouble;
 
+        spawn->width = cJSON_GetObjectItem(item, "width")->valueint * SCALE;
+        spawn->height = cJSON_GetObjectItem(item, "height")->valueint * SCALE;
+
         cJSON *dir_item = cJSON_GetObjectItem(item, "direction");
         spawn->direction = (dir_item && cJSON_IsNumber(dir_item)) ? dir_item->valueint : 1;      
 
@@ -42,7 +45,7 @@ void enemy_init(level_t *level, cJSON *json) {
     }
 }
 
-void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, int direction) {
+void new_enemy(level_t *level, enemy_spawn_t *spawn) {
     if (!allocate_new_entity((void**)&level->enemies, &level->num_enemies, &level->enemy_capacity, sizeof(enemy_t))) {
         return;
     }
@@ -50,18 +53,23 @@ void new_enemy(level_t *level, entities_t enemy_type, float pos_x, float pos_y, 
     level->num_enemies += 1;
     enemy_t *enemy = &level->enemies[level->num_enemies - 1];
 
-    init_new_entity_base(&enemy->base, pos_x, pos_y, direction);
+    init_new_entity_base(&enemy->base, spawn->x, spawn->y, spawn->direction);
     enemy->fly_time = 0;
     enemy->jumping = false;
+    enemy->base.type = spawn->type;
+    enemy->base.width = spawn->width;
+    enemy->base.height = spawn->height;
 
-    switch (enemy_type) {
+    switch (spawn->type) {
         case BARREL:
-            enemy->base.type = enemy_type;
             enemy->base.animation.current_animation = ANIM_BARREL_SIDE;
+            break;
+        case FIRE_SPIRIT:
+            enemy->base.animation.current_animation = ANIM_FIRE_SPIRIT_WALK;
             break;
 
         default:
-            g_warning("Unknown enemy type (%d). Skipping enemy creation.", enemy_type);
+            g_warning("Unknown enemy type (%d). Skipping enemy creation.", spawn->type);
     }
 
     set_animation_frames(&enemy->base);
@@ -100,7 +108,7 @@ void enemy_update(level_t *level, float dt_seconds) {
         }
 
         if (level->donkey_kong.throw && spawn->type == BARREL) {
-            new_enemy(level, spawn->type, spawn->x, spawn->y, spawn->direction);
+            new_enemy(level, spawn);
             level->donkey_kong.throw = false;
             continue;
         }
@@ -108,7 +116,7 @@ void enemy_update(level_t *level, float dt_seconds) {
         spawn->spawn_timer -= dt_seconds;
     
         if (spawn->spawn_timer <= dt_seconds && !(spawn->type == BARREL)) {
-            new_enemy(level, spawn->type, spawn->x, spawn->y, spawn->direction);
+            new_enemy(level, spawn);
             spawn->spawn_timer = spawn->spawn_interval;
         }
     }
