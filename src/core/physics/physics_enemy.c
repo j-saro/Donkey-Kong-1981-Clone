@@ -21,7 +21,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
 
         // Remove out of bound enemies
         bool hit_with_hammer = enemy_should_be_destroyed_by_player(&level->player, enemy);
-        if (enemy->base.x < 0 || enemy->base.x > BASE_WIDTH || hit_with_hammer) {
+        if (enemy->base.x < -enemy->base.width|| enemy->base.x > (BASE_WIDTH + enemy->base.width) || hit_with_hammer) {
             if (hit_with_hammer) {
                 new_effect(level, ANIM_ENEMY_DEATH, enemy->base.x, enemy->base.y - 10, 1);
                 game_state->mode = GAME_MODE_EFFECT;
@@ -52,6 +52,9 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
                   enemy->base.type == BARREL)) {
                 set_animation(&enemy->base, ANIM_BARREL_SIDE);
             }
+            if (enemy->base.type == FIRE_SPIRIT) {
+              enemy->base.x += 10;
+          }
         }
     }
 }
@@ -73,28 +76,41 @@ void barrel_movement(enemy_t *enemy, float dt_seconds) {
 
     if (enemy->base.velocity_y == 0 || enemy->jumping) {
         enemy->base.x += 130 * enemy->base.direction * dt_seconds;
-    } 
+    }
     else {
         enemy->base.x += 0.1 * enemy->base.direction;
-    }        
-    enemy->base.velocity_y += GRAVITY * dt_seconds;
-    enemy->base.y += enemy->base.velocity_y * dt_seconds;
+    }
 
     if (!enemy->base.is_grounded && !enemy->jumping) {
         enemy->fly_time += dt_seconds;
     }
+
+    enemy->base.velocity_y += GRAVITY * dt_seconds;
+    enemy->base.y += enemy->base.velocity_y * dt_seconds;
 }
 
 void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
-    if (enemy->base.velocity_y == 0) {
-        enemy->base.x += 50 * enemy->base.direction * dt_seconds;
-    } 
-    else {
+    if (enemy->on_ladder && !enemy->base.is_grounded) {
+        enemy->base.y += 40 * dt_seconds * enemy->climb_direction;
+        return;
+    }
+
+    if (enemy->base.velocity_y > 0) {
         enemy->base.direction *= -1;
         enemy->base.x += 10 * enemy->base.direction;
-    }        
-    enemy->base.velocity_y += GRAVITY * dt_seconds;
-    enemy->base.y += enemy->base.velocity_y * dt_seconds;
+        return;
+    }
+
+    if ((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH) {
+        enemy->base.direction *= -1;
+    }
+
+    enemy->base.x += (MOVE_SPEED / 1.5f) * enemy->base.direction * dt_seconds;
+
+    if (!enemy->on_ladder) {
+        enemy->base.velocity_y += GRAVITY * dt_seconds;
+        enemy->base.y += enemy->base.velocity_y * dt_seconds;
+    }
 }
 
 void enemy_platform_collision(level_t *level, enemy_t *enemy) {
@@ -108,8 +124,7 @@ void enemy_platform_collision(level_t *level, enemy_t *enemy) {
     for (int i = 0; i < level->num_platforms; i++) {
         const geometry_t *platform = &level->platforms[i];
 
-        if (!platform->has_physics)
-            continue;
+        if (!platform->has_physics) continue;
 
         float platform_left = platform->base.x;
         float platform_right = platform_left + platform->base.width;
@@ -156,30 +171,41 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
             bool aligned_with_ladder = (enemy_center_x > ladder_left && enemy_center_x < ladder_right);
             bool close_enough_top_y = fabs(enemy_bottom - ladder_top) <= 6.0f;
             bool close_enough_bottom_y = fabs(ladder_bottom - enemy_bottom) <= 6.0f;
-            
-            if (aligned_with_ladder && (close_enough_top_y || close_enough_bottom_y)) {
-                int probability = (level->player.current_ladder_index == j) ? 20 : 1;
-                if ((rand() % 200) < probability) {
-                    enemy->base.is_grounded = false;
 
-                    switch (enemy->base.type) {
-                        case BARREL:
+            if (!aligned_with_ladder) {
+                enemy->on_ladder = false;
+            }
+
+            if (aligned_with_ladder && (close_enough_top_y || close_enough_bottom_y)) {
+
+                int probability = (level->player.current_ladder_index == j) ? 20 : 1;
+                int rand_int = rand() % 200;
+
+                switch (enemy->base.type) {
+                    case BARREL:
+                        if (rand_int < probability)
                             if (close_enough_top_y) {
                                 enemy->base.y += 30;
+                                enemy->base.is_grounded = false;
+                                enemy->on_ladder = true;
                                 set_animation(&enemy->base, ANIM_BARREL_FRONT);
                             }
-                            break;
-                        case FIRE_SPIRIT:
-                            if (close_enough_top_y) {
-                                enemy->base.y += 40;
-                            } else if (close_enough_bottom_y) {
-                                enemy->base.y -= 100;
-                            }
-                            break;
-                    }
-                    
-                    break;
+                        break;
+                    case FIRE_SPIRIT:
+                        if (close_enough_top_y && rand_int < probability) {
+                            enemy->climb_direction = 1;
+                            enemy->base.y += 40;
+                            enemy->on_ladder = true;
+                            enemy->base.is_grounded = false;
+                        } else if (close_enough_bottom_y && rand_int < probability * 2) {
+                            enemy->climb_direction = -1;
+                            enemy->base.y -= 40;
+                            enemy->on_ladder = true;
+                            enemy->base.is_grounded = false;
+                        }
+                        break;
                 }
+                break;
             }
         }
     }

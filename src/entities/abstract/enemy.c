@@ -56,9 +56,11 @@ void new_enemy(level_t *level, enemy_spawn_t *spawn) {
     init_new_entity_base(&enemy->base, spawn->x, spawn->y, spawn->direction);
     enemy->fly_time = 0;
     enemy->jumping = false;
+    enemy->on_ladder = false;
     enemy->base.type = spawn->type;
     enemy->base.width = spawn->width;
     enemy->base.height = spawn->height;
+    enemy->climb_direction = 1;
 
     switch (spawn->type) {
         case BARREL:
@@ -110,6 +112,10 @@ void enemy_update(level_t *level, float dt_seconds) {
         if (level->donkey_kong.throw && spawn->type == BARREL) {
             new_enemy(level, spawn);
             level->donkey_kong.throw = false;
+            continue;
+        }
+
+        if (level->num_enemies >= MAX_FIRE_SPIRITS) {
             continue;
         }
 

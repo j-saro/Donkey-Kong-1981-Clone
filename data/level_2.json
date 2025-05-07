@@ -1,6 +1,14 @@
 {
     "level": {
-        "static_entities": [],
+        "static_entities": [
+            {
+                "key": "ANIM_OIL_BARREL",
+                "x": 284,
+                "y": 300,
+                "width": 16,
+                "height": 16
+            }
+        ],
         "peach": {
             "key": "ANIM_HIDE",
             "x": 250,
@@ -25,20 +33,29 @@
         "enemys": [
             {
                 "type": "FIRE_SPIRIT",
-                "x": 200,
-                "y": 400,
+                "x": 280,
+                "y": 270,
                 "width": 16,
                 "height": 16,
                 "spawn_interval": 5,
                 "initial_delay": 1
+            },
+            {
+                "type": "FIRE_SPIRIT",
+                "x": 320,
+                "y": 270,
+                "width": 16,
+                "height": 16,
+                "spawn_interval": 5,
+                "initial_delay": 9
             }
         ],
         "items": [
             {
                 "type": "HAMMER",
                 "key": "ANIM_STATIC_HAMMER",
-                "x": 440,
-                "y": 440,
+                "x": 290,
+                "y": 410,
                 "width": 7,
                 "height": 15,
                 "points": 0
@@ -46,8 +63,8 @@
             {
                 "type": "HAMMER",
                 "key": "ANIM_STATIC_HAMMER",
-                "x": 70,
-                "y": 220,
+                "x": 52,
+                "y": 322,
                 "width": 7,
                 "height": 15,
                 "points": 0
@@ -147,6 +164,12 @@
                 "height": 74
             },
             {
+                "x": 401,
+                "y": 406,
+                "width": 19,
+                "height": 74
+            },
+            {
                 "x": 70,
                 "y": 316,
                 "width": 19,
@@ -170,7 +193,18 @@
                 "width": 19,
                 "height": 74
             },
-
+            {
+                "x": 42,
+                "y": 211,
+                "width": 19,
+                "height": 89
+            },
+            {
+                "x": 530,
+                "y": 211,
+                "width": 19,
+                "height": 89
+            },
             {
                 "x": 221,
                 "y": 171,

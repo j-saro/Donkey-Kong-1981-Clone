@@ -11,7 +11,8 @@
 #define SCALE 2.0f
 #define BASIC_TILE_SIZE 16
 #define PHYSICS_EPSILON 19
-#define MAX_ENEMIES 7
+#define MAX_ENEMIES 10
+#define MAX_FIRE_SPIRITS 5
 #define HAMMER_TIME 6.0f
 
 
@@ -160,6 +161,8 @@ typedef struct {
     entity_t base;
     float fly_time;
     bool jumping;
+    bool on_ladder;
+    int climb_direction;
 } enemy_t;
 
 typedef struct {
