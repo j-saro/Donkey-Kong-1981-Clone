@@ -85,6 +85,15 @@ typedef enum {
     ANIM_ENEMY_DEATH,
     ANIM_HEART_FULL,
     ANIM_HEART_BROKEN,
+
+    // Ladders
+    ANIM_LADDER_WHITE,
+    ANIM_LADDER_BLUE,
+    ANIM_LADDER_YELLOW,
+
+    // Platforms
+    ANIM_PLATFORM_RED,
+    ANIM_PLATFORM_YELLOW,
 } animation_state_t;
 
 typedef struct {

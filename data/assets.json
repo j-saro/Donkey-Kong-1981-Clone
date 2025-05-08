@@ -277,6 +277,56 @@
             "frame_duration": 1.0,
             "frame_width": 16,
             "frame_height": 13
+        },
+        {
+            "key": "ANIM_LADDER_WHITE",
+            "entity_id": "LADDER",
+            "start_x": 13,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 10,
+            "frame_height": 16
+        },
+        {
+            "key": "ANIM_LADDER_BLUE",
+            "entity_id": "LADDER",
+            "start_x": 0,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 10,
+            "frame_height": 16
+        },
+        {
+            "key": "ANIM_LADDER_YELLOW",
+            "entity_id": "LADDER",
+            "start_x": 26,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 10,
+            "frame_height": 16
+        },
+        {
+            "key": "ANIM_PLATFORM_YELLOW",
+            "entity_id": "PLATFORM",
+            "start_x": 0,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 8,
+            "frame_height": 8
+        },
+        {
+            "key": "ANIM_PLATFORM_RED",
+            "entity_id": "PLATFORM",
+            "start_x": 13,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 8,
+            "frame_height": 8
         }
     ]
 }

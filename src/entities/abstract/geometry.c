@@ -12,34 +12,40 @@ void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
     structure->base.type = type;
-
-    structure->base.x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
-    structure->base.y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
-    structure->base.width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
-    structure->base.height = (float)cJSON_GetObjectItem(json, "height")->valuedouble;
-
-    cJSON *physics = cJSON_GetObjectItem(json, "has_physics");
-    structure->has_physics = (physics == NULL) ? true : cJSON_IsTrue(physics);
-
-    cJSON *cutscene = cJSON_GetObjectItem(json, "is_cutscene_entity");
-    structure->is_cutscene_entity = (cutscene == NULL) ? false : cJSON_IsTrue(cutscene);
-
-    cJSON *cutscene_id = cJSON_GetObjectItem(json, "cutscene_id");
-    structure->cutscene_id = (cJSON_IsNumber(cutscene_id)) ? cutscene_id->valueint : -1;
+    entity_parse(&structure->base, json);
     
-    cairo_surface_t *surface = get_spritesheet(structure->base.type);
-    if (surface != NULL) {
-        structure->base.animation.current_frame = surface;
-    } else {
-        structure->base.animation.current_frame = NULL;
-        g_warning("No geometry spritesheet found for %d", structure->base.type);
+    // Get the native dimensions of the animation frame for this geometry
+    animation_sequence_t anim_seq = get_animation_by_key(&structure->base, structure->base.animation.current_animation);
+    float native_tile_width = (float)anim_seq.frame_width;
+    float native_tile_height = (float)anim_seq.frame_height;
+
+    // Gets width and height form JSON
+    float json_total_width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
+    float json_total_height = (float)cJSON_GetObjectItem(json, "height")->valuedouble;
+
+    if (type == PLATFORM) {
+        structure->base.width = json_total_width;
+        structure->base.height = native_tile_height * SCALE;
+    } else if (type == LADDER) {
+        structure->base.width = native_tile_width * SCALE;
+        structure->base.height = json_total_height;
     }
-    
+
+    cJSON *physics_json = cJSON_GetObjectItem(json, "has_physics");
+    structure->has_physics = (physics_json == NULL) ? true : cJSON_IsTrue(physics_json);
+
+    cJSON *cutscene_json = cJSON_GetObjectItem(json, "is_cutscene_entity");
+    structure->is_cutscene_entity = (cutscene_json == NULL) ? false : cJSON_IsTrue(cutscene_json);
+
+    cJSON *cutscene_id_json = cJSON_GetObjectItem(json, "cutscene_id");
+    structure->cutscene_id = (cJSON_IsNumber(cutscene_id_json)) ? cutscene_id_json->valueint : -1;
 }
 
 void geometry_array_cleanup(geometry_t **array, int *count) {
-    free(*array);
-    *array = NULL;
+    if (*array) {
+        free(*array);
+        *array = NULL;
+    }
     *count = 0;
 }
 
@@ -61,34 +67,53 @@ void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game
             }
             else {
                 // Optionally hide non-cutscene entities during cutscenes 1
-                if (game_state->current_cutscene == 1 &&
-                    structure->base.type == LADDER)
-                {
+                if (game_state->current_cutscene == 1 && structure->base.type == LADDER)
                     continue;
-                }
             }
+        }
+
+        cairo_surface_t *frame_surface = structure->base.animation.current_frame;
+        if (frame_surface == NULL || structure->base.animation.current_animation == ANIM_HIDE) {
+            if (structure->base.animation.current_animation != ANIM_HIDE) {
+                 g_warning("Invalid or hidden frame surface for geometry: type %d, anim %d",
+                           structure->base.type, structure->base.animation.current_animation);
+            }
+            continue; 
         }
 
         cairo_save(cr);
 
-        cairo_surface_t *frame_surface = array->base.animation.current_frame;
-        if (frame_surface != NULL) { 
-            cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
-            cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
-            cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
+        // Sets the geometry's top left cords as (0,0)
+        cairo_translate(cr, structure->base.x, structure->base.y);
+        
+        cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
+        cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
+        cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
 
-            cairo_matrix_t matrix;
-            cairo_matrix_init_translate(&matrix, -structure->base.x, -structure->base.y);
-            cairo_pattern_set_matrix(pattern, &matrix);
 
-            cairo_set_source(cr, pattern);
-            cairo_rectangle(cr, structure->base.x, structure->base.y, structure->base.width, structure->base.height);
-            cairo_fill(cr);
+        // Create a transformation matrix
+        cairo_matrix_t p_matrix;
 
-            cairo_pattern_destroy(pattern);
-        } else {
-            g_warning("Invalid frame surface for geometry");
+        // Initialize the matrix as the identity matrix (no transformation)
+        cairo_matrix_init_identity(&p_matrix);
+
+        // If SCALE is not zero, apply an inverse scaling to the matrix
+        if (SCALE != 0.0f) {
+            // Scale the matrix by 1/SCALE in both X and Y directions (undo a previous scale)
+            cairo_matrix_scale(&p_matrix, 1.0f / SCALE, 1.0f / SCALE);
         }
+
+        // Apply the transformation matrix to the Cairo pattern
+        cairo_pattern_set_matrix(pattern, &p_matrix);
+
+        // Set the pattern as the source.
+        cairo_set_source(cr, pattern);
+
+        // Draw the rectangle
+        cairo_rectangle(cr, 0, 0, structure->base.width, structure->base.height);
+        cairo_fill(cr);
+
+        cairo_pattern_destroy(pattern);
         cairo_restore(cr);
     }
 }

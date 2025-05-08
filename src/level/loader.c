@@ -138,18 +138,21 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     cJSON *peach_json = cJSON_GetObjectItem(level_json, "peach");
     if (!cJSON_IsObject(peach_json)) {
         printf("Error: 'peach' is not an object\n");
+        cJSON_Delete(json);
         return FALSE;
     }
 
     cJSON *donkey_kong_json = cJSON_GetObjectItem(level_json, "donkey_kong");
     if (!cJSON_IsObject(donkey_kong_json)) {
         printf("Error: 'donkey_kong' is not an object\n");
+        cJSON_Delete(json);
         return FALSE;
     }
 
     cJSON *mario_json = cJSON_GetObjectItem(level_json, "mario");
     if (!cJSON_IsObject(mario_json)) {
         printf("Error: 'mario' is not an object\n");
+        cJSON_Delete(json);
         return FALSE;
     }
 

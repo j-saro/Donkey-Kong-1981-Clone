@@ -106,6 +106,11 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_ENEMY_DEATH") == 0) return ANIM_ENEMY_DEATH;
     if (strcmp(name, "ANIM_HEART_FULL") == 0) return ANIM_HEART_FULL;
     if (strcmp(name, "ANIM_HEART_BROKEN") == 0) return ANIM_HEART_BROKEN;
+    if (strcmp(name, "ANIM_LADDER_WHITE") == 0) return ANIM_LADDER_WHITE;
+    if (strcmp(name, "ANIM_LADDER_BLUE") == 0) return ANIM_LADDER_BLUE;
+    if (strcmp(name, "ANIM_LADDER_YELLOW") == 0) return ANIM_LADDER_YELLOW;
+    if (strcmp(name, "ANIM_PLATFORM_RED") == 0) return ANIM_PLATFORM_RED;
+    if (strcmp(name, "ANIM_PLATFORM_YELLOW") == 0) return ANIM_PLATFORM_YELLOW;
 
     g_warning("Type did not match any name");
     return -1;
