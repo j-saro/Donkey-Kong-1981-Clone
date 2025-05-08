@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "level/level.h"
 #include "entities/environment/platform.h"
 #include "entities/environment/ladder.h"

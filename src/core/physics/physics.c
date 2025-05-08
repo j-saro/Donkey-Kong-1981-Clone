@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "core/physics/physics.h"
 #include "entities/abstract/item.h"
 #include "core/physics/physics_enemy.h"

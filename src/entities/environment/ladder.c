@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "entities/abstract/entity.h"
 #include "entities/environment/ladder.h"
 #include "entities/abstract/geometry.h"
 #include <gtk/gtk.h>

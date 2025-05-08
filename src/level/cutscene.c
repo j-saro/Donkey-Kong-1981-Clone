@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "level/cutscene.h"
 #include "level/level.h"
 #include "core/sprite/animation.h"

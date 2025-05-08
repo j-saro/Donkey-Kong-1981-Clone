@@ -1,4 +1,5 @@
 #include <math.h>
+#include "consts.h"
 #include "core/game.h"
 #include "level/level.h"
 #include "level/cutscene.h"
@@ -153,7 +154,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             if (game_state->level.num_effects == 0) {
                 game_state->mode = GAME_MODE_NORMAL;
             }
-    
+            break;
 
         // game pause
         case GAME_MODE_PAUSED:

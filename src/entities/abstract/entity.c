@@ -1,7 +1,8 @@
-#include "entities/abstract/entity.h"
 #include <gtk/gtk.h>
-#include "core/sprite/animation.h"
 #include "cJSON.h"
+#include "consts.h"
+#include "entities/abstract/entity.h"
+#include "core/sprite/animation.h"
 #include "core/sprite/sprite_utils.h"
 
 void entity_parse(entity_t *base, cJSON *json);

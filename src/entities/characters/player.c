@@ -1,3 +1,4 @@
+#include "consts.h"
 #include "entities/characters/player.h"
 #include "core/sprite/animation.h"
 #include "entities/abstract/entity.h"

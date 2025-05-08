@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <gtk/gtk.h>
+#include "consts.h"
 #include "entities/abstract/geometry.h"
 #include "core/sprite/sprite.h"
-#include <gtk/gtk.h>
 #include "core/sprite/sprite_utils.h"
 #include "entities/abstract/entity.h"
 

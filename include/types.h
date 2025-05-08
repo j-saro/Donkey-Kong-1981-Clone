@@ -3,19 +3,6 @@
 #include <cairo.h>
 #include <stdbool.h>
 
-#define BASE_WIDTH 600.0f
-#define BASE_HEIGHT 600.0f
-#define KEY_INPUT_COOLDOWN 0.2f
-#define GRAVITY 800.0f
-#define MOVE_SPEED 100.0f
-#define JUMP_FORCE 250.0f
-#define SCALE 2.0f
-#define BASIC_TILE_SIZE 16
-#define PHYSICS_EPSILON 19
-#define MAX_ENEMIES 10
-#define MAX_FIRE_SPIRITS 5
-#define HAMMER_TIME 6.0f
-
 typedef enum {
     GAME_MODE_NORMAL,
     GAME_MODE_CUTSCENE,
@@ -227,12 +214,10 @@ typedef struct {
     // Platforms
     int num_platforms;
     geometry_t *platforms;
-    cairo_surface_t *platform_sprite_sheet;
 
     // Ladders
     int num_ladders;
     geometry_t *ladders;
-    cairo_surface_t *ladder_sprite_sheet;
 
     // Static objects
     int num_static_entities;

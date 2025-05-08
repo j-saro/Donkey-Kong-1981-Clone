@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "consts.h"
 #include "entities/abstract/enemy.h"
 #include "entities/abstract/entity.h"
 #include "entities/abstract/entity_utils.h"
@@ -87,7 +88,7 @@ void enemy_cleanup(level_t *level) {
     level->enemy_capacity = 0;
 
     // enemy categories
-    entity_array_cleanup((void**)&level->enemy_spawns, &level->enemy_spawns);
+    entity_array_cleanup((void**)&level->enemy_spawns, &level->num_enemy_spawns);
 }
 
 void enemy_draw(cairo_t *cr, const level_t *level) {

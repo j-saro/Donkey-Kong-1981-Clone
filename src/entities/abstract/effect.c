@@ -1,11 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <gtk/gtk.h>
 #include "entities/abstract/effect.h"
 #include "entities/abstract/entity.h"
 #include "entities/abstract/entity_utils.h"
 #include "core/sprite/sprite_utils.h"
 #include "core/sprite/animation.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <gtk/gtk.h>
 
 void effect_init(level_t *level);
 void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction);

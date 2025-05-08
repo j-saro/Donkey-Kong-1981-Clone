@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     game_init(&game_state);
     input_init(&game_state);
 
-    if (sprite_load_from_json(sprites_json)) {
+    if (sprite_load_from_json(ASSETS_FILE_PATH)) {
         level_init(&game_state);
 
         // Init Gdk Window
