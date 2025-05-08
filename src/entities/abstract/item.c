@@ -45,7 +45,5 @@ void item_draw(cairo_t *cr, const level_t *level) {
 }
 
 void item_cleanup(level_t *level) {
-    free(level->items);
-    level->items = NULL;
-    level->num_items = 0;
+    entity_array_cleanup((void**)&level->items, &level->num_items);
 }

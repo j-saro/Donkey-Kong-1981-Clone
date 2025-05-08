@@ -32,22 +32,29 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
 
     if (game_state->current_cutscene > 1) return;
 
+    // DK animation change logic only in level 1
+
     animation_sequence_t sequence = get_animation_by_key(&donkey_kong->base, animation->current_animation);
 
     switch (animation->current_animation) {
         case ANIM_THROWING_BARREL_DONKEY_KONG:
+            // if animation is at second/middle frame, show barrel
             if (animation->current_frame_index == 1 && animation->frame_time < 0.05) {
                 show_static_entity(&game_state->level);
             }
+            // if animation at last frame, hide barrel
             if (animation->current_frame_index == sequence.frame_count - 1
                 && animation->frame_time < 0.05) {
                 hide_static_entity(&game_state->level);
             }
+
+            // if at animation at last frame and not barrel throw, throw
             if (animation->current_frame_index == sequence.frame_count - 1 &&
                 !donkey_kong->has_thrown_this_cicle) {
                 donkey_kong->throw = true;
                 donkey_kong->has_thrown_this_cicle = true;
             }
+            // if end of animation last frame, choose random between two animations
             if (animation->current_frame_index == sequence.frame_count - 1 && 
                 animation->frame_time >= (sequence.frame_duration - 0.05)) {
                 animation_state_t new_anim = (rand() % 10 < 7) ? ANIM_IDLE_DONKEY_KONG : ANIM_BEATING_CHEST_DONKEY_KONG;
@@ -58,6 +65,7 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
             
         case ANIM_IDLE_DONKEY_KONG:
         case ANIM_BEATING_CHEST_DONKEY_KONG:
+            // if animation last frame set trowing animation
             if (animation->current_frame_index == sequence.frame_count - 1 && 
                 animation->frame_time >= (sequence.frame_duration - 0.05)) {
                 set_animation(&donkey_kong->base, ANIM_THROWING_BARREL_DONKEY_KONG);
@@ -65,7 +73,7 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
             break;
             
         default:
-            set_animation(&donkey_kong->base, ANIM_THROWING_BARREL_DONKEY_KONG);
+            set_animation(&donkey_kong->base, ANIM_IDLE_DONKEY_KONG);
             break;
     }
 }

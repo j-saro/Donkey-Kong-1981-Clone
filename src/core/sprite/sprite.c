@@ -49,6 +49,7 @@ void load_sprite_sheets_from_json(cJSON *json) {
         return;
     }
 
+    // load each spritesheet and its surface into an array
     for (int i = 0; i < num_sprite_sheets; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         if (item) {
@@ -103,15 +104,14 @@ void load_animation_sprites() {
         return;
     }
 
+    // calloc memory for every animation loaded
     loaded_animations = calloc(num_animations, sizeof(animation_frames_t));
     if (!loaded_animations) {
         g_warning("Failed to allocate memory for animation frame containers");
         return;
     }
 
-    // Debug info
-    //g_message("Number of loaded animations: %d", num_animations);
-
+    // for every animation loaded
     for (int i = 0; i < num_animations; i++) {
         animation_sequence_t *anim = &animations[i];
         loaded_animations[i].anim_key = anim->anim_key;
@@ -131,7 +131,7 @@ void load_animation_sprites() {
             continue;
         }
 
-        // Create each frame
+        // Create surface for each frame
         for (int k = 0; k < anim->frame_count; k++) {
             loaded_animations[i].frames[k] = cairo_surface_create_for_rectangle(
                 sheet,

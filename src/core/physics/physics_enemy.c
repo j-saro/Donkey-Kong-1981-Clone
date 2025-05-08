@@ -32,6 +32,8 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
         }
 
         enemy_player_collision(&level->player, enemy);
+
+        // set enemy type specific movement
         switch (enemy->base.type) {
             case BARREL:
                 barrel_movement(enemy, dt_seconds);
@@ -44,6 +46,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
         enemy_platform_collision(level, enemy);
         enemy_ladder_option(level, enemy);
         
+        // if enemy falls of platform or climbs ladder, change direction
         if (enemy->fly_time > 0.1 && enemy->base.is_grounded && !enemy->jumping) {
             enemy->base.direction *= -1;
             enemy->fly_time = 0;
@@ -61,6 +64,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
 
 void barrel_movement(enemy_t *enemy, float dt_seconds) {
     float no_jump_zone = 100;
+    // randomly jump
     if (enemy->base.is_grounded && 
         (rand() % 300) < 2 && 
         enemy->base.x > no_jump_zone && 
@@ -74,39 +78,47 @@ void barrel_movement(enemy_t *enemy, float dt_seconds) {
         enemy->jumping = false;
     }
 
+    // Normal Movement Speed
     if (enemy->base.velocity_y == 0 || enemy->jumping) {
         enemy->base.x += 130 * enemy->base.direction * dt_seconds;
     }
+    // if falling, reduce movement 
     else {
         enemy->base.x += 0.1 * enemy->base.direction;
     }
 
+    // if falling, update fly time
     if (!enemy->base.is_grounded && !enemy->jumping) {
         enemy->fly_time += dt_seconds;
     }
 
+    // Gravity
     enemy->base.velocity_y += GRAVITY * dt_seconds;
     enemy->base.y += enemy->base.velocity_y * dt_seconds;
 }
 
 void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
+    // climb ladder up/down
     if (enemy->on_ladder && !enemy->base.is_grounded) {
         enemy->base.y += 40 * dt_seconds * enemy->climb_direction;
         return;
     }
 
+    // dont fall of platforms
     if (enemy->base.velocity_y > 0) {
         enemy->base.direction *= -1;
         enemy->base.x += 10 * enemy->base.direction;
         return;
     }
 
+    // change randomly direction
     if ((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH) {
         enemy->base.direction *= -1;
     }
 
     enemy->base.x += (MOVE_SPEED / 1.5f) * enemy->base.direction * dt_seconds;
 
+    // only gravity when not on ladder
     if (!enemy->on_ladder) {
         enemy->base.velocity_y += GRAVITY * dt_seconds;
         enemy->base.y += enemy->base.velocity_y * dt_seconds;
@@ -160,7 +172,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                 continue;
             }
 
-            float ladder_center = ladder->base.x - 5;
+            float ladder_center = ladder->base.x;
             float ladder_left = ladder->base.x;
             float ladder_right = ladder_left + ladder->base.width;
             float ladder_top = ladder->base.y - PHYSICS_EPSILON;
@@ -176,6 +188,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                 enemy->on_ladder = false;
             }
 
+            // if aligned with ladder
             if (aligned_with_ladder && (close_enough_top_y || close_enough_bottom_y)) {
 
                 int probability = (level->player.current_ladder_index == j) ? 20 : 1;
@@ -184,6 +197,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                 switch (enemy->base.type) {
                     case BARREL:
                         if (rand_int < probability)
+                            // if above ladder, climb down
                             if (close_enough_top_y) {
                                 enemy->base.y += 30;
                                 enemy->base.is_grounded = false;
@@ -192,12 +206,15 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                             }
                         break;
                     case FIRE_SPIRIT:
+                        // if abouve ladder, climp down
                         if (close_enough_top_y && rand_int < probability) {
                             enemy->climb_direction = 1;
                             enemy->base.y += 40;
                             enemy->on_ladder = true;
                             enemy->base.is_grounded = false;
-                        } else if (close_enough_bottom_y && rand_int < probability * 2) {
+                        }
+                        // if at bottom of ladder, climb up 
+                        else if (close_enough_bottom_y && rand_int < probability * 2) {
                             enemy->climb_direction = -1;
                             enemy->base.y -= 40;
                             enemy->on_ladder = true;

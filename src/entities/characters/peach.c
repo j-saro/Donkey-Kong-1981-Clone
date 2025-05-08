@@ -31,7 +31,10 @@ void peach_update(peach_t *peach, float dt_seconds) {
 
     peach->anim_time += dt_seconds;
 
+    // if peach is at the end of the animation cycle
     if (animation->current_frame_index == sequence.frame_count - 1) {
+
+        // pause while anim time is smaller as anim interval
         if (peach->anim_time < peach->anim_interval) {
             return;
         }

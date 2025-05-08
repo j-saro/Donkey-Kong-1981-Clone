@@ -33,12 +33,9 @@ void static_entity_init(level_t *level, cJSON *static_entities_json) {
     }
 }
 
-
 void static_entity_cleanup(level_t *level) {
     // Cleanup static_entities array
-    free(level->static_entities);
-    level->static_entities = NULL;
-    level->num_static_entities = 0;
+    entity_array_cleanup((void**)&level->static_entities, &level->num_static_entities);
 }
 
 void hide_static_entity(level_t *level) {

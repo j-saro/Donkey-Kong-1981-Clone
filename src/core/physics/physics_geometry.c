@@ -54,6 +54,7 @@ void check_ladder_collision(game_state_t *game_state) {
     float player_top = player->base.y;
     float player_bottom = player->base.y + player->base.height;
 
+    // if hammer is equipped, climbing is not allowed
     if (player->has_hammer) {
         player->on_ladder = false;
         return;
@@ -64,6 +65,7 @@ void check_ladder_collision(game_state_t *game_state) {
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const geometry_t *ladder = &game_state->level.ladders[i];
 
+        // if ladder is not physics object skip it
         if (!ladder->has_physics || 
             player->base.animation.current_animation == ANIM_JUMP_MARIO ||
             ladder->is_cutscene_entity) {
@@ -75,6 +77,7 @@ void check_ladder_collision(game_state_t *game_state) {
         float ladder_top = ladder->base.y - PHYSICS_EPSILON;
         float ladder_bottom = ladder_top + ladder->base.height;
 
+        // checks if player is overlapping with the ladder
         bool inside_ladder = (player_center > ladder_left && player_center < ladder_right);
         bool overlap_ladder = (player_bottom > ladder_top && player_top < ladder_bottom);
 

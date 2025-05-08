@@ -48,10 +48,8 @@ void effect_clear_all(level_t *level) {
 }
 
 void effect_cleanup(level_t *level) {
-    free(level->effects);
-    level->effects = NULL;
+    entity_array_cleanup((void**)&level->effects, &level->num_effects);
     level->effects_capacity = 0;
-    level->num_effects = 0;
 }
 
 void effect_update(level_t *level, float dt_seconds) {
@@ -60,6 +58,7 @@ void effect_update(level_t *level, float dt_seconds) {
         animation_sequence_t sequence = get_animation_by_key(&effect->base, effect->base.animation.current_animation);
         update_animation_progress(&effect->base, dt_seconds);
 
+        // if effect at last frame destroy it
         if (effect->base.animation.current_frame_index == (sequence.frame_count - 1)) {
             effect_destroy(level, i);
             i--;

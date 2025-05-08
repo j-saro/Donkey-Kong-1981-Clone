@@ -7,7 +7,6 @@
 #include "entities/abstract/entity.h"
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type);
-void geometry_array_cleanup(geometry_t **array, int *count);
 void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game_state);
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
@@ -39,14 +38,6 @@ void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
 
     cJSON *cutscene_id_json = cJSON_GetObjectItem(json, "cutscene_id");
     structure->cutscene_id = (cJSON_IsNumber(cutscene_id_json)) ? cutscene_id_json->valueint : -1;
-}
-
-void geometry_array_cleanup(geometry_t **array, int *count) {
-    if (*array) {
-        free(*array);
-        *array = NULL;
-    }
-    *count = 0;
 }
 
 void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game_state) {

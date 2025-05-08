@@ -6,6 +6,7 @@
 
 void entity_parse(entity_t *base, cJSON *json);
 void entity_draw(cairo_t *cr, const entity_t *base);
+void entity_array_cleanup(void **array, int *count);
 
 void entity_parse(entity_t *base, cJSON *json) {
     // Json read Values
@@ -76,4 +77,12 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
     }
 
     cairo_restore(cr);
+}
+
+void entity_array_cleanup(void **array, int *count) {
+    if (*array) {
+        free(*array);
+        *array = NULL;
+    }
+    *count = 0;
 }

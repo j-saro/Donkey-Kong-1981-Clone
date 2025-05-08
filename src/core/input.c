@@ -23,12 +23,14 @@ gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_da
 }
 
 void input_init(game_state_t *game_state) {
-    game_state->num_pressed_keys = 256; // 65536 for most of keyval 
+    game_state->num_pressed_keys = 256; // 65536 for most of keyval
     game_state->pressed_keys = calloc(game_state->num_pressed_keys, sizeof(int));
 }
 
 void input_cleanup(game_state_t *game_state) {
-    free(game_state->pressed_keys);
+    if (game_state->pressed_keys) {
+        free(game_state->pressed_keys);
+    }
     game_state->pressed_keys = NULL;
     game_state->num_pressed_keys = 0;
 }

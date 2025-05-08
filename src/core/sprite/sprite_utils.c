@@ -2,7 +2,6 @@
 #include "core/sprite/sprite.h"
 #include <gtk/gtk.h>
 
-
 int find_animation_index(entity_t *base, animation_state_t anim_state);
 animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim_state);
 cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_state);
@@ -10,12 +9,15 @@ void set_animation_frames(entity_t *base);
 cairo_surface_t *get_spritesheet(entities_t entity);
 int get_type_by_name(const char *name);
 
+
 int find_animation_index(entity_t *base, animation_state_t anim_state) {
+    // return if index is cached
     if (base->animation.current_animation == anim_state &&
         base->animation.current_animation_index != -1) {
         return base->animation.current_animation_index;
     }
 
+    // find animation index in array
     for (int i = 0; i < num_animations; i++) {
         if (animations[i].anim_key == anim_state) {
             base->animation.current_animation_index = i;
@@ -25,6 +27,7 @@ int find_animation_index(entity_t *base, animation_state_t anim_state) {
     return -1;
 }
 
+// returns animation sequence by animation state
 animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim_state) {
     int index = find_animation_index(base, anim_state);
     if (index >= 0) return animations[index];
@@ -33,6 +36,7 @@ animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim
     return empty;
 }
 
+// returns animation frames array of current animation
 cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_state) {
     int index = find_animation_index(base, anim_state);
     if (index >= 0) return loaded_animations[index].frames;
@@ -46,6 +50,7 @@ void set_animation_frames(entity_t *base) {
         return;
     }
 
+    // set animation frames array of current animation
     base->animation.frames = get_animation_frames(base, base->animation.current_animation);
     int index = base->animation.current_frame_index;
     if (base->animation.frames != NULL && index >= 0) {
@@ -56,6 +61,7 @@ void set_animation_frames(entity_t *base) {
     }
 }
 
+// retruns spritesheet of entities type
 cairo_surface_t *get_spritesheet(entities_t entity) {
     for (int i = 0; i < num_sprite_sheets; i++) {
         if (sprite_sheets[i].type == entity) {
@@ -67,6 +73,7 @@ cairo_surface_t *get_spritesheet(entities_t entity) {
 }
 
 
+// helper function to map string to enum
 int get_type_by_name(const char *name) {
     // Entities
     if (strcmp(name, "MARIO") == 0) return MARIO;

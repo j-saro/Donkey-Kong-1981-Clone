@@ -5,6 +5,7 @@
 
 #define BASE_WIDTH 600.0f
 #define BASE_HEIGHT 600.0f
+#define KEY_INPUT_COOLDOWN 0.2f
 #define GRAVITY 800.0f
 #define MOVE_SPEED 100.0f
 #define JUMP_FORCE 250.0f
@@ -14,7 +15,6 @@
 #define MAX_ENEMIES 10
 #define MAX_FIRE_SPIRITS 5
 #define HAMMER_TIME 6.0f
-
 
 typedef enum {
     GAME_MODE_NORMAL,
@@ -271,7 +271,7 @@ typedef struct {
 
     // Game mode
     game_mode_t mode;
-    float game_time;
+    float key_cooldown;
 
     // Cutscene
     int current_cutscene;

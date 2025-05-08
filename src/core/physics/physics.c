@@ -69,8 +69,13 @@ void item_player_collision(level_t *level) {
 
         if (player_object_collision(&level->player, &item->base, level->player.base.width, level->player.base.height / 2.0f)) {
             item_destroy(level, i);
-            level->player.has_hammer = true;
-            level->player.hammer_time = HAMMER_TIME;
+
+            // TODO: add points
+
+            if (item->base.type == HAMMER) {
+                level->player.has_hammer = true;
+                level->player.hammer_time = HAMMER_TIME;
+            }
             i--;
             continue;
         }

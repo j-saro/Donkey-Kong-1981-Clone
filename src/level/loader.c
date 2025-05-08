@@ -24,7 +24,7 @@ gboolean sprite_parse_from_json(const char *json_str);
 gboolean level_load_from_json(level_t *level, const char *filename);
 gboolean level_parse_from_json(level_t *level, const char *json_str);
 
-
+// Load json file from path
 char *load_file_content_from_json(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) return NULL;
@@ -56,6 +56,7 @@ char *load_file_content_from_json(const char *filename) {
     return content;
 }
 
+// load animations & sprites from json
 gboolean sprite_load_from_json(const char *filename) {
     char *json_str = load_file_content_from_json(filename);
     if (!json_str) {

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "entities/environment/platform.h"
 #include "entities/abstract/geometry.h"
+#include "entities/abstract/entity.h"
 #include <gtk/gtk.h>
 
 void platform_init(level_t *level, cJSON *platforms_json);
@@ -20,7 +21,7 @@ void platform_init(level_t *level, cJSON *platforms_json) {
 
 void platform_cleanup(level_t *level) {
     // Cleanup platforms array
-    geometry_array_cleanup(&level->platforms, &level->num_platforms);
+    entity_array_cleanup((void**)&level->platforms, &level->num_platforms);
 }
 
 void platform_draw(cairo_t *cr, game_state_t *game_state) {

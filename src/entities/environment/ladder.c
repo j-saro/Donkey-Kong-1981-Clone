@@ -20,7 +20,7 @@ void ladder_init(level_t *level, cJSON *ladders_json) {
 
 void ladder_cleanup(level_t *level) {
     // Cleanup ladders array
-    geometry_array_cleanup(&level->ladders, &level->num_ladders);
+    entity_array_cleanup((void**)&level->ladders, &level->num_ladders);
 }
 
 

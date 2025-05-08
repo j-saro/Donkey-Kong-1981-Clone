@@ -11,7 +11,7 @@ void game_update(game_state_t *game_state, float dt_seconds);
 
 void game_init(game_state_t *game_state) {
     game_state->mode = GAME_MODE_CUTSCENE;
-    game_state->game_time = 0.2f;
+    game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
     // Level
     game_state->current_level = 1;
@@ -65,6 +65,8 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
 
 gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_data) {
     game_state_t *game_state = (game_state_t*) user_data;
+
+    // Calc delta time
     static gint64 previous_time = 0;
     gint64 current_time = gdk_frame_clock_get_frame_time(clock);
     if (previous_time == 0) {
@@ -75,8 +77,11 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     gint64 time_delta = current_time - previous_time;
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
-    game_state->game_time -= dt_seconds;
 
+    // update key cooldown
+    game_state->key_cooldown -= dt_seconds;
+
+    // update entire game loop
     game_update(game_state, dt_seconds);
 
     gtk_widget_queue_draw(drawing_area);
@@ -86,35 +91,42 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds) {
     bool key_pause = game_state->pressed_keys['p'] || game_state->pressed_keys['P'];
     bool key_skip = game_state->pressed_keys['c'] || game_state->pressed_keys['C'];
-    bool top = game_state->pressed_keys['t'];
-
-    // for debug
-    if (top) {
-        game_state->level.player.base.x = 300;
-        game_state->level.player.base.y = 150;
-    }
+    bool top = game_state->pressed_keys['t'] || game_state->pressed_keys['T'];
     
-    if (key_pause && game_state->game_time <= 0) {
-        if (game_state->mode == GAME_MODE_NORMAL) {
-            game_state->mode = GAME_MODE_PAUSED;
-        } else if (game_state->mode == GAME_MODE_PAUSED) {
-            cutscene_init_characters(&game_state->level);
-            effect_clear_all(&game_state->level);
-            game_state->mode = GAME_MODE_NORMAL;
+    if (game_state->key_cooldown <= 0) {
+        // Pause game
+        if (key_pause) {
+            if (game_state->mode == GAME_MODE_NORMAL) {
+                game_state->mode = GAME_MODE_PAUSED;
+            } else if (game_state->mode == GAME_MODE_PAUSED) {
+                cutscene_init_characters(&game_state->level);
+                effect_clear_all(&game_state->level);
+                game_state->mode = GAME_MODE_NORMAL;
+            }
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
-        game_state->game_time = 0.2f;
-    }
-    
-    if (key_skip && game_state->game_time <= 0) {
-        if (game_state->mode == GAME_MODE_CUTSCENE) {
-            cutscene_init_characters(&game_state->level);
-            effect_clear_all(&game_state->level);
-            game_state->mode = GAME_MODE_NORMAL;
+        
+        // skip current cutscene
+        if (key_skip) {
+            if (game_state->mode == GAME_MODE_CUTSCENE) {
+                cutscene_init_characters(&game_state->level);
+                effect_clear_all(&game_state->level);
+                game_state->mode = GAME_MODE_NORMAL;
+            }
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
-        game_state->game_time = 0.2f;
+
+        // for debug, tp player to top
+        if (top) {
+            game_state->level.player.base.x = 300;
+            game_state->level.player.base.y = 150;
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
+        }
     }
 
+    // Handle different game modes
     switch (game_state->mode) {
+        // Normal game loop
         case GAME_MODE_NORMAL:
             donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
             donkey_kong->base.x = 73;
@@ -123,6 +135,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             level_update(game_state, dt_seconds);
             break;
     
+        // current cutscene
         case GAME_MODE_CUTSCENE:
             switch (game_state->current_cutscene) {
                 case 1:
@@ -134,12 +147,15 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             }
             break;
 
+        // only effect
         case GAME_MODE_EFFECT:
             effect_update(&game_state->level, dt_seconds);
             if (game_state->level.num_effects == 0) {
                 game_state->mode = GAME_MODE_NORMAL;
             }
     
+
+        // game pause
         case GAME_MODE_PAUSED:
             break;
     }

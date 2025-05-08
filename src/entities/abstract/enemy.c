@@ -83,15 +83,11 @@ void enemy_destroy(level_t *level, int index) {
 
 void enemy_cleanup(level_t *level) {
     // Spawned enemies
-    free(level->enemies);
-    level->enemies = NULL;
+    entity_array_cleanup((void**)&level->enemies, &level->num_enemies);
     level->enemy_capacity = 0;
-    level->num_enemies = 0;
 
     // enemy categories
-    free(level->enemy_spawns);
-    level->enemy_spawns = NULL;
-    level->enemy_spawns = 0;
+    entity_array_cleanup((void**)&level->enemy_spawns, &level->enemy_spawns);
 }
 
 void enemy_draw(cairo_t *cr, const level_t *level) {
@@ -105,22 +101,26 @@ void enemy_update(level_t *level, float dt_seconds) {
     for (int i = 0; i < level->num_enemy_spawns; i++) {
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
 
+        // spawn only a max size of enemys
         if (level->num_enemies >= MAX_ENEMIES) {
             continue;
         }
 
+        // spawn barrel if dk throws
         if (level->donkey_kong.throw && spawn->type == BARREL) {
             new_enemy(level, spawn);
             level->donkey_kong.throw = false;
             continue;
         }
 
+        // spawn only a max size of fire 
         if (level->num_enemies >= MAX_FIRE_SPIRITS) {
             continue;
         }
 
         spawn->spawn_timer -= dt_seconds;
     
+        // spawn new enemy after timer
         if (spawn->spawn_timer <= dt_seconds && !(spawn->type == BARREL)) {
             new_enemy(level, spawn);
             spawn->spawn_timer = spawn->spawn_interval;

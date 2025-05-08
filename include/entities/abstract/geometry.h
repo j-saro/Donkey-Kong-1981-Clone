@@ -5,5 +5,4 @@
 
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type);
-void geometry_array_cleanup(geometry_t **array, int *count);
 void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game_state);
