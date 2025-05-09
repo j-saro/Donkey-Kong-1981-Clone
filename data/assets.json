@@ -249,6 +249,36 @@
             "frame_height": 11
         },
         {
+            "key": "ANIM_UMBRELLA_ITEM",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 44,
+            "start_y": 26,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 16,
+            "frame_height": 15
+        },
+        {
+            "key": "ANIM_HANDBAG_ITEM",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 65,
+            "start_y": 32,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 9,
+            "frame_height": 9
+        },
+        {
+            "key": "ANIM_HAT_ITEM",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 79,
+            "start_y": 33,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 15,
+            "frame_height": 8
+        },
+        {
             "key": "ANIM_ENEMY_DEATH",
             "entity_id": "EFFECT",
             "start_x": 1,
@@ -322,6 +352,16 @@
             "key": "ANIM_PLATFORM_RED",
             "entity_id": "PLATFORM",
             "start_x": 13,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 8,
+            "frame_height": 8
+        },
+        {
+            "key": "ANIM_PLATFORM_CONVEYER_BELT",
+            "entity_id": "PLATFORM",
+            "start_x": 26,
             "start_y": 0,
             "frame_count": 1,
             "frame_duration": 1.0,

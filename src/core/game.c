@@ -16,6 +16,7 @@ void game_init(game_state_t *game_state) {
 
     // Level
     game_state->current_level = 1;
+    game_state->player_score = 0;
 
     // Cutscene
     game_state->current_cutscene = 1;
@@ -84,6 +85,8 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 
     // update entire game loop
     game_update(game_state, dt_seconds);
+
+    g_message("Score: %d", game_state->player_score);
 
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;

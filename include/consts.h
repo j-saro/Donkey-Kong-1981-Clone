@@ -12,6 +12,7 @@
 #define PHYSICS_EPSILON 19
 #define BARREL_MOVE_SPEED 130.0f
 #define FIRE_SPIRIT_MOVE_SPEED 40.0f
+#define CONVEYER_BELT_SPEED 2.0f
 
 // Mario
 #define HAMMER_TIME 6.0f
@@ -25,3 +26,4 @@
 // Enemy
 #define MAX_ENEMIES 10
 #define MAX_FIRE_SPIRITS 5
+#define ENEMY_POINTS 100

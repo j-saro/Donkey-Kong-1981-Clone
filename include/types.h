@@ -56,17 +56,16 @@ typedef enum {
     // Fire spirit
     ANIM_FIRE_SPIRIT_WALK,
 
-    // STATIC OIL BARREL
+    // Static entitys
     ANIM_OIL_BARREL,
-
-    // Donky Kong Barrel Stack
+    ANIM_STATIC_HAMMER,
     ANIM_BARREL_STACK,
+    ANIM_UMBRELLA_ITEM,
+    ANIM_HANDBAG_ITEM,
+    ANIM_HAT_ITEM,
 
     // Hide
     ANIM_HIDE,
-
-    // Hammer
-    ANIM_STATIC_HAMMER,
 
     // Effects
     ANIM_ENEMY_DEATH,
@@ -81,6 +80,7 @@ typedef enum {
     // Platforms
     ANIM_PLATFORM_RED,
     ANIM_PLATFORM_YELLOW,
+    ANIM_PLATFORM_CONVEYER_BELT,
 } animation_state_t;
 
 typedef struct {
@@ -212,16 +212,16 @@ typedef struct {
     donkey_kong_t donkey_kong;
 
     // Platforms
-    int num_platforms;
     geometry_t *platforms;
+    unsigned int num_platforms;
 
     // Ladders
-    int num_ladders;
     geometry_t *ladders;
+    unsigned int num_ladders;
 
     // Static objects
-    int num_static_entities;
     static_entity_t *static_entities;
+    unsigned int num_static_entities;
 
     // Enemys
     enemy_t *enemies;
@@ -253,6 +253,7 @@ typedef struct {
     // Level data
     level_t level;
     int current_level;
+    int player_score;
 
     // Game mode
     game_mode_t mode;

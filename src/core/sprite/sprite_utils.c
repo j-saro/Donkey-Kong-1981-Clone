@@ -110,6 +110,9 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
     if (strcmp(name, "ANIM_HIDE") == 0) return ANIM_HIDE;
     if (strcmp(name, "ANIM_STATIC_HAMMER") == 0) return ANIM_STATIC_HAMMER;
+    if (strcmp(name, "ANIM_UMBRELLA_ITEM") == 0) return ANIM_UMBRELLA_ITEM;
+    if (strcmp(name, "ANIM_HANDBAG_ITEM") == 0) return ANIM_HANDBAG_ITEM;
+    if (strcmp(name, "ANIM_HAT_ITEM") == 0) return ANIM_HAT_ITEM;
     if (strcmp(name, "ANIM_ENEMY_DEATH") == 0) return ANIM_ENEMY_DEATH;
     if (strcmp(name, "ANIM_HEART_FULL") == 0) return ANIM_HEART_FULL;
     if (strcmp(name, "ANIM_HEART_BROKEN") == 0) return ANIM_HEART_BROKEN;
@@ -118,6 +121,7 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_LADDER_YELLOW") == 0) return ANIM_LADDER_YELLOW;
     if (strcmp(name, "ANIM_PLATFORM_RED") == 0) return ANIM_PLATFORM_RED;
     if (strcmp(name, "ANIM_PLATFORM_YELLOW") == 0) return ANIM_PLATFORM_YELLOW;
+    if (strcmp(name, "ANIM_PLATFORM_CONVEYER_BELT") == 0) return ANIM_PLATFORM_CONVEYER_BELT;
 
     g_warning("Type did not match any name");
     return -1;

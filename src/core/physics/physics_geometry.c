@@ -39,6 +39,10 @@ bool platform_entity_collison(game_state_t *game_state, entity_t *base) {
         {
             base->y = platform_top - base->height;
             base->velocity_y = 0;
+
+            if (platform->base.animation.current_animation == ANIM_PLATFORM_CONVEYER_BELT) {
+                game_state->level.player.base.x += CONVEYER_BELT_SPEED * platform->base.direction;
+            }
             if (base->type == MARIO) {
                 game_state->level.player.current_platform_index = i;
             }

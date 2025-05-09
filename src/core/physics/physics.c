@@ -11,7 +11,7 @@ void apply_gravity(entity_t *base, float dt_seconds, float gravity_force);
 void player_donkey_kong_collision(level_t *level);
 void player_gravity(player_t *player, float dt_seconds);
 void window_collision(game_state_t *game_state, float screen_height);
-void item_player_collision(level_t *level);
+void item_player_collision(game_state_t *game_state);
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height) {
     player_gravity(&game_state->level.player, dt_seconds);
@@ -19,7 +19,7 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
     window_collision(game_state, screen_height);
     platform_player_collision(game_state);
     enemy_physics(game_state, dt_seconds);
-    item_player_collision(&game_state->level);
+    item_player_collision(game_state);
 }
 
 void player_gravity(player_t *player, float dt_seconds) {
@@ -64,14 +64,15 @@ void window_collision(game_state_t *game_state, float screen_height) {
     }
 }
 
-void item_player_collision(level_t *level) {
+void item_player_collision(game_state_t *game_state) {
+    level_t *level = &game_state->level;
     for (int i = 0; i < level->num_items; i++) {
         item_t *item = &level->items[i];
 
         if (player_object_collision(&level->player, &item->base, level->player.base.width, level->player.base.height / 2.0f)) {
             item_destroy(level, i);
 
-            // TODO: add points
+            game_state->player_score += item->points;
 
             if (item->base.type == HAMMER) {
                 level->player.has_hammer = true;

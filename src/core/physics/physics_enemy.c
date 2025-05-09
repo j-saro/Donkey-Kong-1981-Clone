@@ -24,6 +24,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
         bool hit_with_hammer = enemy_should_be_destroyed_by_player(&level->player, enemy);
         if (enemy->base.x < -enemy->base.width|| enemy->base.x > (BASE_WIDTH + enemy->base.width) || hit_with_hammer) {
             if (hit_with_hammer) {
+                game_state->player_score += ENEMY_POINTS;
                 new_effect(level, ANIM_ENEMY_DEATH, enemy->base.x, enemy->base.y, 1);
                 game_state->mode = GAME_MODE_EFFECT;
             }
