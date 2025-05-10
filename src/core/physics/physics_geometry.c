@@ -1,17 +1,17 @@
 #include "consts.h"
 #include "core/physics/physics_geometry.h"
 
-void platform_player_collision(game_state_t *game_state);
-bool platform_entity_collison(game_state_t *game_state, entity_t *base);
+void platform_player_collision(game_state_t *game_state, float dt_seconds);
+bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt_seconds);
 void check_ladder_collision(game_state_t *game_state);
 
-void platform_player_collision(game_state_t *game_state) {
+void platform_player_collision(game_state_t *game_state, float dt_seconds) {
     player_t *player = &game_state->level.player;
     player->base.height = player->has_hammer ? MARIO_WITH_HAMMER_HEIGHT * SCALE : BASIC_TILE_SIZE * SCALE;
-    player->base.is_grounded = platform_entity_collison(game_state, &player->base);
+    player->base.is_grounded = platform_entity_collison(game_state, &player->base, dt_seconds);
 }
 
-bool platform_entity_collison(game_state_t *game_state, entity_t *base) {
+bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt_seconds) {
     float old_bottom = base->previous_y + base->height;
     float new_bottom = base->y + base->height;
     float entity_left = base->x;
@@ -41,7 +41,7 @@ bool platform_entity_collison(game_state_t *game_state, entity_t *base) {
             base->velocity_y = 0;
 
             if (platform->base.animation.current_animation == ANIM_PLATFORM_CONVEYER_BELT) {
-                game_state->level.player.base.x += CONVEYER_BELT_SPEED * platform->base.direction;
+                game_state->level.player.base.x += CONVEYER_BELT_SPEED * dt_seconds * platform->base.direction;
             }
             if (base->type == MARIO) {
                 game_state->level.player.current_platform_index = i;

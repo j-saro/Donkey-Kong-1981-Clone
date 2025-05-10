@@ -7,6 +7,13 @@
                 "y": 300,
                 "width": 16,
                 "height": 16
+            },
+            {
+                "key": "ANIM_FIRE_LARGE",
+                "x": 285,
+                "y": 271,
+                "width": 16,
+                "height": 15
             }
         ],
         "peach": {
@@ -32,7 +39,7 @@
         },
         "enemys": [
             {
-                "type": "FIRE_SPIRIT",
+                "key": "ANIM_FIRE_SPIRIT_WALK",
                 "x": 280,
                 "y": 270,
                 "width": 16,
@@ -41,13 +48,32 @@
                 "initial_delay": 1
             },
             {
-                "type": "FIRE_SPIRIT",
+                "key": "ANIM_FIRE_SPIRIT_WALK",
                 "x": 320,
                 "y": 270,
                 "width": 16,
                 "height": 16,
                 "spawn_interval": 5,
                 "initial_delay": 9
+            },
+            {
+                "key": "ANIM_IDLE_LORE",
+                "x": 0,
+                "y": 472,
+                "width": 16,
+                "height": 8,
+                "spawn_interval": 5,
+                "initial_delay": 0
+            },
+            {
+                "key": "ANIM_IDLE_LORE",
+                "x": 560,
+                "y": 292,
+                "width": 16,
+                "height": 8,
+                "direction": -1,
+                "spawn_interval": 5,
+                "initial_delay": 0
             }
         ],
         "items": [

@@ -42,6 +42,13 @@
                 "y": 170,
                 "width": 21,
                 "height": 32
+            },
+            {
+                "key": "ANIM_FIRE_SMALL",
+                "x": 63,
+                "y": 508,
+                "width": 16,
+                "height": 15
             }
         ],
         "peach": {
@@ -67,7 +74,7 @@
         },
         "enemys": [
             {
-                "type": "BARREL",
+                "key": "ANIM_BARREL_SIDE",
                 "x": 160,
                 "y": 175,
                 "width": 12,

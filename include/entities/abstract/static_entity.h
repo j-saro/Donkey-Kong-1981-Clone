@@ -8,3 +8,4 @@ void static_entity_cleanup(level_t *level);
 void hide_static_entity(level_t *level);
 void show_static_entity(level_t *level);
 void static_entity_draw(cairo_t *cr, const level_t *level);
+void static_entity_update(level_t *level, float dt_seconds);

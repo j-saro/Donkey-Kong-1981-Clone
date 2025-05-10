@@ -12,6 +12,7 @@ void static_entity_cleanup(level_t *level);
 void hide_static_entity(level_t *level);
 void show_static_entity(level_t *level);
 void static_entity_draw(cairo_t *cr, const level_t *level);
+void static_entity_update(level_t *level, float dt_seconds);
 
 void static_entity_init(level_t *level, cJSON *static_entities_json) {
     level->num_static_entities = cJSON_GetArraySize(static_entities_json);
@@ -57,5 +58,12 @@ void show_static_entity(level_t *level) {
 void static_entity_draw(cairo_t *cr, const level_t *level) {
     for (int i = 0; i < level->num_static_entities; ++i) {
         entity_draw(cr, &level->static_entities[i].base);
+    }
+}
+
+void static_entity_update(level_t *level, float dt_seconds) {
+    for (int i = 0; i < level->num_static_entities; i++) {
+        static_entity_t *static_entity = &level->static_entities[i];
+        update_animation_progress(&static_entity->base, dt_seconds);
     }
 }

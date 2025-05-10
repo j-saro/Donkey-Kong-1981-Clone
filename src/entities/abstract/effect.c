@@ -13,6 +13,7 @@ void effect_destroy(level_t *level, int index);
 void effect_clear_all(level_t *level);
 void effect_cleanup(level_t *level);
 void effect_update(level_t *level, float dt_seconds);
+bool effect_is_active(level_t *level, animation_state_t anim);
 void effect_draw(cairo_t *cr, const level_t *level);
 
 void effect_init(level_t *level) {
@@ -59,12 +60,24 @@ void effect_update(level_t *level, float dt_seconds) {
         update_animation_progress(&effect->base, dt_seconds);
 
         // if effect at last frame destroy it
-        if (effect->base.animation.current_frame_index == (sequence.frame_count - 1)) {
+        if (effect->base.animation.current_frame_index == (sequence.frame_count - 1) && effect->base.animation.current_animation == ANIM_ENEMY_DEATH) {
             effect_destroy(level, i);
             i--;
             continue;
         }
     }
+}
+
+bool effect_is_active(level_t *level, animation_state_t anim) {
+    for (int i = 0; i < level->num_effects; i++) {
+        effect_t *effect = &level->effects[i];
+        
+        if (effect->base.animation.current_animation == ANIM_ENEMY_DEATH) {
+            return TRUE;
+            break;
+        }
+    }
+    return FALSE;
 }
 
 void effect_draw(cairo_t *cr, const level_t *level) {

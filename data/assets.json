@@ -13,12 +13,8 @@
             "path": "./assets/peach_sprite_sheet.png"
         },
         {
-            "type": "BARREL",
-            "path": "./assets/barrels_sprite_sheet.png"
-        },
-        {
-            "type": "FIRE_SPIRIT",
-            "path": "./assets/fire_spirit_sprite_sheet.png"
+            "type": "ENEMY",
+            "path": "./assets/enemy_sprite_sheet.png"
         },
         {
             "type": "LADDER",
@@ -180,9 +176,9 @@
         },
         {
             "key": "ANIM_BARREL_SIDE",
-            "entity_id": "BARREL",
+            "entity_id": "ENEMY",
             "start_x": 0,
-            "start_y": 0,
+            "start_y": 20,
             "frame_count": 4,
             "frame_duration": 0.1,
             "frame_width": 12,
@@ -190,7 +186,7 @@
         },
         {
             "key": "ANIM_FIRE_SPIRIT_WALK",
-            "entity_id": "FIRE_SPIRIT",
+            "entity_id": "ENEMY",
             "start_x": 0,
             "start_y": 0,
             "frame_count": 2,
@@ -200,9 +196,9 @@
         },
         {
             "key": "ANIM_BARREL_FRONT",
-            "entity_id": "BARREL",
+            "entity_id": "ENEMY",
             "start_x": 50,
-            "start_y": 0,
+            "start_y": 20,
             "frame_count": 2,
             "frame_duration": 0.1,
             "frame_width": 16,
@@ -222,7 +218,7 @@
             "key": "ANIM_OIL_BARREL",
             "entity_id": "STATIC_ENTITY",
             "start_x": 0,
-            "start_y": 7,
+            "start_y": 9,
             "frame_count": 1,
             "frame_duration": 1.0,
             "frame_width": 16,
@@ -366,6 +362,36 @@
             "frame_count": 1,
             "frame_duration": 1.0,
             "frame_width": 8,
+            "frame_height": 8
+        },
+        {
+            "key": "ANIM_FIRE_SMALL",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 22,
+            "start_y": 1,
+            "frame_count": 2,
+            "frame_duration": 0.2,
+            "frame_width": 16,
+            "frame_height": 15
+        },
+        {
+            "key": "ANIM_FIRE_LARGE",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 22,
+            "start_y": 1,
+            "frame_count": 4,
+            "frame_duration": 0.2,
+            "frame_width": 16,
+            "frame_height": 15
+        },
+        {
+            "key": "ANIM_IDLE_LORE",
+            "entity_id": "ENEMY",
+            "start_x": 0,
+            "start_y": 34,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 16,
             "frame_height": 8
         }
     ]

@@ -30,8 +30,15 @@ void enemy_init(level_t *level, cJSON *json) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
         
-        const char *type_str = cJSON_GetObjectItem(item, "type")->valuestring;
-        spawn->type = get_type_by_name(type_str);
+        spawn->type = ENEMY;
+
+        const char *key_str = cJSON_GetObjectItem(item, "key")->valuestring;
+        animation_state_t anim_state = get_type_by_name(key_str);
+        if (anim_state == -1) {
+            g_warning("Unknown animation state: %s", key_str);
+        }
+        spawn->anim_state = anim_state;
+
         spawn->x = cJSON_GetObjectItem(item, "x")->valuedouble;
         spawn->y = cJSON_GetObjectItem(item, "y")->valuedouble;
 
@@ -62,18 +69,7 @@ void new_enemy(level_t *level, enemy_spawn_t *spawn) {
     enemy->base.width = spawn->width;
     enemy->base.height = spawn->height;
     enemy->climb_direction = 1;
-
-    switch (spawn->type) {
-        case BARREL:
-            enemy->base.animation.current_animation = ANIM_BARREL_SIDE;
-            break;
-        case FIRE_SPIRIT:
-            enemy->base.animation.current_animation = ANIM_FIRE_SPIRIT_WALK;
-            break;
-
-        default:
-            g_warning("Unknown enemy type (%d). Skipping enemy creation.", spawn->type);
-    }
+    enemy->base.animation.current_animation = spawn->anim_state;
 
     set_animation_frames(&enemy->base);
 }
@@ -108,21 +104,16 @@ void enemy_update(level_t *level, float dt_seconds) {
         }
 
         // spawn barrel if dk throws
-        if (level->donkey_kong.throw && spawn->type == BARREL) {
+        if (level->donkey_kong.throw && spawn->anim_state == ANIM_BARREL_SIDE) {
             new_enemy(level, spawn);
             level->donkey_kong.throw = false;
-            continue;
-        }
-
-        // spawn only a max size of fire 
-        if (level->num_enemies >= MAX_FIRE_SPIRITS) {
             continue;
         }
 
         spawn->spawn_timer -= dt_seconds;
     
         // spawn new enemy after timer
-        if (spawn->spawn_timer <= dt_seconds && !(spawn->type == BARREL)) {
+        if (spawn->spawn_timer <= dt_seconds && !(spawn->anim_state == ANIM_BARREL_SIDE)) {
             new_enemy(level, spawn);
             spawn->spawn_timer = spawn->spawn_interval;
         }

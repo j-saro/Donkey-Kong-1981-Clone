@@ -85,9 +85,7 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 
     // update entire game loop
     game_update(game_state, dt_seconds);
-
-    g_message("Score: %d", game_state->player_score);
-
+    
     gtk_widget_queue_draw(drawing_area);
     return G_SOURCE_CONTINUE;
 }
@@ -115,7 +113,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             if (game_state->mode == GAME_MODE_CUTSCENE) {
                 cutscene_init_characters(&game_state->level);
                 effect_clear_all(&game_state->level);
-                game_state->mode = GAME_MODE_NORMAL;
+                game_state->cutscene_step = 4;
             }
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
@@ -154,7 +152,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         // only effect
         case GAME_MODE_EFFECT:
             effect_update(&game_state->level, dt_seconds);
-            if (game_state->level.num_effects == 0) {
+            if (!effect_is_active(&game_state->level, ANIM_ENEMY_DEATH)) {
                 game_state->mode = GAME_MODE_NORMAL;
             }
             break;

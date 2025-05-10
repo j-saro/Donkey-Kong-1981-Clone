@@ -79,8 +79,7 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "MARIO") == 0) return MARIO;
     if (strcmp(name, "DONKEY_KONG") == 0) return DONKEY_KONG;
     if (strcmp(name, "PEACH") == 0) return PEACH;
-    if (strcmp(name, "BARREL") == 0) return BARREL;
-    if (strcmp(name, "FIRE_SPIRIT") == 0) return FIRE_SPIRIT;
+    if (strcmp(name, "ENEMY") == 0) return ENEMY;
     if (strcmp(name, "HAMMER") == 0) return HAMMER;
     if (strcmp(name, "LADDER") == 0) return LADDER;
     if (strcmp(name, "PLATFORM") == 0) return PLATFORM;
@@ -106,6 +105,7 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_BARREL_FRONT_IDLE") == 0) return ANIM_BARREL_FRONT_IDLE;
     if (strcmp(name, "ANIM_BARREL_FRONT") == 0) return ANIM_BARREL_FRONT;
     if (strcmp(name, "ANIM_FIRE_SPIRIT_WALK") == 0) return ANIM_FIRE_SPIRIT_WALK;
+    if (strcmp(name, "ANIM_IDLE_LORE") == 0) return ANIM_IDLE_LORE;
     if (strcmp(name, "ANIM_OIL_BARREL") == 0) return ANIM_OIL_BARREL;
     if (strcmp(name, "ANIM_BARREL_STACK") == 0) return ANIM_BARREL_STACK;
     if (strcmp(name, "ANIM_HIDE") == 0) return ANIM_HIDE;
@@ -122,7 +122,9 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_PLATFORM_RED") == 0) return ANIM_PLATFORM_RED;
     if (strcmp(name, "ANIM_PLATFORM_YELLOW") == 0) return ANIM_PLATFORM_YELLOW;
     if (strcmp(name, "ANIM_PLATFORM_CONVEYER_BELT") == 0) return ANIM_PLATFORM_CONVEYER_BELT;
+    if (strcmp(name, "ANIM_FIRE_SMALL") == 0) return ANIM_FIRE_SMALL;
+    if (strcmp(name, "ANIM_FIRE_LARGE") == 0) return ANIM_FIRE_LARGE;
 
-    g_warning("Type did not match any name");
+    g_warning("Type did not match any name: %s", name);
     return -1;
 }

@@ -17,7 +17,7 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
     player_gravity(&game_state->level.player, dt_seconds);
     player_donkey_kong_collision(&game_state->level);
     window_collision(game_state, screen_height);
-    platform_player_collision(game_state);
+    platform_player_collision(game_state, dt_seconds);
     enemy_physics(game_state, dt_seconds);
     item_player_collision(game_state);
 }

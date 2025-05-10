@@ -71,14 +71,14 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
     // Items
     item_draw(cr, level);
 
+    // Effects
+    effect_draw(cr, level);
+
     // Player
     player_draw(cr, &level->player.base);
 
     // Enemy
     enemy_draw(cr, level);
-
-    // Effects
-    effect_draw(cr, level);
 }
 
 // Update current level
@@ -91,7 +91,9 @@ void level_update(game_state_t *game_state, float dt_seconds) {
 
     peach_update(&game_state->level.peach, dt_seconds);
     donkey_kong_update(game_state, dt_seconds);
+    static_entity_update(&game_state->level, dt_seconds);
     enemy_update(&game_state->level, dt_seconds);
+    effect_update(&game_state->level, dt_seconds);
 
     // Check if player is dead
     player_check_death(&game_state->level.player);

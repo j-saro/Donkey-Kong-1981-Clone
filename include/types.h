@@ -14,8 +14,7 @@ typedef enum {
     MARIO,
     DONKEY_KONG,
     PEACH,
-    BARREL,
-    FIRE_SPIRIT,
+    ENEMY,
     HAMMER,
     LADDER,
     PLATFORM,
@@ -48,13 +47,12 @@ typedef enum {
     ANIM_CLIMB_WITH_PEACH_DONKEY_KONG,
     ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG,
 
-    // Barrel
+    // ENEMY
     ANIM_BARREL_SIDE,
     ANIM_BARREL_FRONT,
     ANIM_BARREL_FRONT_IDLE,
-
-    // Fire spirit
     ANIM_FIRE_SPIRIT_WALK,
+    ANIM_IDLE_LORE,
 
     // Static entitys
     ANIM_OIL_BARREL,
@@ -63,6 +61,8 @@ typedef enum {
     ANIM_UMBRELLA_ITEM,
     ANIM_HANDBAG_ITEM,
     ANIM_HAT_ITEM,
+    ANIM_FIRE_SMALL,
+    ANIM_FIRE_LARGE,
 
     // Hide
     ANIM_HIDE,
@@ -142,6 +142,7 @@ typedef struct {
 
 typedef struct {
     entities_t type;
+    animation_state_t anim_state; 
     float x, y;
     float width, height;
     int direction;
