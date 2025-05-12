@@ -188,6 +188,7 @@ typedef struct {
 
 typedef struct {
     entity_t base;
+    float spawn_x, spawn_y;
     bool is_dead;
 
     // Hammer
@@ -240,6 +241,9 @@ typedef struct {
     effect_t *effects;
     unsigned int num_effects;
     unsigned int effects_capacity;
+
+    // finish line
+    float finish_line;
 } level_t;
 
 

@@ -171,6 +171,9 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
+    // Height player has to reach
+    level->finish_line = (float)cJSON_GetObjectItem(level_json, "finish_line")->valuedouble;
+
     // Geometry
     platform_init(level, platforms_json);
     ladder_init(level, ladders_json);

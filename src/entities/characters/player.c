@@ -17,6 +17,9 @@ void player_init(player_t *player, cJSON *json) {
     
     // Json read Values
     entity_parse(&player->base, json);
+    
+    player->spawn_x = player->base.x;
+    player->spawn_y = player->base.y;
 
     // Player Default Values
     player->climbing = false;
@@ -55,8 +58,8 @@ void player_hammer_update(player_t *player, float dt_seconds) {
 void player_check_death(player_t *player) {
     if (player->is_dead) {
         player->is_dead = false;
-        player->base.x = 120;
-        player->base.y = 530 - player->base.height / 2.0f;   
+        player->base.x = player->spawn_x;
+        player->base.y = player->spawn_y;   
     }
 }
 

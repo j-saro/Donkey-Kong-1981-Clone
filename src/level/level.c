@@ -25,7 +25,7 @@ void level_complete(game_state_t *game_state);
 gboolean level_init(game_state_t *game_state) {
     char filename[64];
     // create current level file path
-    snprintf(filename, sizeof(filename), "data/level_%d.json", game_state->current_level);
+    snprintf(filename, sizeof(filename), "%s%d.json", LEVEL_FILE_PATH, game_state->current_level);
 
     return level_load_from_json(&game_state->level, filename);
 }
@@ -104,10 +104,9 @@ void level_complete(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
     peach_t *peach = &game_state->level.peach;
     float player_bottom = player->base.y + player->base.height;
-    float peach_bottom = peach->base.y + peach->base.height;
 
     // if player is on the same height of peach
-    if (player_bottom < peach_bottom && game_state->mode == GAME_MODE_NORMAL) {
+    if (player_bottom < game_state->level.finish_line && game_state->mode == GAME_MODE_NORMAL) {
         // Set animations
         set_animation(&game_state->level.donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
         set_animation(&peach->base, ANIM_IDLE_PEACH);

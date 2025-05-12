@@ -1,5 +1,6 @@
 {
     "level": {
+        "finish_line": 195,
         "static_entities": [
             {
                 "key": "ANIM_OIL_BARREL",
@@ -54,7 +55,7 @@
                 "width": 16,
                 "height": 16,
                 "spawn_interval": 5,
-                "initial_delay": 9
+                "initial_delay": 6
             },
             {
                 "key": "ANIM_IDLE_LORE",

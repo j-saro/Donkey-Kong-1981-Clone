@@ -1,5 +1,6 @@
 {
     "level": {
+        "finish_line": 138,
         "static_entities": [
             {
                 "key": "ANIM_OIL_BARREL",

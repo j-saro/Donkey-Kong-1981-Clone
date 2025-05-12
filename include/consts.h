@@ -22,6 +22,7 @@
 #define SCALE 2.0f
 #define BASIC_TILE_SIZE 16
 #define ASSETS_FILE_PATH "data/assets.json"
+#define LEVEL_FILE_PATH "data/level_"
 
 // Enemy
 #define MAX_ENEMIES 10

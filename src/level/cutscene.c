@@ -132,13 +132,17 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
             break;
 
         case 4:
-            // End of cutscene – switch back to game mode
+            // End of cutscene - switch back to game mode
             if (game_state->cutscene_time > 1.0f) {
                 game_state->cutscene_time = 0;
                 game_state->cutscene_step = 0;
                 game_state->mode = GAME_MODE_NORMAL;
                 
-                level_next(game_state);
+                if (!level_next(game_state)) {
+                    game_state->mode = GAME_MODE_PAUSED;
+                    set_animation(&game_state->level.player.base, ANIM_HIDE);
+                    break;
+                }
                 cutscene_init_characters(&game_state->level);
             }
             break;

@@ -251,6 +251,7 @@ bool enemy_should_be_destroyed_by_player(player_t *player, enemy_t *enemy) {
     
     bool right_direction = true;
     if (enemy->base.y > player->base.y) {
+        // player is facing enemy
         right_direction = player->base.direction * enemy->base.direction < 0;
     }
 
