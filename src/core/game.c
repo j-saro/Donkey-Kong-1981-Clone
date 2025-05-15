@@ -4,6 +4,8 @@
 #include "level/level.h"
 #include "level/cutscene.h"
 #include "entities/abstract/effect.h"
+#include "entities/abstract/enemy.h"
+#include "core/gui.h"
 
 void game_init(game_state_t *game_state);
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);
@@ -17,6 +19,7 @@ void game_init(game_state_t *game_state) {
     // Level
     game_state->current_level = 1;
     game_state->player_score = 0;
+    game_state->player_lives = PLAYER_LIVES;
 
     // Cutscene
     game_state->current_cutscene = 1;
@@ -59,6 +62,7 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
 
     // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
     level_draw(cr, game_state);
+    gui_draw(cr, game_state);
     
     cairo_restore(cr);
 
@@ -93,7 +97,11 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds) {
     bool key_pause = game_state->pressed_keys['p'] || game_state->pressed_keys['P'];
     bool key_skip = game_state->pressed_keys['c'] || game_state->pressed_keys['C'];
-    bool top = game_state->pressed_keys['t'] || game_state->pressed_keys['T'];
+
+    // debug
+    bool top = game_state->pressed_keys['t'];
+    bool refill = game_state->pressed_keys['r'];
+    bool kill = game_state->pressed_keys['k'];
     
     if (game_state->key_cooldown <= 0) {
         // Pause game
@@ -122,6 +130,17 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         if (top) {
             game_state->level.player.base.x = 300;
             game_state->level.player.base.y = 150;
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
+        }
+        if (refill) {
+            game_state->player_lives = PLAYER_LIVES;
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
+        }
+        if (kill) {
+            for (int i = 0; i < game_state->level.num_enemies; i++) {
+                enemy_destroy(&game_state->level, i);
+                i--;
+            } 
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
     }

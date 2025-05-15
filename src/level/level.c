@@ -11,6 +11,7 @@
 #include "entities/abstract/enemy.h"
 #include "core/sprite/animation.h"
 #include "core/physics/physics.h"
+#include "core/gui.h"
 #include "level/loader.h"
 
 gboolean level_init(game_state_t *game_state);
@@ -23,6 +24,7 @@ void level_complete(game_state_t *game_state);
 
 // load current level
 gboolean level_init(game_state_t *game_state) {
+    game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
     char filename[64];
     // create current level file path
     snprintf(filename, sizeof(filename), "%s%d.json", LEVEL_FILE_PATH, game_state->current_level);
@@ -85,6 +87,8 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
 void level_update(game_state_t *game_state, float dt_seconds) {
     level_complete(game_state);
 
+    gui_update(game_state, dt_seconds);
+
     check_ladder_collision(game_state);
     player_update(game_state, dt_seconds);
     apply_physics(game_state, dt_seconds, BASE_HEIGHT);
@@ -96,7 +100,7 @@ void level_update(game_state_t *game_state, float dt_seconds) {
     effect_update(&game_state->level, dt_seconds);
 
     // Check if player is dead
-    player_check_death(&game_state->level.player);
+    player_check_death(game_state);
 }
 
 // Checks if level is finished
@@ -122,6 +126,8 @@ void level_complete(game_state_t *game_state) {
 
         // faces peach and mario if not
         player->base.direction = -1;
+
+        game_state->player_score += game_state->bonus_points;
 
         // Set next cutscene
         game_state->mode = GAME_MODE_CUTSCENE;

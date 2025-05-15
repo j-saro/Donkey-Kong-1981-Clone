@@ -63,7 +63,16 @@ typedef enum {
     ANIM_HAT_ITEM,
     ANIM_FIRE_SMALL,
     ANIM_FIRE_LARGE,
+    ANIM_CONVEYER_ROLLER_LEFT,
+    ANIM_CONVEYER_ROLLER_RIGHT,
+    ANIM_LIVES,
+    ANIM_BONUS_POINTS,
 
+    // Numbers
+    ANIM_NUMBERS,
+    ANIM_ALPHABET,
+    ANIM_SPECIAL,
+    
     // Hide
     ANIM_HIDE,
 
@@ -112,6 +121,10 @@ typedef struct {
     cairo_surface_t **frames;
     float frame_count;
 } animation_frames_t;
+
+typedef struct {
+    float tint_red, tint_green, tint_blue, tint_alpha;
+} tint_t;
 
 /* 
 * Abstract 'Classes'
@@ -258,7 +271,10 @@ typedef struct {
     // Level data
     level_t level;
     int current_level;
+    int player_lives;
     int player_score;
+    int bonus_points;
+    float bonus_points_timer;
 
     // Game mode
     game_mode_t mode;

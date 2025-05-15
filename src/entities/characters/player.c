@@ -7,7 +7,7 @@
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);
 void player_update(game_state_t *game_state, float dt_seconds);
-void player_check_death(player_t *player);
+void player_check_death(game_state_t *game_state);
 void player_hammer_update(player_t *player, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
 void player_change_animation(game_state_t *game_state, float dt_seconds);
@@ -55,11 +55,15 @@ void player_hammer_update(player_t *player, float dt_seconds) {
     }
 }
 
-void player_check_death(player_t *player) {
-    if (player->is_dead) {
+void player_check_death(game_state_t *game_state) {
+    player_t *player = &game_state->level.player;
+    if (player->is_dead && game_state->player_lives > 0) {
+        game_state->player_lives -= 1;
         player->is_dead = false;
         player->base.x = player->spawn_x;
         player->base.y = player->spawn_y;   
+    } else if (game_state->player_lives <= 0) {
+        game_state->mode = GAME_MODE_PAUSED;
     }
 }
 

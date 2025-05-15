@@ -17,6 +17,13 @@
 // Mario
 #define HAMMER_TIME 6.0f
 #define MARIO_WITH_HAMMER_HEIGHT 27
+#define PLAYER_LIVES 2
+
+// Level
+#define BASE_BONUS_POINTS 4000
+#define LEVEL_BONUS_POINTS 1000
+#define BONUS_POINT_DECREMENT 100
+#define DECREMENT_TIMER 2.0f
 
 // Sprites
 #define SCALE 2.0f
@@ -27,4 +34,4 @@
 // Enemy
 #define MAX_ENEMIES 10
 #define MAX_FIRE_SPIRITS 5
-#define ENEMY_POINTS 100
+#define ENEMY_POINTS 300

@@ -124,6 +124,13 @@ int get_type_by_name(const char *name) {
     if (strcmp(name, "ANIM_PLATFORM_CONVEYER_BELT") == 0) return ANIM_PLATFORM_CONVEYER_BELT;
     if (strcmp(name, "ANIM_FIRE_SMALL") == 0) return ANIM_FIRE_SMALL;
     if (strcmp(name, "ANIM_FIRE_LARGE") == 0) return ANIM_FIRE_LARGE;
+    if (strcmp(name, "ANIM_CONVEYER_ROLLER_LEFT") == 0) return ANIM_CONVEYER_ROLLER_LEFT;
+    if (strcmp(name, "ANIM_CONVEYER_ROLLER_RIGHT") == 0) return ANIM_CONVEYER_ROLLER_RIGHT;
+    if (strcmp(name, "ANIM_NUMBERS") == 0) return ANIM_NUMBERS;
+    if (strcmp(name, "ANIM_ALPHABET") == 0) return ANIM_ALPHABET;
+    if (strcmp(name, "ANIM_SPECIAL") == 0) return ANIM_SPECIAL;
+    if (strcmp(name, "ANIM_LIVES") == 0) return ANIM_LIVES;
+    if (strcmp(name, "ANIM_BONUS_POINTS") == 0) return ANIM_BONUS_POINTS;
 
     g_warning("Type did not match any name: %s", name);
     return -1;

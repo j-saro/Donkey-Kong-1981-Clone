@@ -118,7 +118,7 @@ void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
     }
 
     // change randomly direction
-    if ((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH) {
+    if ((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH - enemy->base.width) {
         enemy->base.direction *= -1;
     }
 

@@ -8,6 +8,7 @@
 #include "level/level.h"
 #include "core/sprite/sprite.h"
 #include "level/loader.h"
+#include "core/gui.h"
 
 int main(int argc, char **argv);
 static void activate(GtkApplication* app, gpointer user_data);
@@ -45,6 +46,7 @@ int main(int argc, char **argv) {
     // Init game and input
     game_init(&game_state);
     input_init(&game_state);
+    gui_init(&game_state);
 
     if (sprite_load_from_json(ASSETS_FILE_PATH)) {
         level_init(&game_state);
