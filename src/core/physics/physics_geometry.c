@@ -12,7 +12,7 @@ void platform_player_collision(game_state_t *game_state, float dt_seconds) {
 }
 
 bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt_seconds) {
-    float old_bottom = base->previous_y + base->height;
+    float old_bottom = game_state->level.player.previous_y + base->height;
     float new_bottom = base->y + base->height;
     float entity_left = base->x;
     float entity_right = base->x + base->width;
@@ -34,7 +34,7 @@ bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt
 
         // snap player to platform
         if (base->velocity_y > 0 &&
-            (old_bottom - 4) <= platform_top &&
+            (old_bottom - EPSILON) <= platform_top &&
             new_bottom >= platform_top)
         {
             base->y = platform_top - base->height;
@@ -79,7 +79,7 @@ void check_ladder_collision(game_state_t *game_state) {
 
         float ladder_left = ladder->base.x;
         float ladder_right = ladder_left + ladder->base.width;
-        float ladder_top = ladder->base.y - PHYSICS_EPSILON;
+        float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
         float ladder_bottom = ladder_top + ladder->base.height;
 
         // checks if player is overlapping with the ladder

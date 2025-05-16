@@ -95,13 +95,13 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 }
 
 void game_update(game_state_t *game_state, float dt_seconds) {
-    bool key_pause = game_state->pressed_keys['p'] || game_state->pressed_keys['P'];
-    bool key_skip = game_state->pressed_keys['c'] || game_state->pressed_keys['C'];
+    bool key_pause = game_state->pressed_keys[GDK_KEY_p] || game_state->pressed_keys[GDK_KEY_P];
+    bool key_skip = game_state->pressed_keys[GDK_KEY_c] || game_state->pressed_keys[GDK_KEY_C];
 
     // debug
-    bool top = game_state->pressed_keys['t'];
-    bool refill = game_state->pressed_keys['r'];
-    bool kill = game_state->pressed_keys['k'];
+    bool top = game_state->pressed_keys[GDK_KEY_t];
+    bool refill = game_state->pressed_keys[GDK_KEY_r];
+    bool kill = game_state->pressed_keys[GDK_KEY_k];
     
     if (game_state->key_cooldown <= 0) {
         // Pause game
@@ -150,9 +150,9 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         // Normal game loop
         case GAME_MODE_NORMAL:
             donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
-            donkey_kong->base.x = 73;
-            donkey_kong->base.y = 131;
-            game_state->level.player.base.previous_y = game_state->level.player.base.y;
+            donkey_kong->base.x = donkey_kong->spawn_x;
+            donkey_kong->base.y = donkey_kong->spawn_y;
+            game_state->level.player.previous_y = game_state->level.player.base.y;
             level_update(game_state, dt_seconds);
             break;
     

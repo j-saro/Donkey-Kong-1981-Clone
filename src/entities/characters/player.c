@@ -90,14 +90,14 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         player->base.direction = 1;
     }
     if (key_up && player->on_ladder) {
-        float ladder_top = ladder->base.y - PHYSICS_EPSILON;
-        if ((player_bottom - 2) >= ladder_top) {
+        float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
+        if ((player_bottom - EPSILON) >= ladder_top) {
             player->base.y -= move_amount;
         }
     }
     if (key_down && player->on_ladder) {
         float ladder_bottom = ladder->base.y + ladder->base.height;
-        if (player_bottom <= ladder_bottom - 2) {
+        if (player_bottom <= ladder_bottom - EPSILON) {
             player->base.y += move_amount;
         }
     }
@@ -124,7 +124,7 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     geometry_t *platform = &game_state->level.platforms[current_platform];
     
     float ladder_top = ladder->base.y - platform->base.height;
-    float ladder_bottom = ladder->base.y + ladder->base.height - 2;
+    float ladder_bottom = ladder->base.y + ladder->base.height - EPSILON;
 
     if (player->has_hammer && (key_right || key_left)) {
         player->climbing = false;

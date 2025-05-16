@@ -75,7 +75,7 @@ void barrel_movement(enemy_t *enemy, float dt_seconds) {
         (rand() % 300) < 2 && 
         enemy->base.x > no_jump_zone && 
         enemy->base.x < (BASE_WIDTH - no_jump_zone) &&
-        enemy->base.y > 200) {
+        enemy->base.y > no_jump_zone * 2) {
         entity_jump(&enemy->base, JUMP_FORCE);
         enemy->jumping = true;
     }
@@ -113,7 +113,6 @@ void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
     // dont fall of platforms
     if (enemy->base.velocity_y > 0) {
         enemy->base.direction *= -1;
-        enemy->base.x += 10 * enemy->base.direction;
         return;
     }
 
@@ -158,7 +157,7 @@ void enemy_platform_collision(level_t *level, enemy_t *enemy) {
 
         // Check vertical collision (enemy falling onto platform)
         if (enemy->base.velocity_y >= 0 &&
-            (enemy_bottom + 2) >= platform_top &&
+            (enemy_bottom + EPSILON) >= platform_top &&
             enemy_top < platform_top)
         {
             enemy->base.y = platform_top - enemy->base.height;
@@ -185,7 +184,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
             float ladder_center = ladder->base.x;
             float ladder_left = ladder->base.x;
             float ladder_right = ladder_left + ladder->base.width;
-            float ladder_top = ladder->base.y - PHYSICS_EPSILON;
+            float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
             float ladder_bottom = ladder->base.y + ladder->base.height;
 
             float enemy_bottom = enemy->base.y + enemy->base.height;
@@ -201,7 +200,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
             // if aligned with ladder
             if (aligned_with_ladder && (close_enough_top_y || close_enough_bottom_y)) {
 
-                int probability = (level->player.current_ladder_index == j) ? 20 : 1;
+                int probability = (level->player.current_ladder_index == j) ? 3 : 1;
                 int rand_int = rand() % 200;
 
                 switch (enemy->base.animation.current_animation) {

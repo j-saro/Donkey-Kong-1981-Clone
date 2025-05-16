@@ -72,9 +72,6 @@ typedef enum {
     ANIM_NUMBERS,
     ANIM_ALPHABET,
     ANIM_SPECIAL,
-    
-    // Hide
-    ANIM_HIDE,
 
     // Effects
     ANIM_ENEMY_DEATH,
@@ -90,6 +87,9 @@ typedef enum {
     ANIM_PLATFORM_RED,
     ANIM_PLATFORM_YELLOW,
     ANIM_PLATFORM_CONVEYER_BELT,
+
+    // No Animation
+    ANIM_HIDE,
 } animation_state_t;
 
 typedef struct {
@@ -123,6 +123,11 @@ typedef struct {
 } animation_frames_t;
 
 typedef struct {
+    const char *name;
+    int value;
+} string_to_enmum_t;
+
+typedef struct {
     float tint_red, tint_green, tint_blue, tint_alpha;
 } tint_t;
 
@@ -132,7 +137,6 @@ typedef struct {
 typedef struct {
     entities_t type;
     
-    float previous_y;
     float x, y;
     float velocity_x, velocity_y;
     int direction;
@@ -195,12 +199,14 @@ typedef struct {
 
 typedef struct {
     entity_t base;
+    float spawn_x, spawn_y;
     bool throw;
     bool has_thrown_this_cicle;
 } donkey_kong_t;
 
 typedef struct {
     entity_t base;
+    float previous_y;
     float spawn_x, spawn_y;
     bool is_dead;
 
