@@ -7,6 +7,7 @@
 void player_init(player_t *player, cJSON *json);
 void player_draw(cairo_t *cr, const entity_t *base);
 void player_update(game_state_t *game_state, float dt_seconds);
+void player_check_jump(player_t *player, float dt_seconds);
 void player_check_death(game_state_t *game_state);
 void player_hammer_update(player_t *player, float dt_seconds);
 void player_movement(game_state_t *game_state, float dt_seconds, float screen_width);
@@ -27,6 +28,8 @@ void player_init(player_t *player, cJSON *json) {
     player->current_ladder_index = 0;
     player->current_platform_index = 0;
 
+    player->on_elevator = false;
+    player->flight_timer = 0.0f;
     player->hammer_time = 0.0f;
     player->has_hammer = false;
     player->is_dead = false;
@@ -38,11 +41,20 @@ void player_draw(cairo_t *cr, const entity_t *base) {
 }
 
 void player_update(game_state_t *game_state, float dt_seconds) {
+    player_check_jump(&game_state->level.player, dt_seconds);
     player_hammer_update(&game_state->level.player, dt_seconds);
     player_movement(game_state, dt_seconds, BASE_WIDTH);
 
     player_change_animation(game_state, dt_seconds);
     update_animation_progress(&game_state->level.player.base, dt_seconds);
+}
+
+void player_check_jump(player_t *player, float dt_seconds) {
+    if (!player->base.is_grounded) {
+        player->flight_timer += dt_seconds;
+    } else {
+        player->flight_timer = 0.0f;
+    }
 }
 
 void player_hammer_update(player_t *player, float dt_seconds) {
@@ -58,6 +70,7 @@ void player_hammer_update(player_t *player, float dt_seconds) {
 void player_check_death(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
     if (player->is_dead && game_state->player_lives > 0) {
+        player->hammer_time = false;
         set_animation(&player->base, ANIM_IDLE_MARIO);
         game_state->player_lives -= 1;
         player->is_dead = false;
@@ -135,6 +148,7 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
         player->climbing = false;
         set_animation(&player->base, ANIM_HAMMER_MARIO_STAND);
     }
+    else if (!player->base.is_grounded && player->on_elevator && player->flight_timer <= 0.15) {}
     else if (!player->base.is_grounded && !player->on_ladder) {
         player->climbing = false;
         set_animation(&player->base, ANIM_JUMP_MARIO);

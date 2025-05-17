@@ -2,6 +2,34 @@
     "level": {
         "finish_line": 138,
         "static_entities": [
+            {
+                "key": "ANIM_ELEVATOR_BASE_DOWN",
+                "x": 96,
+                "y": 195,
+                "width": 16,
+                "height": 16
+            },
+            {
+                "key": "ANIM_ELEVATOR_BASE_UP",
+                "x": 96,
+                "y": 554,
+                "width": 16,
+                "height": 16
+            },
+            {
+                "key": "ANIM_ELEVATOR_BASE_DOWN",
+                "x": 272,
+                "y": 195,
+                "width": 16,
+                "height": 16
+            },
+            {
+                "key": "ANIM_ELEVATOR_BASE_UP",
+                "x": 272,
+                "y": 554,
+                "width": 16,
+                "height": 16
+            }
         ],
         "peach": {
             "key": "ANIM_HIDE",
@@ -25,10 +53,126 @@
             "height": 16
         },
         "enemys": [
+            {
+                "key": "ANIM_FIRE_SPIRIT_WALK",
+                "x": 560,
+                "y": 180,
+                "width": 16,
+                "height": 16,
+                "spawn_interval": 10000,
+                "initial_delay": 1
+            },
+            {
+                "key": "ANIM_FIRE_SPIRIT_WALK",
+                "x": 200,
+                "y": 270,
+                "width": 16,
+                "height": 16,
+                "spawn_interval": 10000,
+                "initial_delay": 1
+            },
+            {
+                "key": "ANIM_SPRING",
+                "x": 0,
+                "y": 160,
+                "width": 16,
+                "height": 16,
+                "spawn_interval": 2,
+                "initial_delay": 1
+            }
         ],
         "items": [
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_HANDBAG_ITEM",
+                "x": 562,
+                "y": 190,
+                "width": 9,
+                "height": 9,
+                "points": 800
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_HAT_ITEM",
+                "x": 196,
+                "y": 462,
+                "width": 15,
+                "height": 8,
+                "points": 800
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_UMBRELLA_ITEM",
+                "x": 15,
+                "y": 268,
+                "width": 16,
+                "height": 15,
+                "points": 800
+            }
         ],
         "platforms": [
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 96,
+                "y": 316,
+                "direction": -1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 96,
+                "y": 436,
+                "direction": -1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 96,
+                "y": 556,
+                "direction": -1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 272,
+                "y": 240,
+                "direction": 1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 272,
+                "y": 360,
+                "direction": 1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_ELEVATOR",
+                "x": 272,
+                "y": 480,
+                "direction": 1,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 98,
+                "y": 554,
+                "width": 28,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 274,
+                "y": 554,
+                "width": 28,
+                "height": 8
+            },
             {
                 "key": "ANIM_PLATFORM_RED",
                 "x": 0,
@@ -185,6 +329,20 @@
             }
         ],
         "ladders": [
+            {
+                "key": "ANIM_ELEVATOR_LINE",
+                "x": 96,
+                "y": 195,
+                "width": 16,
+                "height": 360
+            },
+            {
+                "key": "ANIM_ELEVATOR_LINE",
+                "x": 272,
+                "y": 195,
+                "width": 16,
+                "height": 360
+            },
             {
                 "key": "ANIM_LADDER_BLUE",
                 "x": 20,

@@ -1,4 +1,5 @@
 #include "consts.h"
+#include <gtk/gtk.h>
 #include "core/physics/physics_geometry.h"
 
 void platform_player_collision(game_state_t *game_state, float dt_seconds);
@@ -34,9 +35,9 @@ bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt
 
         // snap player to platform
         if (base->velocity_y > 0 &&
-            (old_bottom - EPSILON) <= platform_top &&
-            new_bottom >= platform_top)
-        {
+            (old_bottom - EPSILON * 2) <= platform_top &&
+            new_bottom >= platform_top) {
+    
             base->y = platform_top - base->height;
             base->velocity_y = 0;
 
@@ -66,6 +67,7 @@ void check_ladder_collision(game_state_t *game_state) {
     }
 
     bool is_on_ladder = false;
+    player->on_elevator = false;
 
     for (int i = 0; i < game_state->level.num_ladders; i++) {
         const geometry_t *ladder = &game_state->level.ladders[i];
@@ -87,6 +89,11 @@ void check_ladder_collision(game_state_t *game_state) {
         bool overlap_ladder = (player_bottom > ladder_top && player_top < ladder_bottom);
 
         if (inside_ladder && overlap_ladder) {
+            if (ladder->base.animation.current_animation == ANIM_ELEVATOR_LINE) {
+                player->on_elevator = true;
+                continue;
+            }
+            
             is_on_ladder = true;
             player->current_ladder_index = i;
             break;

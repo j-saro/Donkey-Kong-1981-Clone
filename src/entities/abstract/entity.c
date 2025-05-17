@@ -59,10 +59,20 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
 
     cairo_surface_t *frame_surface = base->animation.current_frame;
     if (frame_surface != NULL) {
+        #ifdef DEBUG
         // Debug info
         //g_message("entity_draw: type=%d, anim=%d, frame=%d, surface=%p",
         //base->type, base->animation.current_animation,
         //base->animation.current_frame_index, (void*)frame_surface);
+
+        // Set outline color and line width
+        cairo_set_source_rgb(cr, 0.0, 1.0, 0.0); // Green
+        cairo_set_line_width(cr, 2.0); // line width
+
+        // Draw rectangle outline
+        cairo_rectangle(cr, 0, 0, base->width / SCALE, base->height / SCALE);
+        cairo_stroke(cr);
+        #else
 
         cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
         cairo_pattern_set_filter(pattern, CAIRO_FILTER_NEAREST);
@@ -71,6 +81,8 @@ void entity_draw(cairo_t *cr, const entity_t *base) {
         cairo_paint(cr);
 
         cairo_pattern_destroy(pattern);
+
+        #endif
     }
     else if (base->animation.current_animation == ANIM_HIDE) {}
     else {

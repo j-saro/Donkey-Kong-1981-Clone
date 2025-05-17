@@ -80,7 +80,7 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
             // End of cutscene - switch back to game mode
             if (game_state->cutscene_time > 1.0f) {
                 cutscene_finish(game_state);
-                set_animation(&game_state->level.player.base, ANIM_IDLE_MARIO);
+                cutscene_init_characters(&game_state->level);
             }
             break;
     }

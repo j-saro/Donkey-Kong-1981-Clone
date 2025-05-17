@@ -68,9 +68,6 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
     peach_draw(cr, &level->peach.base);
     donkey_kong_draw(cr, &level->donkey_kong.base);
 
-    // Static entity
-    static_entity_draw(cr, level);
-
     // Items
     item_draw(cr, level);
 
@@ -79,6 +76,9 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
 
     // Player
     player_draw(cr, &level->player.base);
+
+    // Static entity
+    static_entity_draw(cr, level);
 
     // Enemy
     enemy_draw(cr, level);
@@ -90,6 +90,8 @@ void level_update(game_state_t *game_state, float dt_seconds) {
     level_complete(game_state);
 
     gui_update(game_state, dt_seconds);
+
+    platform_update(&game_state->level, dt_seconds);
 
     check_ladder_collision(game_state);
     player_update(game_state, dt_seconds);

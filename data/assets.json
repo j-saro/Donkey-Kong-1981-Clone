@@ -483,6 +483,56 @@
             "frame_duration": 1.4,
             "frame_width": 15,
             "frame_height": 7
+        },
+        {
+            "key": "ANIM_ELEVATOR_BASE_DOWN",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 132,
+            "start_y": 4,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 16,
+            "frame_height": 16
+        },
+        {
+            "key": "ANIM_ELEVATOR_BASE_UP",
+            "entity_id": "STATIC_ENTITY",
+            "start_x": 148,
+            "start_y": 4,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 16,
+            "frame_height": 16
+        },
+        {
+            "key": "ANIM_ELEVATOR_LINE",
+            "entity_id": "LADDER",
+            "start_x": 47,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 16,
+            "frame_height": 8
+        },
+        {
+            "key": "ANIM_PLATFORM_ELEVATOR",
+            "entity_id": "PLATFORM",
+            "start_x": 13,
+            "start_y": 0,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 8,
+            "frame_height": 8
+        },
+        {
+            "key": "ANIM_SPRING",
+            "entity_id": "ENEMY",
+            "start_x": 21,
+            "start_y": 33,
+            "frame_count": 2,
+            "frame_duration": 0.1,
+            "frame_width": 16,
+            "frame_height": 15
         }
     ]
 }

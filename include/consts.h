@@ -1,5 +1,7 @@
 #pragma once
 
+//#define DEBUG
+
 // Gdk Window
 #define BASE_WIDTH 600.0f
 #define BASE_HEIGHT 600.0f
@@ -15,6 +17,12 @@
 #define FIRE_SPIRIT_MOVE_SPEED 40.0f
 #define CONVEYER_BELT_SPEED 100.0f
 #define ENEMY_OFFSET 10.0f
+#define SPRING_MOVE_SPEED 200.0f
+
+// Elevator
+#define ELEVATOR_TOP 200
+#define ELEVATOR_BOTTOM 554
+#define ELEVATOR_MOVE_SPEED 50.0f
 
 // Mario
 #define HAMMER_TIME 6.0f
@@ -38,6 +46,11 @@
 #define MAX_ENEMIES 10
 #define MAX_FIRE_SPIRITS 5
 #define ENEMY_POINTS 300
+// Spring
+#define ENEMY_X_THRESHOLD_1 460
+#define ENEMY_X_THRESHOLD_2 490
+#define ENEMY_Y_PLATFORM 188
+#define ENEMY_X_PLATFORM 455
 
 #define ENTITY_LIST \
     X(MARIO) \
@@ -73,6 +86,7 @@
     X(ANIM_BARREL_FRONT_IDLE) \
     X(ANIM_FIRE_SPIRIT_WALK) \
     X(ANIM_IDLE_LORE) \
+    X(ANIM_SPRING) \
     /* Static entities */ \
     X(ANIM_OIL_BARREL) \
     X(ANIM_STATIC_HAMMER) \
@@ -86,6 +100,8 @@
     X(ANIM_CONVEYER_ROLLER_RIGHT) \
     X(ANIM_LIVES) \
     X(ANIM_BONUS_POINTS) \
+    X(ANIM_ELEVATOR_BASE_UP) \
+    X(ANIM_ELEVATOR_BASE_DOWN) \
     /* Numbers & Alphabet */ \
     X(ANIM_NUMBERS) \
     X(ANIM_ALPHABET) \
@@ -100,9 +116,11 @@
     X(ANIM_LADDER_WHITE) \
     X(ANIM_LADDER_BLUE) \
     X(ANIM_LADDER_YELLOW) \
+    X(ANIM_ELEVATOR_LINE) \
     /* Platforms */ \
     X(ANIM_PLATFORM_RED) \
     X(ANIM_PLATFORM_YELLOW) \
     X(ANIM_PLATFORM_CONVEYER_BELT) \
+    X(ANIM_PLATFORM_ELEVATOR) \
     /* Special */ \
     X(ANIM_HIDE)

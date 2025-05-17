@@ -70,6 +70,7 @@ void new_enemy(level_t *level, enemy_spawn_t *spawn) {
     enemy->base.height = spawn->height;
     enemy->climb_direction = 1;
     enemy->base.animation.current_animation = spawn->anim_state;
+    enemy->stop_x_threshold = (rand() % 2 == 0) ? ENEMY_X_THRESHOLD_1 : ENEMY_X_THRESHOLD_2;
 
     set_animation_frames(&enemy->base);
 }

@@ -17,7 +17,7 @@ void game_init(game_state_t *game_state) {
     game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
     // Level
-    game_state->current_level = 1;
+    game_state->current_level = 1; // 1
     game_state->player_score = 0;
     game_state->bonus_live = false;
     game_state->player_lives = PLAYER_LIVES;
@@ -142,7 +142,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
 
         // for debug, tp player to top
         if (top) {
-            game_state->level.player.base.y = 150;
+            game_state->level.player.base.y -= 100;
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
         if (refill) {

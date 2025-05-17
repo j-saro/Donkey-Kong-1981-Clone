@@ -111,6 +111,7 @@ typedef struct {
     bool jumping;
     bool on_ladder;
     int climb_direction;
+    float stop_x_threshold;
 } enemy_t;
 
 typedef struct {
@@ -141,6 +142,8 @@ typedef struct {
 typedef struct {
     entity_t base;
     float previous_y;
+    float flight_timer;
+    bool on_elevator;
     float spawn_x, spawn_y;
     bool is_dead;
 

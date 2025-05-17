@@ -10,6 +10,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds);
 void barrel_movement(enemy_t *enemy, float dt_seconds);
 void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds);
 void lore_movement(enemy_t *enemy, float dt_seconds);
+void spring_movement(enemy_t *enemy, float dt_seconds);
 void enemy_platform_collision(level_t *level, enemy_t *enemy);
 void enemy_ladder_option(level_t *level, enemy_t *enemy);
 void enemy_player_collision(player_t *player, enemy_t *enemy);
@@ -53,6 +54,9 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
             case ANIM_IDLE_LORE:
                 lore_movement(enemy, dt_seconds);
                 break;
+            case ANIM_SPRING:
+                spring_movement(enemy, dt_seconds);
+                continue;
         }
 
         enemy_platform_collision(level, enemy);
@@ -123,6 +127,9 @@ void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds) {
     }
 
     // change randomly direction
+    if (enemy->base.x > BASE_WIDTH - (enemy->base.width / 2.0)) {
+        enemy->base.x = BASE_WIDTH - enemy->base.width;
+    }
     if (((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH - enemy->base.width) && level->frame_timer < 0.5) {
         enemy->base.direction *= -1;
     }
@@ -138,6 +145,22 @@ void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds) {
 
 void lore_movement(enemy_t *enemy, float dt_seconds) {
     enemy->base.x += (MOVE_SPEED / 1.5f) * enemy->base.direction * dt_seconds;
+}
+
+void spring_movement(enemy_t *enemy, float dt_seconds) {
+    entity_jump(&enemy->base, JUMP_FORCE);
+
+    if (enemy->base.x < enemy->stop_x_threshold) {
+        enemy->base.x += SPRING_MOVE_SPEED * dt_seconds;
+    }
+
+    if (enemy->base.y > (ENEMY_Y_PLATFORM - enemy->base.height) && enemy->base.x < ENEMY_X_PLATFORM) {
+        enemy->base.is_grounded = true;
+    }
+    
+    // Gravity
+    enemy->base.velocity_y += GRAVITY * dt_seconds;
+    enemy->base.y += enemy->base.velocity_y * dt_seconds;
 }
 
 void enemy_platform_collision(level_t *level, enemy_t *enemy) {
@@ -183,7 +206,9 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
         for (int j = 0; j < level->num_ladders; j++) {
             const geometry_t *ladder = &level->ladders[j];
 
-            if (!ladder->has_physics || ladder->is_cutscene_entity) {
+            if (!ladder->has_physics || 
+                ladder->is_cutscene_entity||
+                ladder->base.animation.current_animation == ANIM_ELEVATOR_LINE) {
                 continue;
             }
 
