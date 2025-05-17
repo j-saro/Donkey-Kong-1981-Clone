@@ -121,7 +121,7 @@
         ],
         "items": [
             {
-                "type": "HAMMER",
+                "type": "STATIC_ENTITY",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 290,
                 "y": 410,
@@ -130,7 +130,7 @@
                 "points": 0
             },
             {
-                "type": "HAMMER",
+                "type": "STATIC_ENTITY",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 52,
                 "y": 322,
@@ -325,7 +325,7 @@
             },
             {
                 "key": "ANIM_LADDER_WHITE",
-                "x": 221,
+                "x": 220,
                 "y": 171,
                 "width": 10,
                 "height": 24,
@@ -341,7 +341,7 @@
             },
             {
                 "key": "ANIM_LADDER_WHITE",
-                "x": 221,
+                "x": 220,
                 "y": 63,
                 "width": 10,
                 "height": 92,
@@ -357,10 +357,10 @@
             },
             {
                 "key": "ANIM_LADDER_WHITE",
-                "x": 341,
+                "x": 340,
                 "y": 155,
                 "width": 10,
-                "height": 42,
+                "height": 40,
                 "has_physics": false
             }
         ]

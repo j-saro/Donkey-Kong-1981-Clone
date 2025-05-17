@@ -8,7 +8,7 @@
 
 void enemy_physics(game_state_t *game_state, float dt_seconds);
 void barrel_movement(enemy_t *enemy, float dt_seconds);
-void fire_spirit_movement(enemy_t *enemy, float dt_seconds);
+void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds);
 void lore_movement(enemy_t *enemy, float dt_seconds);
 void enemy_platform_collision(level_t *level, enemy_t *enemy);
 void enemy_ladder_option(level_t *level, enemy_t *enemy);
@@ -23,10 +23,15 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
 
         // Remove out of bound enemies
         bool hit_with_hammer = enemy_should_be_destroyed_by_player(&level->player, enemy);
-        if (enemy->base.x < 0 || enemy->base.x > (BASE_WIDTH - enemy->base.width) || hit_with_hammer) {
+        if (enemy->base.x < 0 || 
+            enemy->base.x > BASE_WIDTH || 
+            enemy->base.y > BASE_HEIGHT || 
+            enemy->base.y < 0 || 
+            hit_with_hammer) {
             if (hit_with_hammer) {
                 game_state->player_score += ENEMY_POINTS;
-                new_effect(level, ANIM_ENEMY_DEATH, enemy->base.x, enemy->base.y, 1);
+                new_effect(level, ANIM_ENEMY_DEATH, enemy->base.x, enemy->base.y, 1, true);
+                new_effect(level, ANIM_300_POINTS, enemy->base.x + 30, enemy->base.y - 20, 1, true);
                 game_state->mode = GAME_MODE_EFFECT;
             }
             enemy_destroy(level, i);
@@ -43,7 +48,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
                 barrel_movement(enemy, dt_seconds);
                 break;
             case ANIM_FIRE_SPIRIT_WALK:
-                fire_spirit_movement(enemy, dt_seconds);
+                fire_spirit_movement(&game_state->level, enemy, dt_seconds);
                 break;
             case ANIM_IDLE_LORE:
                 lore_movement(enemy, dt_seconds);
@@ -103,7 +108,7 @@ void barrel_movement(enemy_t *enemy, float dt_seconds) {
     enemy->base.y += enemy->base.velocity_y * dt_seconds;
 }
 
-void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
+void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds) {
     // climb ladder up/down
     if (enemy->on_ladder && !enemy->base.is_grounded) {
         enemy->base.y += FIRE_SPIRIT_MOVE_SPEED * dt_seconds * enemy->climb_direction;
@@ -113,11 +118,12 @@ void fire_spirit_movement(enemy_t *enemy, float dt_seconds) {
     // dont fall of platforms
     if (enemy->base.velocity_y > 0) {
         enemy->base.direction *= -1;
+        enemy->base.x += ENEMY_OFFSET * enemy->base.direction;
         return;
     }
 
     // change randomly direction
-    if ((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH - enemy->base.width) {
+    if (((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH - enemy->base.width) && level->frame_timer < 0.5) {
         enemy->base.direction *= -1;
     }
 
@@ -251,7 +257,9 @@ bool enemy_should_be_destroyed_by_player(player_t *player, enemy_t *enemy) {
     bool right_direction = true;
     if (enemy->base.y > player->base.y) {
         // player is facing enemy
-        right_direction = player->base.direction * enemy->base.direction < 0;
+        if (enemy->base.animation.current_animation == ANIM_BARREL_FRONT || enemy->base.animation.current_animation == ANIM_BARREL_SIDE) {
+            right_direction = player->base.direction * enemy->base.direction < 0;
+        }
     }
 
     return collision && right_direction;

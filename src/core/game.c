@@ -13,12 +13,13 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds);
 
 void game_init(game_state_t *game_state) {
-    game_state->mode = GAME_MODE_CUTSCENE;
+    game_state->mode = GAME_MODE_CUTSCENE; // GAME_MODE_CUTSCENE || GAME_MODE_NORMAL
     game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
     // Level
     game_state->current_level = 1;
     game_state->player_score = 0;
+    game_state->bonus_live = false;
     game_state->player_lives = PLAYER_LIVES;
 
     // Cutscene
@@ -45,26 +46,39 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     float offset_x = (window_width - scene_w) / 2.0f;
     float offset_y = (window_height - scene_h) / 2.0f;
 
-    // grey offset background
-    cairo_set_source_rgb(cr, 0.2, 0.2, 0.2);
+    // clear entire window
+    cairo_set_source_rgb(cr, 0, 0, 0); // black background for the game content area
     cairo_rectangle(cr, 0, 0, window_width, window_height);
     cairo_fill(cr);
 
-    // center + scale the scene
+    // center + scale the scene for game drawing
     cairo_save(cr);
     cairo_translate(cr, offset_x, offset_y);
     cairo_scale(cr, scale, scale);
 
-    // black game background
-    cairo_set_source_rgb(cr, 0, 0, 0);
-    cairo_rectangle(cr, 0, 0, BASE_WIDTH, BASE_HEIGHT);
-    cairo_fill(cr);
-
-    // draw in logical coords (0..BASE_WIDTH, 0..BASE_HEIGHT)
     level_draw(cr, game_state);
     gui_draw(cr, game_state);
     
     cairo_restore(cr);
+
+    // draw grey offset areas
+    cairo_set_source_rgb(cr, 0.2, 0.2, 0.2); // Grey color
+
+    // Top border
+    cairo_rectangle(cr, 0, 0, window_width, offset_y);
+    cairo_fill(cr);
+
+    // Bottom border
+    cairo_rectangle(cr, 0, window_height - offset_y, window_width, offset_y);
+    cairo_fill(cr);
+
+    // Left border
+    cairo_rectangle(cr, 0, offset_y, offset_x, window_height - (2 * offset_y));
+    cairo_fill(cr);
+
+    // Right border
+    cairo_rectangle(cr, window_width - offset_x, offset_y, offset_x, window_height - (2 * offset_y));
+    cairo_fill(cr);
 
     return G_SOURCE_CONTINUE;
 }
@@ -128,7 +142,6 @@ void game_update(game_state_t *game_state, float dt_seconds) {
 
         // for debug, tp player to top
         if (top) {
-            game_state->level.player.base.x = 300;
             game_state->level.player.base.y = 150;
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }

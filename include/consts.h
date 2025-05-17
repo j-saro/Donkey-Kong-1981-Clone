@@ -14,6 +14,7 @@
 #define BARREL_MOVE_SPEED 130.0f
 #define FIRE_SPIRIT_MOVE_SPEED 40.0f
 #define CONVEYER_BELT_SPEED 100.0f
+#define ENEMY_OFFSET 10.0f
 
 // Mario
 #define HAMMER_TIME 6.0f
@@ -25,6 +26,7 @@
 #define LEVEL_BONUS_POINTS 1000
 #define BONUS_POINT_DECREMENT 100
 #define DECREMENT_TIMER 2.0f
+#define BONUS_LIVE 7000
 
 // Sprites
 #define SCALE 2.0f
@@ -36,3 +38,71 @@
 #define MAX_ENEMIES 10
 #define MAX_FIRE_SPIRITS 5
 #define ENEMY_POINTS 300
+
+#define ENTITY_LIST \
+    X(MARIO) \
+    X(DONKEY_KONG) \
+    X(PEACH) \
+    X(ENEMY) \
+    X(LADDER) \
+    X(PLATFORM) \
+    X(STATIC_ENTITY) \
+    X(EFFECT)
+
+#define ANIM_LIST \
+    /* Mario */ \
+    X(ANIM_IDLE_MARIO) \
+    X(ANIM_WALK_MARIO) \
+    X(ANIM_JUMP_MARIO) \
+    X(ANIM_CLIMB_MARIO) \
+    X(ANIM_CLIMB_IDLE_MARIO) \
+    X(ANIM_HAMMER_MARIO_STAND) \
+    X(ANIM_HAMMER_MARIO_WALK) \
+    /* Peach */ \
+    X(ANIM_IDLE_PEACH) \
+    X(ANIM_HELP_PEACH) \
+    /* Donkey Kong */ \
+    X(ANIM_IDLE_DONKEY_KONG) \
+    X(ANIM_BEATING_CHEST_DONKEY_KONG) \
+    X(ANIM_THROWING_BARREL_DONKEY_KONG) \
+    X(ANIM_CLIMB_WITH_PEACH_DONKEY_KONG) \
+    X(ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG) \
+    /* Enemy */ \
+    X(ANIM_BARREL_SIDE) \
+    X(ANIM_BARREL_FRONT) \
+    X(ANIM_BARREL_FRONT_IDLE) \
+    X(ANIM_FIRE_SPIRIT_WALK) \
+    X(ANIM_IDLE_LORE) \
+    /* Static entities */ \
+    X(ANIM_OIL_BARREL) \
+    X(ANIM_STATIC_HAMMER) \
+    X(ANIM_BARREL_STACK) \
+    X(ANIM_UMBRELLA_ITEM) \
+    X(ANIM_HANDBAG_ITEM) \
+    X(ANIM_HAT_ITEM) \
+    X(ANIM_FIRE_SMALL) \
+    X(ANIM_FIRE_LARGE) \
+    X(ANIM_CONVEYER_ROLLER_LEFT) \
+    X(ANIM_CONVEYER_ROLLER_RIGHT) \
+    X(ANIM_LIVES) \
+    X(ANIM_BONUS_POINTS) \
+    /* Numbers & Alphabet */ \
+    X(ANIM_NUMBERS) \
+    X(ANIM_ALPHABET) \
+    X(ANIM_SPECIAL) \
+    /* Effects */ \
+    X(ANIM_ENEMY_DEATH) \
+    X(ANIM_HEART_FULL) \
+    X(ANIM_HEART_BROKEN) \
+    X(ANIM_300_POINTS) \
+    X(ANIM_800_POINTS) \
+    /* Ladders */ \
+    X(ANIM_LADDER_WHITE) \
+    X(ANIM_LADDER_BLUE) \
+    X(ANIM_LADDER_YELLOW) \
+    /* Platforms */ \
+    X(ANIM_PLATFORM_RED) \
+    X(ANIM_PLATFORM_YELLOW) \
+    X(ANIM_PLATFORM_CONVEYER_BELT) \
+    /* Special */ \
+    X(ANIM_HIDE)

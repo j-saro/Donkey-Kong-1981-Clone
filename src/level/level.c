@@ -14,16 +14,17 @@
 #include "core/gui.h"
 #include "level/loader.h"
 
-gboolean level_init(game_state_t *game_state);
+gboolean level_load(game_state_t *game_state);
 gboolean level_next(game_state_t *game_state);
 
 void level_cleanup(level_t *level);
 void level_draw(cairo_t *cr, game_state_t *game_state);
 void level_update(game_state_t *game_state, float dt_seconds);
+void level_internal_update(game_state_t *game_state, float dt_seconds);
 void level_complete(game_state_t *game_state);
 
 // load current level
-gboolean level_init(game_state_t *game_state) {
+gboolean level_load(game_state_t *game_state) {
     game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
     char filename[64];
     // create current level file path
@@ -36,7 +37,7 @@ gboolean level_next(game_state_t *game_state) {
     // cleanup last level
     level_cleanup(&game_state->level);
     game_state->current_level++;
-    return level_init(game_state);
+    return level_load(game_state);
 }
 
 void level_cleanup(level_t *level) {
@@ -85,6 +86,7 @@ void level_draw(cairo_t *cr, game_state_t *game_state) {
 
 // Update current level
 void level_update(game_state_t *game_state, float dt_seconds) {
+    level_internal_update(game_state, dt_seconds);
     level_complete(game_state);
 
     gui_update(game_state, dt_seconds);
@@ -101,6 +103,18 @@ void level_update(game_state_t *game_state, float dt_seconds) {
 
     // Check if player is dead
     player_check_death(game_state);
+}
+
+void level_internal_update(game_state_t *game_state, float dt_seconds) {
+    // frame timer
+    game_state->level.frame_timer += dt_seconds;
+    if (game_state->level.frame_timer >= 1.0f) {
+        game_state->level.frame_timer = 0.0f;
+    }
+    if (!game_state->bonus_live && game_state->player_score > BONUS_LIVE) {
+        game_state->bonus_live = true;
+        game_state->player_lives += 1;
+    }
 }
 
 // Checks if level is finished

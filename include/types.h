@@ -2,6 +2,7 @@
 
 #include <cairo.h>
 #include <stdbool.h>
+#include "consts.h"
 
 typedef enum {
     GAME_MODE_NORMAL,
@@ -11,85 +12,18 @@ typedef enum {
 } game_mode_t;
 
 typedef enum {
-    MARIO,
-    DONKEY_KONG,
-    PEACH,
-    ENEMY,
-    HAMMER,
-    LADDER,
-    PLATFORM,
-    STATIC_ENTITY,
-    EFFECT,
+    #define X(name) name,
+        ENTITY_LIST
+    #undef X
 } entities_t;
 
 /* 
 * Animation related
 */
-
 typedef enum {
-    // Mario
-    ANIM_IDLE_MARIO,
-    ANIM_WALK_MARIO,
-    ANIM_JUMP_MARIO,
-    ANIM_CLIMB_MARIO,
-    ANIM_CLIMB_IDLE_MARIO,
-    ANIM_HAMMER_MARIO_STAND,
-    ANIM_HAMMER_MARIO_WALK,
-
-    // Peach
-    ANIM_IDLE_PEACH,
-    ANIM_HELP_PEACH,
-
-    // Donkey Kong
-    ANIM_IDLE_DONKEY_KONG,
-    ANIM_BEATING_CHEST_DONKEY_KONG,
-    ANIM_THROWING_BARREL_DONKEY_KONG,
-    ANIM_CLIMB_WITH_PEACH_DONKEY_KONG,
-    ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG,
-
-    // ENEMY
-    ANIM_BARREL_SIDE,
-    ANIM_BARREL_FRONT,
-    ANIM_BARREL_FRONT_IDLE,
-    ANIM_FIRE_SPIRIT_WALK,
-    ANIM_IDLE_LORE,
-
-    // Static entitys
-    ANIM_OIL_BARREL,
-    ANIM_STATIC_HAMMER,
-    ANIM_BARREL_STACK,
-    ANIM_UMBRELLA_ITEM,
-    ANIM_HANDBAG_ITEM,
-    ANIM_HAT_ITEM,
-    ANIM_FIRE_SMALL,
-    ANIM_FIRE_LARGE,
-    ANIM_CONVEYER_ROLLER_LEFT,
-    ANIM_CONVEYER_ROLLER_RIGHT,
-    ANIM_LIVES,
-    ANIM_BONUS_POINTS,
-
-    // Numbers
-    ANIM_NUMBERS,
-    ANIM_ALPHABET,
-    ANIM_SPECIAL,
-
-    // Effects
-    ANIM_ENEMY_DEATH,
-    ANIM_HEART_FULL,
-    ANIM_HEART_BROKEN,
-
-    // Ladders
-    ANIM_LADDER_WHITE,
-    ANIM_LADDER_BLUE,
-    ANIM_LADDER_YELLOW,
-
-    // Platforms
-    ANIM_PLATFORM_RED,
-    ANIM_PLATFORM_YELLOW,
-    ANIM_PLATFORM_CONVEYER_BELT,
-
-    // No Animation
-    ANIM_HIDE,
+    #define X(name) name,
+        ANIM_LIST
+    #undef X
 } animation_state_t;
 
 typedef struct {
@@ -181,11 +115,11 @@ typedef struct {
 
 typedef struct {
     entity_t base;
+    bool once;
 } effect_t;
 
 typedef struct {
     entity_t base;
-    float x, y;
     int points;
 } item_t;
 
@@ -263,6 +197,8 @@ typedef struct {
 
     // finish line
     float finish_line;
+    // counts up to 1.0f
+    float frame_timer;
 } level_t;
 
 
@@ -277,6 +213,7 @@ typedef struct {
     // Level data
     level_t level;
     int current_level;
+    bool bonus_live;
     int player_lives;
     int player_score;
     int bonus_points;

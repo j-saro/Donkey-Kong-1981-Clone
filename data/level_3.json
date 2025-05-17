@@ -1,0 +1,292 @@
+{
+    "level": {
+        "finish_line": 138,
+        "static_entities": [
+        ],
+        "peach": {
+            "key": "ANIM_HIDE",
+            "x": 250,
+            "y": 92,
+            "width": 39,
+            "height": 23
+        },
+        "donkey_kong": {
+            "key": "ANIM_HIDE",
+            "x": 73,
+            "y": 131,
+            "width": 48,
+            "height": 32
+        },
+        "mario": {
+            "key": "ANIM_HIDE",
+            "x": 0,
+            "y": 504,
+            "width": 16,
+            "height": 16
+        },
+        "enemys": [
+        ],
+        "items": [
+        ],
+        "platforms": [
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 0,
+                "y": 570,
+                "width": 600,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 0,
+                "y": 536,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 330,
+                "y": 536,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 414,
+                "y": 515,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 478,
+                "y": 494,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 542,
+                "y": 473,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 562,
+                "y": 420,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 498,
+                "y": 396,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 434,
+                "y": 372,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 370,
+                "y": 348,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 350,
+                "y": 282,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 434,
+                "y": 258,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 498,
+                "y": 234,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 562,
+                "y": 210,
+                "width": 40,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 498,
+                "y": 310,
+                "width": 102,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 0,
+                "y": 436,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 0,
+                "y": 300,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 180,
+                "y": 480,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 160,
+                "y": 300,
+                "width": 80,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 0,
+                "y": 195,
+                "width": 455,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 180,
+                "y": 155,
+                "width": 60,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_RED",
+                "x": 240,
+                "y": 139,
+                "width": 120,
+                "height": 8
+            }
+        ],
+        "ladders": [
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 20,
+                "y": 452,
+                "width": 10,
+                "height": 84
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 40,
+                "y": 316,
+                "width": 10,
+                "height": 120
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 562,
+                "y": 436,
+                "width": 10,
+                "height": 37
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 498,
+                "y": 326,
+                "width": 10,
+                "height": 70
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 370,
+                "y": 298,
+                "width": 10,
+                "height": 50
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 434,
+                "y": 211,
+                "width": 10,
+                "height": 47
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 562,
+                "y": 226,
+                "width": 10,
+                "height": 84
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 220,
+                "y": 316,
+                "width": 10,
+                "height": 164
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 180,
+                "y": 316,
+                "width": 10,
+                "height": 164
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 220,
+                "y": 171,
+                "width": 10,
+                "height": 24,
+                "has_physics": false
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 180,
+                "y": 171,
+                "width": 10,
+                "height": 24,
+                "has_physics": false
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 220,
+                "y": 63,
+                "width": 10,
+                "height": 92,
+                "has_physics": false
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 180,
+                "y": 63,
+                "width": 10,
+                "height": 92,
+                "has_physics": false
+            },
+            {
+                "key": "ANIM_LADDER_BLUE",
+                "x": 340,
+                "y": 155,
+                "width": 10,
+                "height": 40
+            }
+        ]
+    }
+}

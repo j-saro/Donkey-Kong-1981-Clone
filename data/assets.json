@@ -463,6 +463,26 @@
             "frame_duration": 1.0,
             "frame_width": 43,
             "frame_height": 19
+        },
+        {
+            "key": "ANIM_300_POINTS",
+            "entity_id": "EFFECT",
+            "start_x": 46,
+            "start_y": 35,
+            "frame_count": 1,
+            "frame_duration": 2.0,
+            "frame_width": 15,
+            "frame_height": 7
+        },
+        {
+            "key": "ANIM_800_POINTS",
+            "entity_id": "EFFECT",
+            "start_x": 70,
+            "start_y": 35,
+            "frame_count": 1,
+            "frame_duration": 1.4,
+            "frame_width": 15,
+            "frame_height": 7
         }
     ]
 }

@@ -24,6 +24,7 @@ gboolean sprite_parse_from_json(const char *json_str);
 // Load current level
 gboolean level_load_from_json(level_t *level, const char *filename);
 gboolean level_parse_from_json(level_t *level, const char *json_str);
+void level_init(level_t *level, cJSON *json);
 
 // Load json file from path
 char *load_file_content_from_json(const char *filename) {
@@ -172,8 +173,8 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
         return FALSE;
     }
 
-    // Height player has to reach
-    level->finish_line = (float)cJSON_GetObjectItem(level_json, "finish_line")->valuedouble;
+    // Level
+    level_init(level, level_json);
 
     // Geometry
     platform_init(level, platforms_json);
@@ -198,4 +199,10 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
     
     cJSON_Delete(json);
     return TRUE;
+}
+
+void level_init(level_t *level, cJSON *json) {
+    // Height player has to reach
+    level->finish_line = (float)cJSON_GetObjectItem(json, "finish_line")->valuedouble;
+    level->frame_timer = 0.0f;
 }

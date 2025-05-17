@@ -33,7 +33,7 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
     
     update_animation_progress(&donkey_kong->base, dt_seconds);
 
-    if (game_state->current_cutscene > 1) return;
+    if (game_state->current_level > 1) return;
 
     // DK animation change logic only in level 1
 

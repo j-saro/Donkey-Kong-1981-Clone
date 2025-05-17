@@ -86,7 +86,7 @@
         ],
         "items": [
             {
-                "type": "HAMMER",
+                "type": "STATIC_ENTITY",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 440,
                 "y": 440,
@@ -95,7 +95,7 @@
                 "points": 0
             },
             {
-                "type": "HAMMER",
+                "type": "STATIC_ENTITY",
                 "key": "ANIM_STATIC_HAMMER",
                 "x": 70,
                 "y": 220,
@@ -631,7 +631,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 221,
+                "x": 220,
                 "y": 171,
                 "width": 10,
                 "height": 24,
@@ -647,7 +647,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 221,
+                "x": 220,
                 "y": 63,
                 "width": 10,
                 "height": 92,
@@ -663,7 +663,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 341,
+                "x": 340,
                 "y": 155,
                 "width": 10,
                 "height": 42
@@ -679,7 +679,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 341,
+                "x": 340,
                 "y": 213,
                 "width": 10,
                 "height": 354,
@@ -688,7 +688,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 221,
+                "x": 220,
                 "y": 171,
                 "width": 10,
                 "height": 24,
@@ -706,7 +706,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 221,
+                "x": 220,
                 "y": 63,
                 "width": 10,
                 "height": 92,
@@ -724,7 +724,7 @@
             },
             {
                 "key": "ANIM_LADDER_BLUE",
-                "x": 341,
+                "x": 340,
                 "y": 155,
                 "width": 10,
                 "height": 42,

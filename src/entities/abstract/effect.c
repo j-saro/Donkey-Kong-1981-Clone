@@ -8,7 +8,7 @@
 #include "core/sprite/animation.h"
 
 void effect_init(level_t *level);
-void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction);
+void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction, bool once);
 void effect_destroy(level_t *level, int index);
 void effect_clear_all(level_t *level);
 void effect_cleanup(level_t *level);
@@ -22,7 +22,7 @@ void effect_init(level_t *level) {
     level->num_effects = 0;
 }
 
-void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction) {
+void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction, bool once) {
     if (!allocate_new_entity((void**)&level->effects, &level->num_effects, &level->effects_capacity, sizeof(effect_t))) {
         return;
     }
@@ -33,6 +33,7 @@ void new_effect(level_t *level, animation_state_t animation, float pos_x, float 
     init_new_entity_base(&effect->base, pos_x, pos_y, direction);
     effect->base.type = EFFECT;
     effect->base.animation.current_animation = animation;
+    effect->once = once;
  
     set_animation_frames(&effect->base);
 }
@@ -59,8 +60,10 @@ void effect_update(level_t *level, float dt_seconds) {
         animation_sequence_t sequence = get_animation_by_key(&effect->base, effect->base.animation.current_animation);
         update_animation_progress(&effect->base, dt_seconds);
 
-        // if effect at last frame destroy it
-        if (effect->base.animation.current_frame_index == (sequence.frame_count - 1) && effect->base.animation.current_animation == ANIM_ENEMY_DEATH) {
+        // if effect at last frame and frame is shown, destroy it
+        if (effect->base.animation.current_frame_index == (sequence.frame_count - 1) && 
+            effect->base.animation.frame_time >= sequence.frame_duration - (dt_seconds * 2) &&
+            effect->once) {
             effect_destroy(level, i);
             i--;
             continue;

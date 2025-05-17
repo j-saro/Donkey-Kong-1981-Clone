@@ -58,6 +58,7 @@ void player_hammer_update(player_t *player, float dt_seconds) {
 void player_check_death(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
     if (player->is_dead && game_state->player_lives > 0) {
+        set_animation(&player->base, ANIM_IDLE_MARIO);
         game_state->player_lives -= 1;
         player->is_dead = false;
         player->base.x = player->spawn_x;

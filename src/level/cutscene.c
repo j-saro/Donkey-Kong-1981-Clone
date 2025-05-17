@@ -96,7 +96,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
     switch (game_state->cutscene_step) {
         case 0:
             if (game_state->level.num_effects == 0) {
-                new_effect(&game_state->level, ANIM_HEART_FULL, 295, 86, 1);
+                new_effect(&game_state->level, ANIM_HEART_FULL, 295, 86, 1, false);
             }
             if (game_state->cutscene_time > 1.0f) {
                 next_step(game_state);
@@ -117,7 +117,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
                 set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
                 effect_destroy(&game_state->level, 0);
-                new_effect(&game_state->level, ANIM_HEART_BROKEN, 295, 86, 1);
+                new_effect(&game_state->level, ANIM_HEART_BROKEN, 295, 86, 1, false);
                 next_step(game_state);
             }
             break;

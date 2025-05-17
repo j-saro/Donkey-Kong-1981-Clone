@@ -7,6 +7,7 @@
 #include "core/input.h"
 #include "level/level.h"
 #include "core/sprite/sprite.h"
+#include "core/sprite/sprite_utils.h"
 #include "level/loader.h"
 #include "core/gui.h"
 
@@ -49,7 +50,7 @@ int main(int argc, char **argv) {
     gui_init(&game_state);
 
     if (sprite_load_from_json(ASSETS_FILE_PATH)) {
-        level_init(&game_state);
+        level_load(&game_state);
 
         // Init Gdk Window
         app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
@@ -63,6 +64,7 @@ int main(int argc, char **argv) {
 
     input_cleanup(&game_state);
     sprite_cleanup();
+    g_hash_table_destroy(get_string_to_enum_table());
 
     return status;
 }
