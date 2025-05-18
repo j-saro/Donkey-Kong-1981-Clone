@@ -49,6 +49,7 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
                 barrel_movement(enemy, dt_seconds);
                 break;
             case ANIM_FIRE_SPIRIT_WALK:
+            case ANIM_FIRE_GHOST_WALK:
                 fire_spirit_movement(&game_state->level, enemy, dt_seconds);
                 break;
             case ANIM_IDLE_LORE:
@@ -70,8 +71,9 @@ void enemy_physics(game_state_t *game_state, float dt_seconds) {
             if (!(enemy->base.animation.current_animation == ANIM_BARREL_SIDE)) {
                 set_animation(&enemy->base, ANIM_BARREL_SIDE);
             }
-            if (enemy->base.animation.current_animation == ANIM_FIRE_SPIRIT_WALK) {
-              enemy->base.x += 10;
+            if (enemy->base.animation.current_animation == ANIM_FIRE_SPIRIT_WALK ||
+                enemy->base.animation.current_animation == ANIM_FIRE_GHOST_WALK) {
+              enemy->base.x += ENEMY_OFFSET;
           }
         }
     }
@@ -130,7 +132,12 @@ void fire_spirit_movement(level_t *level, enemy_t *enemy, float dt_seconds) {
     if (enemy->base.x > BASE_WIDTH - (enemy->base.width / 2.0)) {
         enemy->base.x = BASE_WIDTH - enemy->base.width;
     }
-    if (((rand() % 200) < 1 || enemy->base.x < enemy->base.width || enemy->base.x > BASE_WIDTH - enemy->base.width) && level->frame_timer < 0.5) {
+
+    if (((rand() % 200) < 1 || 
+        enemy->base.x < enemy->base.width || 
+        enemy->base.x < 0 ||
+        enemy->base.x > BASE_WIDTH - enemy->base.width) && 
+        level->frame_timer < 0.5) {
         enemy->base.direction *= -1;
     }
 
@@ -186,7 +193,7 @@ void enemy_platform_collision(level_t *level, enemy_t *enemy) {
 
         // Check vertical collision (enemy falling onto platform)
         if (enemy->base.velocity_y >= 0 &&
-            (enemy_bottom + EPSILON) >= platform_top &&
+            (enemy_bottom + EPSILON_2) >= platform_top &&
             enemy_top < platform_top)
         {
             enemy->base.y = platform_top - enemy->base.height;
@@ -208,7 +215,8 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
 
             if (!ladder->has_physics || 
                 ladder->is_cutscene_entity||
-                ladder->base.animation.current_animation == ANIM_ELEVATOR_LINE) {
+                ladder->base.animation.current_animation == ANIM_ELEVATOR_LINE ||
+                ladder->base.animation.current_animation == ANIM_POLE_BLUE) {
                 continue;
             }
 
@@ -247,6 +255,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
                             }
                         break;
                     case ANIM_FIRE_SPIRIT_WALK:
+                    case ANIM_FIRE_GHOST_WALK:
                         // if abouve ladder, climp down
                         if (close_enough_top_y && rand_int < probability) {
                             enemy->climb_direction = 1;

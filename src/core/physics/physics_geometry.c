@@ -35,7 +35,7 @@ bool platform_entity_collison(game_state_t *game_state, entity_t *base, float dt
 
         // snap player to platform
         if (base->velocity_y > 0 &&
-            (old_bottom - EPSILON * 2) <= platform_top &&
+            (old_bottom - EPSILON_4) <= platform_top &&
             new_bottom >= platform_top) {
     
             base->y = platform_top - base->height;
@@ -75,6 +75,7 @@ void check_ladder_collision(game_state_t *game_state) {
         // if ladder is not physics object skip it
         if (!ladder->has_physics || 
             player->base.animation.current_animation == ANIM_JUMP_MARIO ||
+            ladder->base.animation.current_animation == ANIM_POLE_BLUE ||
             ladder->is_cutscene_entity) {
             continue;
         }

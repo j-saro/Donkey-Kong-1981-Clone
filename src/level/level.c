@@ -22,6 +22,7 @@ void level_draw(cairo_t *cr, game_state_t *game_state);
 void level_update(game_state_t *game_state, float dt_seconds);
 void level_internal_update(game_state_t *game_state, float dt_seconds);
 void level_complete(game_state_t *game_state);
+void on_level_finish(game_state_t *game_state);
 
 // load current level
 gboolean level_load(game_state_t *game_state) {
@@ -122,28 +123,17 @@ void level_internal_update(game_state_t *game_state, float dt_seconds) {
 // Checks if level is finished
 void level_complete(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
-    peach_t *peach = &game_state->level.peach;
     float player_bottom = player->base.y + player->base.height;
+
+    if (game_state->pressed_buttons <= 0) {
+        on_level_finish(game_state);
+        game_state->mode = GAME_MODE_PAUSED;
+        return;
+    }
 
     // if player is on the same height of peach
     if (player_bottom < game_state->level.finish_line && game_state->mode == GAME_MODE_NORMAL) {
-        // Set animations
-        set_animation(&game_state->level.donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
-        set_animation(&peach->base, ANIM_IDLE_PEACH);
-
-        // delete all enemys
-        for (int i = 0; i < game_state->level.num_enemies; i++) {
-            enemy_destroy(&game_state->level, i);
-            i--;
-        }
-
-        hide_static_entity(&game_state->level);
-        effect_clear_all(&game_state->level);
-
-        // faces peach and mario if not
-        player->base.direction = -1;
-
-        game_state->player_score += game_state->bonus_points;
+        on_level_finish(game_state);
 
         // Set next cutscene
         game_state->mode = GAME_MODE_CUTSCENE;
@@ -151,4 +141,23 @@ void level_complete(game_state_t *game_state) {
         game_state->cutscene_time = 0;
         game_state->cutscene_step = 0;
     }
+}
+
+void on_level_finish(game_state_t *game_state) {
+    peach_t *peach = &game_state->level.peach;
+
+    // Set animations
+    set_animation(&game_state->level.donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
+    set_animation(&peach->base, ANIM_IDLE_PEACH);
+
+    // delete all enemys
+    for (int i = 0; i < game_state->level.num_enemies; i++) {
+        enemy_destroy(&game_state->level, i);
+        i--;
+
+    }
+    hide_static_entity(&game_state->level);
+    effect_clear_all(&game_state->level);
+
+    game_state->player_score += game_state->bonus_points;
 }

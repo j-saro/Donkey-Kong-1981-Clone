@@ -7,12 +7,26 @@
 #define BASE_HEIGHT 600.0f
 #define KEY_INPUT_COOLDOWN 0.2f
 
+// GUI
+#define PLAYER_SCORE_X 40
+#define PLAYER_SCORE_Y 30
+#define BONUS_POINT_X 470
+#define BONUS_POINT_Y 116
+#define BONUS_POINT_FRAME_X 460
+#define BONUS_POINT_FRAME_Y 100
+#define CURRENT_LEVEL_Y 70
+#define PLAYER_LIVES_Y 56
+
+#define LETTER_BUFFER_SIZE 12
+#define LETTER_SPACING 17
+
 // Physics
 #define GRAVITY 800.0f
 #define MOVE_SPEED 100.0f
 #define JUMP_FORCE 250.0f
 #define LADDER_TOP_OVERLAP 19
-#define EPSILON 2.0f
+#define EPSILON_2 2.0f
+#define EPSILON_4 4.0f
 #define BARREL_MOVE_SPEED 130.0f
 #define FIRE_SPIRIT_MOVE_SPEED 40.0f
 #define CONVEYER_BELT_SPEED 100.0f
@@ -35,6 +49,7 @@
 #define BONUS_POINT_DECREMENT 100
 #define DECREMENT_TIMER 2.0f
 #define BONUS_LIVE 7000
+#define NUM_BUTTONS 8
 
 // Sprites
 #define SCALE 2.0f
@@ -44,8 +59,9 @@
 
 // Enemy
 #define MAX_ENEMIES 10
-#define MAX_FIRE_SPIRITS 5
+#define MAX_FIRE_GHOSTS 6
 #define ENEMY_POINTS 300
+
 // Spring
 #define ENEMY_X_THRESHOLD_1 460
 #define ENEMY_X_THRESHOLD_2 490
@@ -85,6 +101,7 @@
     X(ANIM_BARREL_FRONT) \
     X(ANIM_BARREL_FRONT_IDLE) \
     X(ANIM_FIRE_SPIRIT_WALK) \
+    X(ANIM_FIRE_GHOST_WALK) \
     X(ANIM_IDLE_LORE) \
     X(ANIM_SPRING) \
     /* Static entities */ \
@@ -102,6 +119,7 @@
     X(ANIM_BONUS_POINTS) \
     X(ANIM_ELEVATOR_BASE_UP) \
     X(ANIM_ELEVATOR_BASE_DOWN) \
+    X(ANIM_BUTTON) \
     /* Numbers & Alphabet */ \
     X(ANIM_NUMBERS) \
     X(ANIM_ALPHABET) \
@@ -110,16 +128,19 @@
     X(ANIM_ENEMY_DEATH) \
     X(ANIM_HEART_FULL) \
     X(ANIM_HEART_BROKEN) \
+    X(ANIM_100_POINTS) \
     X(ANIM_300_POINTS) \
     X(ANIM_800_POINTS) \
     /* Ladders */ \
     X(ANIM_LADDER_WHITE) \
     X(ANIM_LADDER_BLUE) \
     X(ANIM_LADDER_YELLOW) \
+    X(ANIM_POLE_BLUE) \
     X(ANIM_ELEVATOR_LINE) \
     /* Platforms */ \
     X(ANIM_PLATFORM_RED) \
     X(ANIM_PLATFORM_YELLOW) \
+    X(ANIM_PLATFORM_BLUE) \
     X(ANIM_PLATFORM_CONVEYER_BELT) \
     X(ANIM_PLATFORM_ELEVATOR) \
     /* Special */ \

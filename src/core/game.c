@@ -13,14 +13,15 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds);
 
 void game_init(game_state_t *game_state) {
-    game_state->mode = GAME_MODE_CUTSCENE; // GAME_MODE_CUTSCENE || GAME_MODE_NORMAL
+    game_state->mode = GAME_MODE_CUTSCENE;
     game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
     // Level
-    game_state->current_level = 1; // 1
+    game_state->current_level = 1;
     game_state->player_score = 0;
     game_state->bonus_live = false;
     game_state->player_lives = PLAYER_LIVES;
+    game_state->pressed_buttons = NUM_BUTTONS;
 
     // Cutscene
     game_state->current_cutscene = 1;

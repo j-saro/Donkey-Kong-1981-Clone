@@ -93,8 +93,8 @@ int get_type_by_name(const char *name) {
         return -1;
     }
 
-    GHashTable *tabel = get_string_to_enum_table();
-    return GPOINTER_TO_INT(g_hash_table_lookup(tabel, name));
+    GHashTable *table = get_string_to_enum_table();
+    return GPOINTER_TO_INT(g_hash_table_lookup(table, name));
 
     g_warning("Type did not match any name: %s", name);
     return -1;

@@ -57,11 +57,6 @@ typedef struct {
 } animation_frames_t;
 
 typedef struct {
-    const char *name;
-    int value;
-} string_to_enmum_t;
-
-typedef struct {
     float tint_red, tint_green, tint_blue, tint_alpha;
 } tint_t;
 
@@ -221,6 +216,7 @@ typedef struct {
     int player_score;
     int bonus_points;
     float bonus_points_timer;
+    int pressed_buttons;
 
     // Game mode
     game_mode_t mode;

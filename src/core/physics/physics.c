@@ -68,22 +68,43 @@ void window_collision(game_state_t *game_state, float screen_height) {
 
 void item_player_collision(game_state_t *game_state) {
     level_t *level = &game_state->level;
+    player_t *player = &level->player;
+    float player_bottom = player->base.y + player->base.height;
+
     for (int i = 0; i < level->num_items; i++) {
         item_t *item = &level->items[i];
-
         if (player_object_collision(&level->player, &item->base, level->player.base.width, level->player.base.height / 2.0f)) {
+
+            if (item->base.animation.current_animation == ANIM_STATIC_HAMMER) {
+                if (!level->player.has_hammer) {
+                    level->player.has_hammer = true;
+                    level->player.hammer_time = HAMMER_TIME;
+                    game_state->player_score += item->points;
+                    item_destroy(level, i);
+                    i--;
+                }
+                continue;
+            }
+
+            float item_top = item->base.y;
+            if (item->base.animation.current_animation == ANIM_BUTTON) {
+                if (level->player.base.velocity_y > 0 && player_bottom - EPSILON_4 <= item_top) {
+                    game_state->player_score += item->points;
+                    game_state->pressed_buttons -= 1;
+                    new_effect(&game_state->level, ANIM_100_POINTS, item->base.x, item->base.y - item->base.height, 1, true);
+                    item_destroy(level, i);
+                    i--;
+                }
+                continue;
+            }
+
             if (item->points == 800) {
                 new_effect(&game_state->level, ANIM_800_POINTS, item->base.x, item->base.y, 1, true);
             }
             game_state->player_score += item->points;
-
             item_destroy(level, i);
-
-            if (item->base.animation.current_animation == ANIM_STATIC_HAMMER) {
-                level->player.has_hammer = true;
-                level->player.hammer_time = HAMMER_TIME;
-            }
             i--;
+            
             continue;
         }
     }

@@ -58,22 +58,22 @@ void gui_init(game_state_t *game_state) {
 
 void gui_draw(cairo_t *cr, game_state_t *game_state) {
     // Player Score
-    char player_score_buffer[12];
+    char player_score_buffer[LETTER_BUFFER_SIZE];
     snprintf(player_score_buffer, sizeof(player_score_buffer), "%06d", game_state->player_score);
-    gui_text(cr, player_score_buffer, 40, 30, 17, &no_tint);
+    gui_text(cr, player_score_buffer, PLAYER_SCORE_X, PLAYER_SCORE_Y, LETTER_SPACING, &no_tint);
 
     // Bounus Points
-    char bonus_points_buffer[12];
+    char bonus_points_buffer[LETTER_BUFFER_SIZE];
     snprintf(bonus_points_buffer, sizeof(bonus_points_buffer), "%04d", game_state->bonus_points);
-    gui_text(cr, bonus_points_buffer, 470, 116, 17, &light_blue);
-    gui_bonus_points_sprite(cr, game_state, 460, 100);
+    gui_text(cr, bonus_points_buffer, BONUS_POINT_X, BONUS_POINT_Y, LETTER_SPACING, &light_blue);
+    gui_bonus_points_sprite(cr, game_state, BONUS_POINT_FRAME_X, BONUS_POINT_FRAME_Y);
 
     // Current Level
     char level_buffer[12];
     snprintf(level_buffer, sizeof(level_buffer), "L=%02d", game_state->current_level);
-    gui_text(cr, level_buffer, 460, 70, 17, &blue);
+    gui_text(cr, level_buffer, BONUS_POINT_FRAME_X, CURRENT_LEVEL_Y, LETTER_SPACING, &blue);
 
-    gui_player_lives(cr, game_state, 40, 56, 17);
+    gui_player_lives(cr, game_state, PLAYER_SCORE_X, PLAYER_LIVES_Y, LETTER_SPACING);
 }
 
 void gui_update(game_state_t *game_state, float dt_seconds) {

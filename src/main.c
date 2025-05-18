@@ -20,7 +20,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     // Set window properties
     GtkWidget *window = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(window), "Donkey Kong 1981");
+    gtk_window_set_title(GTK_WINDOW(window), "Donkey Kong");
     gtk_window_set_default_size(GTK_WINDOW(window), BASE_WIDTH, BASE_HEIGHT);
 
     // Add Drawing Area

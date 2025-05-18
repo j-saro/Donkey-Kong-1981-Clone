@@ -100,21 +100,22 @@ void enemy_update(level_t *level, float dt_seconds) {
         enemy_spawn_t *spawn = &level->enemy_spawns[i];
 
         // spawn only a max size of enemys
-        if (level->num_enemies >= MAX_ENEMIES) {
-            continue;
-        }
+        if (level->num_enemies >= MAX_ENEMIES) continue;
+        if (spawn->anim_state == ANIM_FIRE_GHOST_WALK && level->num_enemies > MAX_FIRE_GHOSTS) continue;
 
         // spawn barrel if dk throws
-        if (level->donkey_kong.throw && spawn->anim_state == ANIM_BARREL_SIDE) {
-            new_enemy(level, spawn);
-            level->donkey_kong.throw = false;
+        if (spawn->anim_state == ANIM_BARREL_SIDE) {
+            if (level->donkey_kong.throw) {
+                new_enemy(level, spawn);
+                level->donkey_kong.throw = false;
+            }
             continue;
         }
 
         spawn->spawn_timer -= dt_seconds;
     
         // spawn new enemy after timer
-        if (spawn->spawn_timer <= dt_seconds && !(spawn->anim_state == ANIM_BARREL_SIDE)) {
+        if (spawn->spawn_timer <= dt_seconds) {
             new_enemy(level, spawn);
             spawn->spawn_timer = spawn->spawn_interval;
         }

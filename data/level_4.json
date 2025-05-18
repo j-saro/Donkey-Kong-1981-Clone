@@ -1,0 +1,415 @@
+{
+    "level": {
+        "finish_line": 0,
+        "static_entities": [
+        ],
+        "peach": {
+            "key": "ANIM_HIDE",
+            "x": 286,
+            "y": 72,
+            "width": 39,
+            "height": 23
+        },
+        "donkey_kong": {
+            "key": "ANIM_HIDE",
+            "x": 252,
+            "y": 144,
+            "width": 48,
+            "height": 32
+        },
+        "mario": {
+            "key": "ANIM_HIDE",
+            "x": 90,
+            "y": 538,
+            "width": 16,
+            "height": 16
+        },
+        "enemys": [
+            {
+                "key": "ANIM_FIRE_GHOST_WALK",
+                "x": 30,
+                "y": 460,
+                "width": 16,
+                "height": 12,
+                "spawn_interval": 15,
+                "initial_delay": 3
+            },
+            {
+                "key": "ANIM_FIRE_GHOST_WALK",
+                "x": 526,
+                "y": 274,
+                "width": 16,
+                "height": 12,
+                "spawn_interval": 20,
+                "initial_delay": 5
+            },
+            {
+                "key": "ANIM_FIRE_GHOST_WALK",
+                "x": 70,
+                "y": 274,
+                "width": 16,
+                "height": 12,
+                "spawn_interval": 15,
+                "initial_delay": 7
+            },
+            {
+                "key": "ANIM_FIRE_GHOST_WALK",
+                "x": 70,
+                "y": 274,
+                "width": 16,
+                "height": 12,
+                "spawn_interval": 10000,
+                "initial_delay": 12
+            },
+            {
+                "key": "ANIM_FIRE_GHOST_WALK",
+                "x": 56,
+                "y": 364,
+                "width": 16,
+                "height": 12,
+                "spawn_interval": 15,
+                "initial_delay": 15
+            }
+        ],
+        "items": [
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_STATIC_HAMMER",
+                "x": 290,
+                "y": 230,
+                "width": 7,
+                "height": 15,
+                "points": 0
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_STATIC_HAMMER",
+                "x": 22,
+                "y": 322,
+                "width": 7,
+                "height": 15,
+                "points": 0
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_HANDBAG_ITEM",
+                "x": 340,
+                "y": 550,
+                "width": 9,
+                "height": 9,
+                "points": 800
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_HAT_ITEM",
+                "x": 539,
+                "y": 462,
+                "width": 15,
+                "height": 8,
+                "points": 800
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_UMBRELLA_ITEM",
+                "x": 72,
+                "y": 174,
+                "width": 16,
+                "height": 15,
+                "points": 800
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 150,
+                "y": 204,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 150,
+                "y": 295,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 150,
+                "y": 385,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 150,
+                "y": 475,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 438,
+                "y": 204,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 438,
+                "y": 295,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 438,
+                "y": 385,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            },
+            {
+                "type": "STATIC_ENTITY",
+                "key": "ANIM_BUTTON",
+                "x": 438,
+                "y": 475,
+                "width": 8,
+                "height": 10,
+                "points": 100
+            }
+        ],
+        "platforms": [
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 0,
+                "y": 570,
+                "width": 600,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 20,
+                "y": 480,
+                "width": 130,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 40,
+                "y": 389,
+                "width": 110,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 60,
+                "y": 299,
+                "width": 90,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 80,
+                "y": 208,
+                "width": 70,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 150,
+                "y": 118,
+                "width": 300,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 454,
+                "y": 480,
+                "width": 130,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 454,
+                "y": 389,
+                "width": 110,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 454,
+                "y": 299,
+                "width": 90,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 454,
+                "y": 208,
+                "width": 70,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 166,
+                "y": 480,
+                "width": 272,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 166,
+                "y": 389,
+                "width": 272,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 166,
+                "y": 299,
+                "width": 272,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 166,
+                "y": 208,
+                "width": 272,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 150,
+                "y": 118,
+                "width": 304,
+                "height": 8
+            }
+        ],
+        "ladders": [
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 20,
+                "y": 496,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 40,
+                "y": 405,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 60,
+                "y": 315,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 80,
+                "y": 224,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 564,
+                "y": 496,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 544,
+                "y": 405,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 524,
+                "y": 315,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 504,
+                "y": 224,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 290,
+                "y": 496,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 290,
+                "y": 315,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 180,
+                "y": 405,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 404,
+                "y": 405,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 170,
+                "y": 224,
+                "width": 10,
+                "height": 74
+            }, 
+            {
+                "key": "ANIM_LADDER_YELLOW",
+                "x": 414,
+                "y": 224,
+                "width": 10,
+                "height": 74
+            },
+            {
+                "key": "ANIM_POLE_BLUE",
+                "x": 190,
+                "y": 134,
+                "width": 2,
+                "height": 74
+            },
+            {
+                "key": "ANIM_POLE_BLUE",
+                "x": 410,
+                "y": 134,
+                "width": 2,
+                "height": 74
+            }
+        ]
+    }
+}
