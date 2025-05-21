@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "cJSON.h"
-
 #include "core/sprite/sprite.h"
 #include "entities/environment/platform.h"
 #include "entities/environment/ladder.h"
@@ -28,7 +27,7 @@ void level_parse_metadata(level_t *level, cJSON *json);
 
 // Load json file from path
 char *load_file_content_from_json(const char *filename) {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "rb");
     if (!file) return NULL;
 
     // get file size
