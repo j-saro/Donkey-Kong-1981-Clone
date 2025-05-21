@@ -14,8 +14,8 @@
 #include "core/gui.h"
 #include "level/loader.h"
 
-gboolean level_load(game_state_t *game_state);
-gboolean level_next(game_state_t *game_state);
+gboolean level_load(game_state_t *game_state, const char *file_path);
+gboolean level_next(game_state_t *game_state, const char *file_path);
 
 void level_cleanup(level_t *level);
 void level_draw(cairo_t *cr, game_state_t *game_state);
@@ -25,20 +25,20 @@ void level_complete(game_state_t *game_state);
 void on_level_finish(game_state_t *game_state);
 
 // load current level
-gboolean level_load(game_state_t *game_state) {
+gboolean level_load(game_state_t *game_state, const char *file_path) {
     game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
     char filename[64];
     // create current level file path
-    snprintf(filename, sizeof(filename), "%s%d.json", LEVEL_FILE_PATH, game_state->current_level);
+    snprintf(filename, sizeof(filename), "%s%d.json", file_path, game_state->current_level);
 
     return level_load_from_json(&game_state->level, filename);
 }
 
-gboolean level_next(game_state_t *game_state) {
+gboolean level_next(game_state_t *game_state, const char *file_path) {
     // cleanup last level
     level_cleanup(&game_state->level);
     game_state->current_level++;
-    return level_load(game_state);
+    return level_load(game_state, file_path);
 }
 
 void level_cleanup(level_t *level) {
@@ -127,7 +127,12 @@ void level_complete(game_state_t *game_state) {
 
     if (game_state->pressed_buttons <= 0) {
         on_level_finish(game_state);
-        game_state->mode = GAME_MODE_PAUSED;
+        game_state->player_clone = game_state->level.player;
+        game_state->current_cutscene = 3;
+        level_next(game_state, CUTSCENE_FILE_PATH);
+        // reset level for gui
+        game_state->current_level = 4;
+        game_state->bonus_points = 0;
         return;
     }
 
@@ -136,10 +141,7 @@ void level_complete(game_state_t *game_state) {
         on_level_finish(game_state);
 
         // Set next cutscene
-        game_state->mode = GAME_MODE_CUTSCENE;
         game_state->current_cutscene = 2;
-        game_state->cutscene_time = 0;
-        game_state->cutscene_step = 0;
     }
 }
 
@@ -160,4 +162,8 @@ void on_level_finish(game_state_t *game_state) {
     effect_clear_all(&game_state->level);
 
     game_state->player_score += game_state->bonus_points;
+
+    game_state->mode = GAME_MODE_CUTSCENE;
+    game_state->cutscene_time = 0;
+    game_state->cutscene_step = 0;
 }

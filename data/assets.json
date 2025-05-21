@@ -175,6 +175,26 @@
             "frame_height": 36
         },
         {
+            "key": "ANIM_IDLE_FALLING_DONKEY_KONG",
+            "entity_id": "DONKEY_KONG",
+            "start_x": 102,
+            "start_y": 78,
+            "frame_count": 1,
+            "frame_duration": 1.0,
+            "frame_width": 48,
+            "frame_height": 32
+        },
+        {
+            "key": "ANIM_FALLING_DONKEY_KONG",
+            "entity_id": "DONKEY_KONG",
+            "start_x": 54,
+            "start_y": 78,
+            "frame_count": 2,
+            "frame_duration": 0.3,
+            "frame_width": 48,
+            "frame_height": 32
+        },
+        {
             "key": "ANIM_BARREL_SIDE",
             "entity_id": "ENEMY",
             "start_x": 0,

@@ -17,7 +17,7 @@ void game_init(game_state_t *game_state) {
     game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
     // Level
-    game_state->current_level = 1;
+    game_state->current_level = 0;
     game_state->player_score = 0;
     game_state->bonus_live = false;
     game_state->player_lives = PLAYER_LIVES;
@@ -58,7 +58,9 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     cairo_scale(cr, scale, scale);
 
     level_draw(cr, game_state);
-    gui_draw(cr, game_state);
+    if (game_state->mode != GAME_MODE_CUTSCENE) {
+        gui_draw(cr, game_state);
+    }
     
     cairo_restore(cr);
 
@@ -164,22 +166,13 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         // Normal game loop
         case GAME_MODE_NORMAL:
             donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
-            donkey_kong->base.x = donkey_kong->spawn_x;
-            donkey_kong->base.y = donkey_kong->spawn_y;
             game_state->level.player.previous_y = game_state->level.player.base.y;
             level_update(game_state, dt_seconds);
             break;
     
         // current cutscene
         case GAME_MODE_CUTSCENE:
-            switch (game_state->current_cutscene) {
-                case 1:
-                    cutscene_1(game_state, dt_seconds);
-                    break;
-                case 2:
-                    cutscene_2(game_state, dt_seconds);
-                    break;
-            }
+            cutscene_load(game_state, dt_seconds);
             break;
 
         // only effect

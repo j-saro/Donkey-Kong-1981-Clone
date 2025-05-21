@@ -213,8 +213,7 @@ void enemy_ladder_option(level_t *level, enemy_t *enemy) {
         for (int j = 0; j < level->num_ladders; j++) {
             const geometry_t *ladder = &level->ladders[j];
 
-            if (!ladder->has_physics || 
-                ladder->is_cutscene_entity||
+            if (!ladder->has_physics ||
                 ladder->base.animation.current_animation == ANIM_ELEVATOR_LINE ||
                 ladder->base.animation.current_animation == ANIM_POLE_BLUE) {
                 continue;

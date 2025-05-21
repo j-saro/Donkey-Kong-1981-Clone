@@ -7,13 +7,32 @@
 #include "core/physics/physics_geometry.h"
 #include "entities/abstract/effect.h"
 
-void next_step(game_state_t *game_state);
+void cutscene_load(game_state_t *game_state, float dt_seconds);
+void next_cutscene_step(game_state_t *game_state);
 void cutscene_finish(game_state_t *game_state);
 void cutscene_1(game_state_t *game_state, float dt_seconds);
 void cutscene_2(game_state_t *game_state, float dt_seconds);
+void cutscene_3(game_state_t *game_state, float dt_seconds);
 void cutscene_init_characters(level_t *level);
 
-void next_step(game_state_t *game_state) {
+void cutscene_load(game_state_t *game_state, float dt_seconds) {
+    switch (game_state->current_cutscene) {
+        case 1:
+            cutscene_1(game_state, dt_seconds);
+            break;
+        case 2:
+            cutscene_2(game_state, dt_seconds);
+            break;
+        case 3:
+            cutscene_3(game_state, dt_seconds);
+            break;
+        default:
+            g_warning("Not a valid cutscene: %d", game_state->current_cutscene);
+            break;
+    }
+}
+
+void next_cutscene_step(game_state_t *game_state) {
     game_state->cutscene_time = 0;
     game_state->cutscene_step++;
 }
@@ -22,6 +41,12 @@ void cutscene_finish(game_state_t *game_state) {
     game_state->cutscene_time = 0;
     game_state->cutscene_step = 0;
     game_state->mode = GAME_MODE_NORMAL;
+
+    if (!level_next(game_state, LEVEL_FILE_PATH)) {
+        game_state->mode = GAME_MODE_PAUSED;
+        return;
+    }
+    cutscene_init_characters(&game_state->level);
 }
 
 void cutscene_1(game_state_t *game_state, float dt_seconds) {
@@ -34,10 +59,8 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
         case 0:
             // Start cutscene after 1 seconds
             if (game_state->cutscene_time >= 1.0f) {
-                donkey_kong->base.x = 297;
-                donkey_kong->base.y = 490;
                 set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
         case 1:
@@ -47,14 +70,14 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
             if (donkey_kong->base.y <= 133) {
                 set_animation(&donkey_kong->base, ANIM_IDLE_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HELP_PEACH);
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
 
         case 2:
             // Wait for 1 second
             if (game_state->cutscene_time >= 1.0f) {
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
 
@@ -72,7 +95,7 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
             }
 
             if (donkey_kong->base.x <= 73) {
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
 
@@ -80,7 +103,6 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
             // End of cutscene - switch back to game mode
             if (game_state->cutscene_time > 1.0f) {
                 cutscene_finish(game_state);
-                cutscene_init_characters(&game_state->level);
             }
             break;
     }
@@ -99,14 +121,14 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
                 new_effect(&game_state->level, ANIM_HEART_FULL, 295, 86, 1, false);
             }
             if (game_state->cutscene_time > 1.0f) {
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
         case 1:
             set_animation(&donkey_kong->base, ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG);
             donkey_kong->base.x = 178;
             donkey_kong->base.y = 131;
-            next_step(game_state);
+            next_cutscene_step(game_state);
             break;
         case 2:
             // Donkey Kong climb to peach
@@ -118,7 +140,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
                 effect_destroy(&game_state->level, 0);
                 new_effect(&game_state->level, ANIM_HEART_BROKEN, 295, 86, 1, false);
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
 
@@ -129,7 +151,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
             if (donkey_kong->base.y <= 40) {
                 set_animation(&donkey_kong->base, ANIM_HIDE);
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
-                next_step(game_state);
+                next_cutscene_step(game_state);
             }
             break;
 
@@ -137,13 +159,62 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
             // End of cutscene - switch back to game mode
             if (game_state->cutscene_time > 1.0f) {
                 cutscene_finish(game_state);
-                
-                if (!level_next(game_state)) {
-                    game_state->mode = GAME_MODE_PAUSED;
-                    set_animation(&game_state->level.player.base, ANIM_HIDE);
-                    break;
+            }
+            break;
+    }
+}
+
+void cutscene_3(game_state_t *game_state, float dt_seconds) {
+    donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
+    player_t *player = &game_state->level.player;
+
+    game_state->cutscene_time += dt_seconds;
+
+    update_animation_progress(&donkey_kong->base, dt_seconds);
+
+    switch (game_state->cutscene_step) {
+        case 0:
+            // set player pos to last position
+            player->base.x = game_state->player_clone.base.x;
+            player->base.y = game_state->player_clone.base.y;
+            player->base.direction = game_state->player_clone.base.direction;
+            if (game_state->cutscene_time > 1.0f) {
+                set_animation(&donkey_kong->base, ANIM_BEATING_CHEST_DONKEY_KONG);
+                next_cutscene_step(game_state);
+            }
+            break;
+        
+        case 1:
+            // set dk anim falling
+            if (game_state->cutscene_time > 1.6f) {
+                set_animation(&donkey_kong->base, ANIM_FALLING_DONKEY_KONG);
+                next_cutscene_step(game_state);
+            }
+            break;
+        
+        case 2:
+            // Donkey Kong falling
+            donkey_kong->base.y += 180 * dt_seconds;
+
+            if (donkey_kong->base.y >= 506 - donkey_kong->base.height) {
+                peach_t *peach = &game_state->level.peach;
+                peach->base.x -= 46;
+                // Set Player Pos
+                player->base.x = peach->base.x + 100;
+                player->base.y = peach->base.y + peach->base.height - player->base.height;
+                if (player->base.direction > 0) {
+                    player->base.direction = -1;
                 }
-                cutscene_init_characters(&game_state->level);
+                new_effect(&game_state->level, ANIM_HEART_FULL, peach->base.x + 50, peach->base.y - 10, 1, false);
+                set_animation(&donkey_kong->base, ANIM_IDLE_FALLING_DONKEY_KONG);
+                next_cutscene_step(game_state);
+            }
+            break;
+        
+        case 3:
+            // End of cutscene - switch back to game mode
+            if (game_state->cutscene_time > 5.0f) {
+                game_state->mode = GAME_MODE_PAUSED;
             }
             break;
     }

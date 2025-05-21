@@ -79,7 +79,7 @@ void gui_draw(cairo_t *cr, game_state_t *game_state) {
 void gui_update(game_state_t *game_state, float dt_seconds) {
     game_state->bonus_points_timer -= dt_seconds;
 
-    if (game_state->bonus_points_timer <= 0) {
+    if (game_state->bonus_points_timer <= 0 && game_state->bonus_points > 0) {
         game_state->bonus_points -= BONUS_POINT_DECREMENT;
         game_state->bonus_points_timer = DECREMENT_TIMER;
     }

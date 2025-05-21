@@ -33,36 +33,11 @@ void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
 
     cJSON *physics_json = cJSON_GetObjectItem(json, "has_physics");
     structure->has_physics = (physics_json == NULL) ? true : cJSON_IsTrue(physics_json);
-
-    cJSON *cutscene_json = cJSON_GetObjectItem(json, "is_cutscene_entity");
-    structure->is_cutscene_entity = (cutscene_json == NULL) ? false : cJSON_IsTrue(cutscene_json);
-
-    cJSON *cutscene_id_json = cJSON_GetObjectItem(json, "cutscene_id");
-    structure->cutscene_id = (cJSON_IsNumber(cutscene_id_json)) ? cutscene_id_json->valueint : -1;
 }
 
 void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game_state) {
     for (int i = 0; i < count; ++i) {
         const geometry_t *structure = &array[i];
-
-        // Skip cutscene-only entities if we're not in cutscene mode
-        if (game_state->mode != GAME_MODE_CUTSCENE) {
-            if (structure->is_cutscene_entity)
-                continue;
-        }
-        else {
-            // We're in cutscene mode
-            if (structure->is_cutscene_entity) {
-                // Only show this entity if its cutscene_id matches the current cutscene
-                if (structure->cutscene_id != game_state->current_cutscene)
-                    continue;
-            }
-            else {
-                // Optionally hide non-cutscene entities during cutscenes 1
-                if (game_state->current_cutscene == 1 && structure->base.type == LADDER)
-                    continue;
-            }
-        }
 
         cairo_surface_t *frame_surface = structure->base.animation.current_frame;
         if (frame_surface == NULL || structure->base.animation.current_animation == ANIM_HIDE) {

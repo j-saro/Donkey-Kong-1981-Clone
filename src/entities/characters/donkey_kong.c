@@ -15,9 +15,6 @@ void donkey_kong_init(donkey_kong_t *donkey_kong, cJSON *json) {
     // Load Values form Json
     entity_parse(&donkey_kong->base, json);
 
-    donkey_kong->spawn_x = donkey_kong->base.x;
-    donkey_kong->spawn_y = donkey_kong->base.y;
-
     // Donkey Kong Default Values
     donkey_kong->throw = false;
     donkey_kong->has_thrown_this_cicle = false;

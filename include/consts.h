@@ -56,6 +56,7 @@
 #define BASIC_TILE_SIZE 16
 #define ASSETS_FILE_PATH "data/assets.json"
 #define LEVEL_FILE_PATH "data/level_"
+#define CUTSCENE_FILE_PATH "data/cutscene_"
 
 // Enemy
 #define MAX_ENEMIES 10
@@ -96,6 +97,8 @@
     X(ANIM_THROWING_BARREL_DONKEY_KONG) \
     X(ANIM_CLIMB_WITH_PEACH_DONKEY_KONG) \
     X(ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG) \
+    X(ANIM_IDLE_FALLING_DONKEY_KONG) \
+    X(ANIM_FALLING_DONKEY_KONG) \
     /* Enemy */ \
     X(ANIM_BARREL_SIDE) \
     X(ANIM_BARREL_FRONT) \

@@ -75,8 +75,7 @@ void check_ladder_collision(game_state_t *game_state) {
         // if ladder is not physics object skip it
         if (!ladder->has_physics || 
             player->base.animation.current_animation == ANIM_JUMP_MARIO ||
-            ladder->base.animation.current_animation == ANIM_POLE_BLUE ||
-            ladder->is_cutscene_entity) {
+            ladder->base.animation.current_animation == ANIM_POLE_BLUE) {
             continue;
         }
 

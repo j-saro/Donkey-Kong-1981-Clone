@@ -78,8 +78,6 @@ typedef struct {
 typedef struct {
     entity_t base;
     bool has_physics;
-    bool is_cutscene_entity;
-    int cutscene_id;
 } geometry_t;
 
 typedef struct {
@@ -129,7 +127,6 @@ typedef struct {
 
 typedef struct {
     entity_t base;
-    float spawn_x, spawn_y;
     bool throw;
     bool has_thrown_this_cicle;
 } donkey_kong_t;
@@ -217,6 +214,7 @@ typedef struct {
     int bonus_points;
     float bonus_points_timer;
     int pressed_buttons;
+    player_t player_clone;
 
     // Game mode
     game_mode_t mode;

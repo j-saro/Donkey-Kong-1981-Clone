@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
     gui_init(&game_state);
 
     if (sprite_load_from_json(ASSETS_FILE_PATH)) {
-        level_load(&game_state);
+        level_load(&game_state, CUTSCENE_FILE_PATH);
 
         // Init Gdk Window
         app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);
