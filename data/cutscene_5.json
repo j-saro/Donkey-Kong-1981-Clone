@@ -19,7 +19,7 @@
         },
         "mario": {
             "key": "ANIM_IDLE_MARIO",
-            "x": 0,
+            "x": -40,
             "y": 0,
             "width": 16,
             "height": 16

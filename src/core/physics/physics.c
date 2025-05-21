@@ -25,6 +25,10 @@ void apply_physics(game_state_t *game_state, float dt_seconds, float screen_heig
 }
 
 void player_gravity(player_t *player, float dt_seconds) {
+    // Fall damage
+    if (player->base.velocity_y > FALL_DAMAGE_SPEED) {
+        player->is_dead = true;
+    }
     if (!player->climbing) {
         apply_gravity(&player->base, dt_seconds, GRAVITY);
     }
@@ -88,7 +92,7 @@ void item_player_collision(game_state_t *game_state) {
 
             float item_top = item->base.y;
             if (item->base.animation.current_animation == ANIM_BUTTON) {
-                if (level->player.base.velocity_y > 0 && player_bottom - EPSILON_4 <= item_top) {
+                if (level->player.base.velocity_y > 0 && player_bottom + EPSILON_4 >= item_top && player->base.y <= item_top) {
                     game_state->player_score += item->points;
                     game_state->pressed_buttons -= 1;
                     new_effect(&game_state->level, ANIM_100_POINTS, item->base.x, item->base.y - item->base.height, 1, true);

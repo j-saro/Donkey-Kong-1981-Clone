@@ -2,10 +2,12 @@
 #include "level/cutscene.h"
 #include "level/level.h"
 #include "core/sprite/animation.h"
+#include "core/sprite/sprite_utils.h"
 #include "core/physics/physics.h"
 #include "core/physics/physics_utils.h"
 #include "core/physics/physics_geometry.h"
 #include "entities/abstract/effect.h"
+#include "entities/abstract/enemy.h"
 
 void cutscene_load(game_state_t *game_state, float dt_seconds);
 void next_cutscene_step(game_state_t *game_state);
@@ -13,7 +15,7 @@ void cutscene_finish(game_state_t *game_state);
 void cutscene_1(game_state_t *game_state, float dt_seconds);
 void cutscene_2(game_state_t *game_state, float dt_seconds);
 void cutscene_3(game_state_t *game_state, float dt_seconds);
-void cutscene_init_characters(level_t *level);
+void cutscene_4(game_state_t *game_state, float dt_seconds);
 
 void cutscene_load(game_state_t *game_state, float dt_seconds) {
     switch (game_state->current_cutscene) {
@@ -25,6 +27,9 @@ void cutscene_load(game_state_t *game_state, float dt_seconds) {
             break;
         case 3:
             cutscene_3(game_state, dt_seconds);
+            break;
+        case 4:
+            cutscene_4(game_state, dt_seconds);
             break;
         default:
             g_warning("Not a valid cutscene: %d", game_state->current_cutscene);
@@ -46,7 +51,6 @@ void cutscene_finish(game_state_t *game_state) {
         game_state->mode = GAME_MODE_PAUSED;
         return;
     }
-    cutscene_init_characters(&game_state->level);
 }
 
 void cutscene_1(game_state_t *game_state, float dt_seconds) {
@@ -213,15 +217,53 @@ void cutscene_3(game_state_t *game_state, float dt_seconds) {
         
         case 3:
             // End of cutscene - switch back to game mode
-            if (game_state->cutscene_time > 5.0f) {
+            if (game_state->cutscene_time > 3.0f) {
                 game_state->mode = GAME_MODE_PAUSED;
             }
             break;
     }
 }
 
-void cutscene_init_characters(level_t *level) {
-    set_animation(&level->peach.base, ANIM_HELP_PEACH);
-    set_animation(&level->donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
-    set_animation(&level->player.base, ANIM_IDLE_MARIO);
+void cutscene_4(game_state_t *game_state, float dt_seconds) {
+    player_t *player = &game_state->level.player;
+
+    game_state->cutscene_time += dt_seconds;
+    update_animation_progress(&player->base, dt_seconds);
+
+    switch (game_state->cutscene_step) {
+        case 0:
+            // set player death animation
+            animation_sequence_t anim = get_animation_by_key(&player->base, ANIM_DEATH_MARIO);
+            set_animation(&player->base, ANIM_DEATH_MARIO);
+
+            // if animation done
+            if (player->base.animation.current_frame_index == anim.frame_count - 1 &&
+                player->base.animation.frame_time >= anim.frame_duration - (dt_seconds * EPSILON_2)) {
+                    enemy_destroy_all(game_state);
+                    next_cutscene_step(game_state);
+                }
+            break;
+
+        case 1:
+            // Reset Player position
+            set_animation(&player->base, ANIM_IDLE_MARIO);
+            player->base.direction = 1;
+            player->base.x = player->spawn_x;
+            player->base.y = player->spawn_y; 
+            next_cutscene_step(game_state);
+            break;
+        
+        case 2:
+            // End of cutscene - switch back to game mode
+            if (game_state->cutscene_time > 1.0f) {
+                game_state->player_lives -= 1;
+                player->is_dead = false;
+                player->has_hammer = false;
+
+                game_state->cutscene_time = 0;
+                game_state->cutscene_step = 0;
+                game_state->mode = GAME_MODE_NORMAL;
+            }
+            break;
+    }
 }

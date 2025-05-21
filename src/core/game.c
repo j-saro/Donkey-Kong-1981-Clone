@@ -126,7 +126,6 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             if (game_state->mode == GAME_MODE_NORMAL) {
                 game_state->mode = GAME_MODE_PAUSED;
             } else if (game_state->mode == GAME_MODE_PAUSED) {
-                cutscene_init_characters(&game_state->level);
                 effect_clear_all(&game_state->level);
                 game_state->mode = GAME_MODE_NORMAL;
             }
@@ -136,7 +135,6 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         // skip current cutscene
         if (key_skip) {
             if (game_state->mode == GAME_MODE_CUTSCENE) {
-                cutscene_init_characters(&game_state->level);
                 effect_clear_all(&game_state->level);
                 game_state->cutscene_step = 4;
             }
@@ -153,10 +151,7 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
         if (kill) {
-            for (int i = 0; i < game_state->level.num_enemies; i++) {
-                enemy_destroy(&game_state->level, i);
-                i--;
-            } 
+            enemy_destroy_all(game_state);
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
     }

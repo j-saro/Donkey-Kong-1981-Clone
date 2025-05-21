@@ -22,6 +22,7 @@
 
 // Physics
 #define GRAVITY 800.0f
+#define FALL_DAMAGE_SPEED 500.0f
 #define MOVE_SPEED 100.0f
 #define JUMP_FORCE 250.0f
 #define LADDER_TOP_OVERLAP 19
@@ -60,6 +61,7 @@
 
 // Enemy
 #define MAX_ENEMIES 10
+#define MAX_FIRE_SPIRITS 5
 #define MAX_FIRE_GHOSTS 6
 #define ENEMY_POINTS 300
 
@@ -88,6 +90,7 @@
     X(ANIM_CLIMB_IDLE_MARIO) \
     X(ANIM_HAMMER_MARIO_STAND) \
     X(ANIM_HAMMER_MARIO_WALK) \
+    X(ANIM_DEATH_MARIO) \
     /* Peach */ \
     X(ANIM_IDLE_PEACH) \
     X(ANIM_HELP_PEACH) \

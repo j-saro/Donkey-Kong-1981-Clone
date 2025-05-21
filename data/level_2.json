@@ -60,21 +60,21 @@
             }
         ],
         "peach": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_HELP_PEACH",
             "x": 250,
             "y": 92,
             "width": 39,
             "height": 23
         },
         "donkey_kong": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_IDLE_DONKEY_KONG",
             "x": 73,
             "y": 131,
             "width": 48,
             "height": 32
         },
         "mario": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_IDLE_MARIO",
             "x": 120,
             "y": 538,
             "width": 16,

@@ -153,11 +153,7 @@ void on_level_finish(game_state_t *game_state) {
     set_animation(&peach->base, ANIM_IDLE_PEACH);
 
     // delete all enemys
-    for (int i = 0; i < game_state->level.num_enemies; i++) {
-        enemy_destroy(&game_state->level, i);
-        i--;
-
-    }
+    enemy_destroy_all(game_state);
     hide_static_entity(&game_state->level);
     effect_clear_all(&game_state->level);
 

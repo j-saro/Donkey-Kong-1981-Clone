@@ -18,7 +18,7 @@
         },
         "mario": {
             "key": "ANIM_HIDE",
-            "x": 0,
+            "x": -40,
             "y": 0,
             "width": 16,
             "height": 16

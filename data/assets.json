@@ -105,6 +105,16 @@
             "frame_height": 27
         },
         {
+            "key": "ANIM_DEATH_MARIO",
+            "entity_id": "MARIO",
+            "start_x": 1,
+            "start_y": 97,
+            "frame_count": 5,
+            "frame_duration": 0.3,
+            "frame_width": 16,
+            "frame_height": 16
+        },
+        {
             "key": "ANIM_HELP_PEACH",
             "entity_id": "PEACH",
             "start_x": 0,

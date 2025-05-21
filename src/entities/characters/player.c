@@ -69,14 +69,11 @@ void player_hammer_update(player_t *player, float dt_seconds) {
 
 void player_check_death(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
-    if (player->is_dead && game_state->player_lives > 0) {
-        player->hammer_time = false;
-        set_animation(&player->base, ANIM_IDLE_MARIO);
-        game_state->player_lives -= 1;
-        player->is_dead = false;
-        player->base.x = player->spawn_x;
-        player->base.y = player->spawn_y;   
-    } else if (game_state->player_lives <= 0) {
+    if (player->is_dead) {
+        game_state->mode = GAME_MODE_CUTSCENE;
+        game_state->current_cutscene = 4;
+    } 
+    if (game_state->player_lives <= 0) {
         game_state->mode = GAME_MODE_PAUSED;
     }
 }

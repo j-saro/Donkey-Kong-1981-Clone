@@ -4,21 +4,21 @@
         "static_entities": [
         ],
         "peach": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_HELP_PEACH",
             "x": 286,
             "y": 72,
             "width": 39,
             "height": 23
         },
         "donkey_kong": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_IDLE_DONKEY_KONG",
             "x": 252,
             "y": 144,
             "width": 48,
             "height": 32
         },
         "mario": {
-            "key": "ANIM_HIDE",
+            "key": "ANIM_IDLE_MARIO",
             "x": 90,
             "y": 538,
             "width": 16,
@@ -148,7 +148,7 @@
                 "type": "STATIC_ENTITY",
                 "key": "ANIM_BUTTON",
                 "x": 150,
-                "y": 475,
+                "y": 476,
                 "width": 8,
                 "height": 10,
                 "points": 100
@@ -184,7 +184,7 @@
                 "type": "STATIC_ENTITY",
                 "key": "ANIM_BUTTON",
                 "x": 438,
-                "y": 475,
+                "y": 476,
                 "width": 8,
                 "height": 10,
                 "points": 100

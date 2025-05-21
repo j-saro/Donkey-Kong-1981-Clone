@@ -11,6 +11,7 @@
 void enemy_init(level_t *level, cJSON *json);
 void new_enemy(level_t *level, enemy_spawn_t *spawn);
 void enemy_destroy(level_t *level, int index);
+void enemy_destroy_all(game_state_t *game_state);
 void enemy_cleanup(level_t *level);
 void enemy_draw(cairo_t *cr, const level_t *level);
 void enemy_update(level_t *level, float dt_seconds);
@@ -79,6 +80,20 @@ void enemy_destroy(level_t *level, int index) {
     destroy_entity(level->enemies, &level->num_enemies, sizeof(enemy_t), index);
 }
 
+void enemy_destroy_all(game_state_t *game_state) {
+    // delete all enemys
+    for (int i = 0; i < game_state->level.num_enemies; i++) {
+        enemy_destroy(&game_state->level, i);
+        i--;
+
+    }
+    // reset spawn timer
+    for (int i = 0; i < game_state->level.num_enemy_spawns; i++) {
+        enemy_spawn_t *spawn = &game_state->level.enemy_spawns[i];
+        spawn->spawn_timer = 0.5f;
+    }
+}
+
 void enemy_cleanup(level_t *level) {
     // Spawned enemies
     entity_array_cleanup((void**)&level->enemies, &level->num_enemies);
@@ -101,6 +116,7 @@ void enemy_update(level_t *level, float dt_seconds) {
 
         // spawn only a max size of enemys
         if (level->num_enemies >= MAX_ENEMIES) continue;
+        if (spawn->anim_state == ANIM_FIRE_SPIRIT_WALK && level->num_enemies > MAX_FIRE_SPIRITS) continue;
         if (spawn->anim_state == ANIM_FIRE_GHOST_WALK && level->num_enemies > MAX_FIRE_GHOSTS) continue;
 
         // spawn barrel if dk throws
