@@ -12,24 +12,24 @@
 void cutscene_load(game_state_t *game_state, float dt_seconds);
 void next_cutscene_step(game_state_t *game_state);
 void cutscene_finish(game_state_t *game_state);
-void cutscene_1(game_state_t *game_state, float dt_seconds);
-void cutscene_2(game_state_t *game_state, float dt_seconds);
-void cutscene_3(game_state_t *game_state, float dt_seconds);
-void cutscene_4(game_state_t *game_state, float dt_seconds);
+void cutscene_dk_intro(game_state_t *game_state, float dt_seconds);
+void cutscene_dk_escape(game_state_t *game_state, float dt_seconds);
+void cutscene_dk_death(game_state_t *game_state, float dt_seconds);
+void cutscene_mario_death(game_state_t *game_state, float dt_seconds);
 
 void cutscene_load(game_state_t *game_state, float dt_seconds) {
     switch (game_state->current_cutscene) {
-        case 1:
-            cutscene_1(game_state, dt_seconds);
+        case CUTSCENE_DK_INTRO:
+            cutscene_dk_intro(game_state, dt_seconds);
             break;
-        case 2:
-            cutscene_2(game_state, dt_seconds);
+        case CUTSCENE_DK_ESCAPE:
+            cutscene_dk_escape(game_state, dt_seconds);
             break;
-        case 3:
-            cutscene_3(game_state, dt_seconds);
+        case CUTSCENE_DK_DEATH:
+            cutscene_dk_death(game_state, dt_seconds);
             break;
-        case 4:
-            cutscene_4(game_state, dt_seconds);
+        case CUTSCENE_MARIO_DEATH:
+            cutscene_mario_death(game_state, dt_seconds);
             break;
         default:
             g_warning("Not a valid cutscene: %d", game_state->current_cutscene);
@@ -47,13 +47,13 @@ void cutscene_finish(game_state_t *game_state) {
     game_state->cutscene_step = 0;
     game_state->mode = GAME_MODE_NORMAL;
 
-    if (!level_next(game_state, LEVEL_FILE_PATH)) {
+    if (!level_next(game_state, LEVEL_FILE_PATH, &game_state->current_level)) {
         game_state->mode = GAME_MODE_PAUSED;
         return;
     }
 }
 
-void cutscene_1(game_state_t *game_state, float dt_seconds) {
+void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
     donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
     game_state->cutscene_time += dt_seconds;
 
@@ -112,7 +112,7 @@ void cutscene_1(game_state_t *game_state, float dt_seconds) {
     }
 }
 
-void cutscene_2(game_state_t *game_state, float dt_seconds) {
+void cutscene_dk_escape(game_state_t *game_state, float dt_seconds) {
     donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
 
     game_state->cutscene_time += dt_seconds;
@@ -168,7 +168,7 @@ void cutscene_2(game_state_t *game_state, float dt_seconds) {
     }
 }
 
-void cutscene_3(game_state_t *game_state, float dt_seconds) {
+void cutscene_dk_death(game_state_t *game_state, float dt_seconds) {
     donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;
     player_t *player = &game_state->level.player;
 
@@ -218,13 +218,13 @@ void cutscene_3(game_state_t *game_state, float dt_seconds) {
         case 3:
             // End of cutscene - switch back to game mode
             if (game_state->cutscene_time > 3.0f) {
-                game_state->mode = GAME_MODE_PAUSED;
+                game_state->mode = GAME_MODE_GAME_FINISH;
             }
             break;
     }
 }
 
-void cutscene_4(game_state_t *game_state, float dt_seconds) {
+void cutscene_mario_death(game_state_t *game_state, float dt_seconds) {
     player_t *player = &game_state->level.player;
 
     game_state->cutscene_time += dt_seconds;
@@ -246,6 +246,7 @@ void cutscene_4(game_state_t *game_state, float dt_seconds) {
 
         case 1:
             // Reset Player position
+            set_animation(&game_state->level.donkey_kong.base, ANIM_IDLE_DONKEY_KONG);
             set_animation(&player->base, ANIM_IDLE_MARIO);
             player->base.direction = 1;
             player->base.x = player->spawn_x;

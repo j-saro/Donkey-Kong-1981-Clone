@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <assert.h>
 #include <time.h>
 #include "types.h"
@@ -11,8 +12,15 @@
 #include "level/loader.h"
 #include "core/gui.h"
 
-int main(int argc, char **argv);
+static gboolean maximize_window(gpointer data);
 static void activate(GtkApplication* app, gpointer user_data);
+int main(int argc, char **argv);
+
+static gboolean maximize_window(gpointer data) {
+    GtkWindow *window = GTK_WINDOW(data);
+    gtk_window_maximize(window);
+    return G_SOURCE_REMOVE; 
+}
 
 // Setup Gdk Window
 static void activate(GtkApplication* app, gpointer user_data) {
@@ -22,11 +30,15 @@ static void activate(GtkApplication* app, gpointer user_data) {
     GtkWidget *window = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(window), "Donkey Kong");
     gtk_window_set_default_size(GTK_WINDOW(window), BASE_WIDTH, BASE_HEIGHT);
+    gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
     // Add Drawing Area
     GtkWidget *drawing_area = gtk_drawing_area_new();
     gtk_container_add(GTK_CONTAINER(window), drawing_area);
     gtk_widget_show_all(window);
+
+    // maximize window after 10ms
+    g_timeout_add(10, maximize_window, window);
 
     // Connect Input handlers and draw event
     g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_pressed), game_state);
@@ -50,7 +62,7 @@ int main(int argc, char **argv) {
     gui_init(&game_state);
 
     if (sprite_load_from_json(ASSETS_FILE_PATH)) {
-        level_load(&game_state, CUTSCENE_FILE_PATH); // CUTSCENE_FILE_PATH
+        level_load(&game_state, MENU_FILE_PATH, 0);
 
         // Init Gdk Window
         app = gtk_application_new("de.oth-regensburg.donkeykong", G_APPLICATION_DEFAULT_FLAGS);

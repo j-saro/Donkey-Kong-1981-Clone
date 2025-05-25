@@ -5,6 +5,7 @@ game_SOURCES = \
 	$(top_srcdir)/src/core/game.c \
 	$(top_srcdir)/src/core/input.c \
 	$(top_srcdir)/src/core/gui.c \
+	$(top_srcdir)/src/core/gui_utils.c \
 	$(top_srcdir)/src/core/physics/physics_enemy.c \
 	$(top_srcdir)/src/core/physics/physics_geometry.c \
 	$(top_srcdir)/src/core/physics/physics_utils.c \

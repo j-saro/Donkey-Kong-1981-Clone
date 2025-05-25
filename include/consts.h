@@ -20,6 +20,17 @@
 #define LETTER_BUFFER_SIZE 12
 #define LETTER_SPACING 17
 
+#define SPACING 10
+#define BOX_HEIGHT 34
+#define COMPLETE_TEXT_Y 340
+#define GAME_OVER_TEXT_Y 300
+#define GAME_OVER_RETURN_TEXT_Y 340
+#define MENU_TEXT 500
+
+#define GUI_TEXT_START "PRESS SPACE TO START"
+#define GUI_TEXT_GAME_OVER "GAME OVER"
+#define GUI_TEXT_RETURN "PRESS SPACE TO RETURN"
+
 // Physics
 #define GRAVITY 800.0f
 #define FALL_DAMAGE_SPEED 500.0f
@@ -55,6 +66,7 @@
 // Sprites
 #define SCALE 2.0f
 #define BASIC_TILE_SIZE 16
+#define MENU_FILE_PATH "data/menu_"
 #define ASSETS_FILE_PATH "data/assets.json"
 #define LEVEL_FILE_PATH "data/level_"
 #define CUTSCENE_FILE_PATH "data/cutscene_"

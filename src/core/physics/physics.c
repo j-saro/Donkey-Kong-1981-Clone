@@ -28,6 +28,7 @@ void player_gravity(player_t *player, float dt_seconds) {
     // Fall damage
     if (player->base.velocity_y > FALL_DAMAGE_SPEED) {
         player->is_dead = true;
+        player->base.velocity_y = 0;
     }
     if (!player->climbing) {
         apply_gravity(&player->base, dt_seconds, GRAVITY);
@@ -41,8 +42,11 @@ void apply_gravity(entity_t *base, float dt_seconds, float gravity_force) {
 
 void player_donkey_kong_collision(level_t *level) {
     donkey_kong_t *donkey_kong = &level->donkey_kong;
+    float donkey_kong_bottom = donkey_kong->base.y + donkey_kong->base.height;
     player_t *player = &level->player;
-    if (player_object_collision(player, &donkey_kong->base, donkey_kong->base.width, donkey_kong->base.height)) {
+    float player_bottom = player->base.y + player->base.height;
+
+    if (player_object_collision(player, &donkey_kong->base, donkey_kong->base.width, donkey_kong->base.height) && player_bottom - EPSILON_2 <= donkey_kong_bottom) {
         player->is_dead = true;
     }
 }

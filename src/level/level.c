@@ -14,8 +14,9 @@
 #include "core/gui.h"
 #include "level/loader.h"
 
-gboolean level_load(game_state_t *game_state, const char *file_path);
-gboolean level_next(game_state_t *game_state, const char *file_path);
+void level_init(game_state_t *game_state);
+gboolean level_load(game_state_t *game_state, const char *file_path, int file_index);
+gboolean level_next(game_state_t *game_state, const char *file_path, int *file_index);
 
 void level_cleanup(level_t *level);
 void level_draw(cairo_t *cr, game_state_t *game_state);
@@ -24,21 +25,35 @@ void level_internal_update(game_state_t *game_state, float dt_seconds);
 void level_complete(game_state_t *game_state);
 void on_level_finish(game_state_t *game_state);
 
+void level_init(game_state_t *game_state) {
+    // Level
+    game_state->current_level = 0;
+    game_state->player_score = 0;
+    game_state->bonus_live = false;
+    game_state->player_lives = PLAYER_LIVES;
+    game_state->pressed_buttons = NUM_BUTTONS;
+    game_state->bonus_points_timer = DECREMENT_TIMER;
+
+    // Cutscene
+    game_state->current_cutscene = CUTSCENE_DK_INTRO;
+    game_state->cutscene_time = 0.0f;
+    game_state->cutscene_step = 0;
+}
+
 // load current level
-gboolean level_load(game_state_t *game_state, const char *file_path) {
+gboolean level_load(game_state_t *game_state, const char *file_path, int file_index) {
     game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
     char filename[64];
     // create current level file path
-    snprintf(filename, sizeof(filename), "%s%d.json", file_path, game_state->current_level);
-
+    snprintf(filename, sizeof(filename), "%s%d.json", file_path, file_index);
     return level_load_from_json(&game_state->level, filename);
 }
 
-gboolean level_next(game_state_t *game_state, const char *file_path) {
+gboolean level_next(game_state_t *game_state, const char *file_path, int *file_index) {
     // cleanup last level
     level_cleanup(&game_state->level);
-    game_state->current_level++;
-    return level_load(game_state, file_path);
+    (*file_index)++;
+    return level_load(game_state, file_path, *file_index);
 }
 
 void level_cleanup(level_t *level) {
@@ -128,8 +143,12 @@ void level_complete(game_state_t *game_state) {
     if (game_state->pressed_buttons <= 0) {
         on_level_finish(game_state);
         game_state->player_clone = game_state->level.player;
-        game_state->current_cutscene = 3;
-        level_next(game_state, CUTSCENE_FILE_PATH);
+        game_state->current_cutscene = CUTSCENE_DK_DEATH;
+
+        // load dk death cutscene
+        level_cleanup(&game_state->level);
+        level_load(game_state, CUTSCENE_FILE_PATH, CUTSCENE_DK_DEATH);
+
         // reset level for gui
         game_state->current_level = 4;
         game_state->bonus_points = 0;
@@ -141,7 +160,7 @@ void level_complete(game_state_t *game_state) {
         on_level_finish(game_state);
 
         // Set next cutscene
-        game_state->current_cutscene = 2;
+        game_state->current_cutscene = CUTSCENE_DK_ESCAPE;
     }
 }
 

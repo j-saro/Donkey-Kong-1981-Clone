@@ -13,20 +13,10 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds);
 
 void game_init(game_state_t *game_state) {
-    game_state->mode = GAME_MODE_CUTSCENE;
+    game_state->mode = GAME_MODE_MENU;
     game_state->key_cooldown = KEY_INPUT_COOLDOWN;
 
-    // Level
-    game_state->current_level = 0;
-    game_state->player_score = 0;
-    game_state->bonus_live = false;
-    game_state->player_lives = PLAYER_LIVES;
-    game_state->pressed_buttons = NUM_BUTTONS;
-
-    // Cutscene
-    game_state->current_cutscene = 1;
-    game_state->cutscene_time = 0.0f;
-    game_state->cutscene_step = 0;
+    level_init(game_state);
 }
 
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
@@ -58,10 +48,26 @@ gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data) {
     cairo_scale(cr, scale, scale);
 
     level_draw(cr, game_state);
-    if (game_state->mode != GAME_MODE_CUTSCENE) {
-        gui_draw(cr, game_state);
-    }
     
+    // GUIs
+    if (game_state->mode == GAME_MODE_MENU) {
+        // Start menu
+        gui_startmenu_draw(cr, game_state);
+    }
+    else if (game_state->mode == GAME_MODE_GAME_FINISH) {
+        // Finish screen text
+        gui_game_complete_draw(cr, game_state);
+    }
+    else if ( game_state->mode == GAME_MODE_GAME_OVER) {
+        // Finish screen text
+        gui_game_over_draw(cr, game_state);
+    }
+
+    if (game_state->mode != GAME_MODE_MENU && game_state->mode != GAME_MODE_CUTSCENE) {
+        // Game gui
+        gui_game_draw(cr, game_state);
+    }
+
     cairo_restore(cr);
 
     // draw grey offset areas
@@ -114,21 +120,28 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 void game_update(game_state_t *game_state, float dt_seconds) {
     bool key_pause = game_state->pressed_keys[GDK_KEY_p] || game_state->pressed_keys[GDK_KEY_P];
     bool key_skip = game_state->pressed_keys[GDK_KEY_c] || game_state->pressed_keys[GDK_KEY_C];
-
-    // debug
-    bool top = game_state->pressed_keys[GDK_KEY_t];
-    bool refill = game_state->pressed_keys[GDK_KEY_r];
-    bool kill = game_state->pressed_keys[GDK_KEY_k];
+    bool key_space = game_state->pressed_keys[GDK_KEY_space];
     
     if (game_state->key_cooldown <= 0) {
-        // Pause game
-        if (key_pause) {
-            if (game_state->mode == GAME_MODE_NORMAL) {
-                game_state->mode = GAME_MODE_PAUSED;
-            } else if (game_state->mode == GAME_MODE_PAUSED) {
-                effect_clear_all(&game_state->level);
-                game_state->mode = GAME_MODE_NORMAL;
-            }
+        // start game
+        if (key_space && game_state->mode == GAME_MODE_MENU) {
+            game_state->mode = GAME_MODE_CUTSCENE;
+            // Reset game
+            level_init(game_state);
+            level_cleanup(&game_state->level);
+            level_load(game_state, CUTSCENE_FILE_PATH, CUTSCENE_DK_INTRO);
+            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
+        }
+
+        // back to menu
+        if (key_space && 
+            (game_state->mode == GAME_MODE_GAME_FINISH || 
+            game_state->mode == GAME_MODE_GAME_OVER)) {
+            game_state->mode = GAME_MODE_MENU;
+            // Reset game
+            level_init(game_state);
+            level_cleanup(&game_state->level);
+            level_load(game_state, MENU_FILE_PATH, 0);
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
         
@@ -136,22 +149,21 @@ void game_update(game_state_t *game_state, float dt_seconds) {
         if (key_skip) {
             if (game_state->mode == GAME_MODE_CUTSCENE) {
                 effect_clear_all(&game_state->level);
-                game_state->cutscene_step = 4;
+                switch (game_state->current_cutscene) {
+                    case CUTSCENE_DK_INTRO:
+                    case CUTSCENE_DK_ESCAPE:
+                        game_state->cutscene_step = 4;
+                        break;
+                    case CUTSCENE_DK_DEATH:
+                        game_state->cutscene_step = 3;
+                        break;
+                    case CUTSCENE_MARIO_DEATH:
+                        game_state->cutscene_step = 1;
+                        break;
+                    default:
+                        break;
+                }
             }
-            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
-        }
-
-        // for debug, tp player to top
-        if (top) {
-            game_state->level.player.base.y -= 100;
-            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
-        }
-        if (refill) {
-            game_state->player_lives = PLAYER_LIVES;
-            game_state->key_cooldown = KEY_INPUT_COOLDOWN;
-        }
-        if (kill) {
-            enemy_destroy_all(game_state);
             game_state->key_cooldown = KEY_INPUT_COOLDOWN;
         }
     }
@@ -178,8 +190,8 @@ void game_update(game_state_t *game_state, float dt_seconds) {
             }
             break;
 
-        // game pause
-        case GAME_MODE_PAUSED:
+        default:
+            // Do not update game
             break;
     }
 }

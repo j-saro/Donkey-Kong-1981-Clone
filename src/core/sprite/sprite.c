@@ -1,4 +1,5 @@
 #include "core/sprite/sprite.h"
+#include "core/sprite/sprite_utils.h"
 #include "core/sprite/animation.h"
 #include <string.h>
 #include <stdio.h>
@@ -13,11 +14,6 @@ void animation_load_form_json(cJSON *json);
 void free_animation_frames();
 void free_sprite_sheets();
 void animation_cleanup();
-int get_type_by_name(const char *name);
-animation_sequence_t get_animation_by_key(animation_state_t anim_state);
-cairo_surface_t **get_animation_frames(animation_state_t anim_state);
-void set_animation_frames(entity_t *base);
-cairo_surface_t *get_spritesheet(entities_t entity);
 
 // Stores the animation frames (animation -> frame)
 animation_frames_t *loaded_animations = NULL;

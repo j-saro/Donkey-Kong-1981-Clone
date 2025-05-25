@@ -60,7 +60,7 @@
             "height": 23
         },
         "donkey_kong": {
-            "key": "ANIM_IDLE_PEACH",
+            "key": "ANIM_IDLE_DONKEY_KONG",
             "x": 73,
             "y": 131,
             "width": 48,

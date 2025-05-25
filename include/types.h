@@ -5,11 +5,21 @@
 #include "consts.h"
 
 typedef enum {
+    GAME_MODE_MENU,
     GAME_MODE_NORMAL,
     GAME_MODE_CUTSCENE,
     GAME_MODE_PAUSED,
     GAME_MODE_EFFECT,
+    GAME_MODE_GAME_OVER,
+    GAME_MODE_GAME_FINISH,
 } game_mode_t;
+
+typedef enum {
+    CUTSCENE_DK_INTRO,
+    CUTSCENE_DK_ESCAPE,
+    CUTSCENE_DK_DEATH,
+    CUTSCENE_MARIO_DEATH,
+} cutscene_t;
 
 typedef enum {
     #define X(name) name,
@@ -221,7 +231,7 @@ typedef struct {
     float key_cooldown;
 
     // Cutscene
-    int current_cutscene;
+    cutscene_t current_cutscene;
     float cutscene_time;
     int cutscene_step;
 } game_state_t;

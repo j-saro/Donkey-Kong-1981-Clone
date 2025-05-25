@@ -71,10 +71,10 @@ void player_check_death(game_state_t *game_state) {
     player_t *player = &game_state->level.player;
     if (player->is_dead) {
         game_state->mode = GAME_MODE_CUTSCENE;
-        game_state->current_cutscene = 4;
+        game_state->current_cutscene = CUTSCENE_MARIO_DEATH;
     } 
     if (game_state->player_lives <= 0) {
-        game_state->mode = GAME_MODE_PAUSED;
+        game_state->mode = GAME_MODE_GAME_OVER;
     }
 }
 
@@ -130,11 +130,8 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
 
     int current_ladder = player->current_ladder_index;
     geometry_t *ladder = &game_state->level.ladders[current_ladder];
-
-    int current_platform = player->current_platform_index;
-    geometry_t *platform = &game_state->level.platforms[current_platform];
     
-    float ladder_top = ladder->base.y - platform->base.height;
+    float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
     float ladder_bottom = ladder->base.y + ladder->base.height - EPSILON_2;
 
     if (player->has_hammer && (key_right || key_left)) {

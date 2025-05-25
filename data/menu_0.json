@@ -1,0 +1,571 @@
+{
+    "level": {
+        "finish_line": 0,
+        "static_entities": [],
+        "peach": {
+            "key": "ANIM_HELP_PEACH",
+            "x": -30,
+            "y": 0,
+            "width": 39,
+            "height": 23
+        },
+        "donkey_kong": {
+            "key": "ANIM_IDLE_DONKEY_KONG",
+            "x": -100,
+            "y": 0,
+            "width": 48,
+            "height": 32
+        },
+        "mario": {
+            "key": "ANIM_IDLE_MARIO",
+            "x": -30,
+            "y": 0,
+            "width": 16,
+            "height": 16
+        },
+        "enemys": [],
+        "items": [],
+        "platforms": [
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 92,
+                "y": 100,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 92,
+                "y": 116,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 140,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 92,
+                "y": 132,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 140,
+                "y": 132,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 92,
+                "y": 148,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 140,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 92,
+                "y": 164,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 172,
+                "y": 100,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 172,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 204,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 172,
+                "y": 132,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 204,
+                "y": 132,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 172,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 204,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 172,
+                "y": 164,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 284,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 116,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 284,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 132,
+                "width": 64,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 268,
+                "y": 148,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 164,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 284,
+                "y": 164,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 316,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 364,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 316,
+                "y": 116,
+                "width": 48,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 316,
+                "y": 132,
+                "width": 32,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 316,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 348,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 316,
+                "y": 164,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 364,
+                "y": 164,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 396,
+                "y": 100,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 396,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 396,
+                "y": 132,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 396,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 396,
+                "y": 164,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 460,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 492,
+                "y": 100,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 460,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 492,
+                "y": 116,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 460,
+                "y": 132,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 476,
+                "y": 148,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 476,
+                "y": 164,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 156,
+                "y": 200,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 204,
+                "y": 200,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 156,
+                "y": 216,
+                "width": 48,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 156,
+                "y": 232,
+                "width": 32,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 156,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 188,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 156,
+                "y": 264,
+                "width": 16,
+                "height": 8
+            },       
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 204,
+                "y": 264,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 200,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 216,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 268,
+                "y": 216,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 232,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 268,
+                "y": 232,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 268,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 236,
+                "y": 264,
+                "width": 48,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 300,
+                "y": 200,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 348,
+                "y": 200,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 300,
+                "y": 216,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 348,
+                "y": 216,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 300,
+                "y": 232,
+                "width": 64,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 300,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 332,
+                "y": 248,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 300,
+                "y": 264,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 348,
+                "y": 264,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 380,
+                "y": 200,
+                "width": 64,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 380,
+                "y": 216,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 380,
+                "y": 232,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 412,
+                "y": 232,
+                "width": 32,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 380,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 428,
+                "y": 248,
+                "width": 16,
+                "height": 8
+            },
+            {
+                "key": "ANIM_PLATFORM_BLUE",
+                "x": 380,
+                "y": 264,
+                "width": 64,
+                "height": 8
+            }
+        ],
+        "ladders": []
+    }
+}
