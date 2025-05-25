@@ -131,7 +131,7 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
     int current_ladder = player->current_ladder_index;
     geometry_t *ladder = &game_state->level.ladders[current_ladder];
     
-    float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
+    float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP + EPSILON_4;
     float ladder_bottom = ladder->base.y + ladder->base.height - EPSILON_2;
 
     if (player->has_hammer && (key_right || key_left)) {
