@@ -66,9 +66,14 @@ void window_collision(game_state_t *game_state, float screen_height) {
     
     // Bottom window collision
     if (player_bottom > screen_height) {
-        player->base.y = screen_height - player->base.height;
-        player->base.velocity_y = 0;
-        player->base.is_grounded = true;
+        if (game_state->mode == GAME_MODE_MENU) {
+            player->base.x = player->spawn_x;
+            player->base.y = player->spawn_y;
+        } else {
+            player->base.y = screen_height - player->base.height;
+            player->base.velocity_y = 0;
+            player->base.is_grounded = true;
+        }
     } else {
         player->base.is_grounded = false;
     }

@@ -5,6 +5,10 @@
 #include "level/cutscene.h"
 #include "entities/abstract/effect.h"
 #include "entities/abstract/enemy.h"
+#include "entities/characters/player.h"
+#include "core/physics/physics.h"
+#include "core/physics/physics_geometry.h"
+#include "core/input.h"
 #include "core/gui.h"
 
 void game_init(game_state_t *game_state);
@@ -118,13 +122,14 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
 }
 
 void game_update(game_state_t *game_state, float dt_seconds) {
-    bool key_pause = game_state->pressed_keys[GDK_KEY_p] || game_state->pressed_keys[GDK_KEY_P];
-    bool key_skip = game_state->pressed_keys[GDK_KEY_c] || game_state->pressed_keys[GDK_KEY_C];
-    bool key_space = game_state->pressed_keys[GDK_KEY_space];
-    
+    // Pressed keys
+    bool key_skip = is_key_pressed(game_state, GDK_KEY_c) || is_key_pressed(game_state, GDK_KEY_C);
+    bool key_enter = is_key_pressed(game_state, GDK_KEY_Return) || is_key_pressed(game_state, GDK_KEY_KP_Enter);
+    bool key_space = is_key_pressed(game_state, GDK_KEY_space);
+
     if (game_state->key_cooldown <= 0) {
         // start game
-        if (key_space && game_state->mode == GAME_MODE_MENU) {
+        if (key_enter && game_state->mode == GAME_MODE_MENU) {
             game_state->mode = GAME_MODE_CUTSCENE;
             // Reset game
             level_init(game_state);
@@ -170,6 +175,12 @@ void game_update(game_state_t *game_state, float dt_seconds) {
 
     // Handle different game modes
     switch (game_state->mode) {
+        case GAME_MODE_MENU:
+            game_state->level.player.previous_y = game_state->level.player.base.y;
+            player_update(game_state, dt_seconds);
+            apply_physics(game_state, dt_seconds, BASE_HEIGHT);
+            break;
+
         // Normal game loop
         case GAME_MODE_NORMAL:
             donkey_kong_t *donkey_kong = &game_state->level.donkey_kong;

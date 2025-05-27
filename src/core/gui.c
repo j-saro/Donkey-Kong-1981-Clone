@@ -25,6 +25,7 @@ static tint_t light_blue = {0.388f, 0.906f, 1.0, 1.0}; // red 99, green 231, blu
 static const char *start_text = GUI_TEXT_START;
 static const char *game_over_text = GUI_TEXT_GAME_OVER;
 static const char *return_text = GUI_TEXT_RETURN;
+static const char *bonus_heart_text = GUI_TEXT_BONUS_HERT;
 
 void gui_init(game_state_t *game_state) {
     gui_char_entity.direction = 1;
@@ -72,6 +73,11 @@ void gui_game_draw(cairo_t *cr, game_state_t *game_state) {
     // Player Score
     snprintf(buffer, sizeof(buffer), "%06d", game_state->player_score);
     gui_text(cr, &gui_char_entity, buffer, PLAYER_SCORE_X, PLAYER_SCORE_Y, LETTER_SPACING, &no_tint);
+
+    // 1 Up
+    if (game_state->bonus_live) {
+        gui_text(cr, &gui_char_entity, bonus_heart_text, ONE_UP_X, SPACING, LETTER_SPACING, &red);
+    }
 
     // Bounus Points
     snprintf(buffer, sizeof(buffer), "%04d", game_state->bonus_points);

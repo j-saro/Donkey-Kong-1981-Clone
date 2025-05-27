@@ -1,4 +1,5 @@
 #include "consts.h"
+#include "core/input.h"
 #include "entities/characters/player.h"
 #include "core/sprite/animation.h"
 #include "entities/abstract/entity.h"
@@ -83,10 +84,11 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
 
     float move_amount = MOVE_SPEED * dt_seconds;
 
-    bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
-    bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
-    bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
-    bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
+    bool key_left = is_key_pressed(game_state, GDK_KEY_a) || is_key_pressed(game_state, GDK_KEY_A);
+    bool key_right = is_key_pressed(game_state, GDK_KEY_d) || is_key_pressed(game_state, GDK_KEY_D);
+    bool key_up = is_key_pressed(game_state, GDK_KEY_w) || is_key_pressed(game_state, GDK_KEY_W);
+    bool key_down = is_key_pressed(game_state, GDK_KEY_s) || is_key_pressed(game_state, GDK_KEY_S);
+    bool key_space = is_key_pressed(game_state, GDK_KEY_space);
     
     float player_bottom = player->base.y + player->base.height;
     int current_ladder = player->current_ladder_index;
@@ -112,7 +114,7 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
             player->base.y += move_amount;
         }
     }
-    if (game_state->pressed_keys[GDK_KEY_space]) {
+    if (key_space) {
         entity_jump(&player->base, JUMP_FORCE);
     }
 }
@@ -121,10 +123,10 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
 void player_change_animation(game_state_t *game_state, float dt_seconds) {
     player_t *player = &game_state->level.player;
 
-    bool key_left = game_state->pressed_keys['a'] || game_state->pressed_keys['A'];
-    bool key_right = game_state->pressed_keys['d'] || game_state->pressed_keys['D'];
-    bool key_up = game_state->pressed_keys['w'] || game_state->pressed_keys['W'];
-    bool key_down = game_state->pressed_keys['s'] || game_state->pressed_keys['S'];
+    bool key_left = is_key_pressed(game_state, GDK_KEY_a) || is_key_pressed(game_state, GDK_KEY_A);
+    bool key_right = is_key_pressed(game_state, GDK_KEY_d) || is_key_pressed(game_state, GDK_KEY_D);
+    bool key_up = is_key_pressed(game_state, GDK_KEY_w) || is_key_pressed(game_state, GDK_KEY_W);
+    bool key_down = is_key_pressed(game_state, GDK_KEY_s) || is_key_pressed(game_state, GDK_KEY_S);
 
     float player_bottom = player->base.y + player->base.height;
 

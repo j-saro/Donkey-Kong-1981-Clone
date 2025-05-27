@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cairo.h>
+#include <gtk/gtk.h>
 #include <stdbool.h>
 #include "consts.h"
 
@@ -212,8 +212,7 @@ typedef struct {
 */
 typedef struct {
     // Input
-    int *pressed_keys;
-    unsigned int num_pressed_keys;
+    GHashTable *pressed_keys;
 
     // Level data
     level_t level;
