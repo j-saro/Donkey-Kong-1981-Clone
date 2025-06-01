@@ -37,21 +37,24 @@
 #define DK_CLIMB_SPEED 80
 #define DK_GRAVITY 600
 #define DK_JUMP_FORCE 150.0f
-// Cutscene 1
+#define DEFAULT_WAIT_TIME 1.0f
+// Cutscene 1 (DK Intro)
 #define C1_DK_CLIMB_HEIGHT 133
 #define C1_DK_FINAL_POS_X 73
-// Cutscene 2
+// Cutscene 2 (DK Escape)
 #define C2_HEART_X 295
 #define C2_HEART_Y 86
 #define C2_DK_START_X 178
 #define C2_DK_START_Y 131
 #define C2_DK_FINAL_POS_Y 40
-// Cutscene 3
+// Cutscene 3 (DK Death)
 #define C3_DK_FALLING_SPEED 180
 #define C3_DK_FALLING_STOP 506
 #define C3_PEACH_OFFSET_X 46
 #define C3_MARIO_OFFSET_X 100
 #define C3_HEART_OFFSET_X 10
+#define C3_DK_FALLING_WAIT_TIME 1.6f
+#define C3_FINAL_WAIT_TIME 3.0f
 
 // Physics
 #define GRAVITY 800.0f
@@ -74,6 +77,7 @@
 
 // Mario
 #define HAMMER_TIME 6.0f
+#define MARIO_WITHOUT_HAMMER_HEIGHT 16
 #define MARIO_WITH_HAMMER_HEIGHT 27
 #define PLAYER_LIVES 2
 
@@ -87,7 +91,6 @@
 
 // Sprites
 #define SCALE 2.0f
-#define BASIC_TILE_SIZE 16
 #define MENU_FILE_PATH "data/menu_"
 #define ASSETS_FILE_PATH "data/assets.json"
 #define LEVEL_FILE_PATH "data/level_"
@@ -98,6 +101,7 @@
 #define MAX_FIRE_SPIRITS 5
 #define MAX_FIRE_GHOSTS 6
 #define ENEMY_POINTS 300
+#define ENEMY_PHYSICS_WIDTH 16
 
 // Spring
 #define ENEMY_X_THRESHOLD_1 460

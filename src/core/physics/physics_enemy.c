@@ -174,7 +174,7 @@ void enemy_platform_collision(level_t *level, enemy_t *enemy) {
     float enemy_top = enemy->base.y;
     float enemy_bottom = enemy->base.y + enemy->base.height;
     float enemy_left = enemy->base.x;
-    float enemy_right = enemy->base.x + BASIC_TILE_SIZE;
+    float enemy_right = enemy->base.x + ENEMY_PHYSICS_WIDTH;
 
     bool grounded = false;
 

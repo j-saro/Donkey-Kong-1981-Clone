@@ -8,7 +8,7 @@ void check_ladder_collision(game_state_t *game_state);
 
 void platform_player_collision(game_state_t *game_state, float dt_seconds) {
     player_t *player = &game_state->level.player;
-    player->base.height = player->has_hammer ? MARIO_WITH_HAMMER_HEIGHT * SCALE : BASIC_TILE_SIZE * SCALE;
+    player->base.height = player->has_hammer ? MARIO_WITH_HAMMER_HEIGHT * SCALE : MARIO_WITHOUT_HAMMER_HEIGHT * SCALE;
     player->base.is_grounded = platform_entity_collison(game_state, &player->base, dt_seconds);
 }
 

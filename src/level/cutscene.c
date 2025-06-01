@@ -62,7 +62,7 @@ void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
     switch (game_state->cutscene_step) {
         case 0:
             // Start cutscene after 1 seconds
-            if (game_state->cutscene_time >= 1.0f) {
+            if (game_state->cutscene_time >= DEFAULT_WAIT_TIME) {
                 set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
                 next_cutscene_step(game_state);
             }
@@ -80,7 +80,7 @@ void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
 
         case 2:
             // Wait for 1 second
-            if (game_state->cutscene_time >= 1.0f) {
+            if (game_state->cutscene_time >= DEFAULT_WAIT_TIME) {
                 next_cutscene_step(game_state);
             }
             break;
@@ -105,7 +105,7 @@ void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
 
         case 4:
             // End of cutscene - switch back to game mode
-            if (game_state->cutscene_time > 1.0f) {
+            if (game_state->cutscene_time > DEFAULT_WAIT_TIME) {
                 cutscene_finish(game_state);
             }
             break;
@@ -124,7 +124,7 @@ void cutscene_dk_escape(game_state_t *game_state, float dt_seconds) {
             if (game_state->level.num_effects == 0) {
                 new_effect(&game_state->level, ANIM_HEART_FULL, C2_HEART_X, C2_HEART_Y, 1, false);
             }
-            if (game_state->cutscene_time > 1.0f) {
+            if (game_state->cutscene_time > DEFAULT_WAIT_TIME) {
                 next_cutscene_step(game_state);
             }
             break;
@@ -161,7 +161,7 @@ void cutscene_dk_escape(game_state_t *game_state, float dt_seconds) {
 
         case 4:
             // End of cutscene - switch back to game mode
-            if (game_state->cutscene_time > 1.0f) {
+            if (game_state->cutscene_time > DEFAULT_WAIT_TIME) {
                 cutscene_finish(game_state);
             }
             break;
@@ -182,7 +182,7 @@ void cutscene_dk_death(game_state_t *game_state, float dt_seconds) {
             player->base.x = game_state->player_clone.base.x;
             player->base.y = game_state->player_clone.base.y;
             player->base.direction = game_state->player_clone.base.direction;
-            if (game_state->cutscene_time > 1.0f) {
+            if (game_state->cutscene_time > DEFAULT_WAIT_TIME) {
                 set_animation(&donkey_kong->base, ANIM_BEATING_CHEST_DONKEY_KONG);
                 next_cutscene_step(game_state);
             }
@@ -190,7 +190,7 @@ void cutscene_dk_death(game_state_t *game_state, float dt_seconds) {
         
         case 1:
             // set dk anim falling
-            if (game_state->cutscene_time > 1.6f) {
+            if (game_state->cutscene_time > C3_DK_FALLING_WAIT_TIME) {
                 set_animation(&donkey_kong->base, ANIM_FALLING_DONKEY_KONG);
                 next_cutscene_step(game_state);
             }
@@ -217,7 +217,7 @@ void cutscene_dk_death(game_state_t *game_state, float dt_seconds) {
         
         case 3:
             // End of cutscene - switch back to game mode
-            if (game_state->cutscene_time > 3.0f) {
+            if (game_state->cutscene_time > C3_FINAL_WAIT_TIME) {
                 game_state->mode = GAME_MODE_GAME_FINISH;
             }
             break;
@@ -256,7 +256,7 @@ void cutscene_mario_death(game_state_t *game_state, float dt_seconds) {
         
         case 2:
             // End of cutscene - switch back to game mode
-            if (game_state->cutscene_time > 1.0f) {
+            if (game_state->cutscene_time > DEFAULT_WAIT_TIME) {
                 game_state->player_lives -= 1;
                 player->is_dead = false;
                 player->has_hammer = false;
