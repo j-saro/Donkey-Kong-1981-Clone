@@ -30,10 +30,6 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
     
     update_animation_progress(&donkey_kong->base, dt_seconds);
 
-    if (game_state->current_level > 1) return;
-
-    // DK animation change logic only in level 1
-
     animation_sequence_t sequence = get_animation_by_key(&donkey_kong->base, animation->current_animation);
 
     switch (animation->current_animation) {
@@ -68,7 +64,12 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
             // if animation last frame set trowing animation
             if (animation->current_frame_index == sequence.frame_count - 1 && 
                 animation->frame_time >= (sequence.frame_duration - 0.05)) {
-                set_animation(&donkey_kong->base, ANIM_THROWING_BARREL_DONKEY_KONG);
+                if (game_state->current_level == 1) {
+                    set_animation(&donkey_kong->base, ANIM_THROWING_BARREL_DONKEY_KONG);
+                } else {
+                    animation_state_t new_anim = (rand() % 10 < 8) ? ANIM_IDLE_DONKEY_KONG : ANIM_BEATING_CHEST_DONKEY_KONG;
+                    set_animation(&donkey_kong->base, new_anim);
+                }
             }
             break;
             

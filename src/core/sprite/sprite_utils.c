@@ -52,6 +52,7 @@ animation_sequence_t get_animation_by_key(entity_t *base, animation_state_t anim
 // returns animation frames array of current animation
 cairo_surface_t **get_animation_frames(entity_t *base, animation_state_t anim_state) {
     int index = find_animation_index(base, anim_state);
+    // loaded_animation[animation_index]
     if (index >= 0) return loaded_animations[index].frames;
     g_warning("No animation frames found for animation state %d", anim_state);
     return NULL;

@@ -15,15 +15,39 @@ void free_animation_frames();
 void free_sprite_sheets();
 void animation_cleanup();
 
-// Stores the animation frames (animation -> frame)
-animation_frames_t *loaded_animations = NULL;
+/* Stores the sprite sheets in json order
 
-// Stores the sprite sheets (entity -> sprite sheet)
+Struct
+    entities_t type;
+    cairo_surface_t *sprite_sheet;
+*/
 spritesheet_t *sprite_sheets = NULL;
 unsigned int num_sprite_sheets = 0;
 
+
+/* Stores the animation in json order
+
+Struct
+    entities_t type;
+    animation_state_t anim_key;
+    int start_x;
+    ...
+*/
 animation_sequence_t *animations = NULL;
 unsigned int num_animations = 0;
+
+
+/* Stores the loaded animation frames in animation order 
+   (Animation index == Loaded Animation index)
+   frames = loaded_animations[animation_index].frames
+
+Struct
+    animation_state_t anim_key;
+    cairo_surface_t **frames;
+    float frame_count;
+*/
+animation_frames_t *loaded_animations = NULL;
+
 
 void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json) {
     animation_load_form_json(animation_json);
