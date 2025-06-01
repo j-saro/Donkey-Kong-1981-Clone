@@ -69,9 +69,9 @@ void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
             break;
         case 1:
             // Donkey Kong climbs ladders
-            donkey_kong->base.y -= 80 * dt_seconds;
+            donkey_kong->base.y -= DK_CLIMB_SPEED * dt_seconds;
 
-            if (donkey_kong->base.y <= 133) {
+            if (donkey_kong->base.y <= C1_DK_CLIMB_HEIGHT) {
                 set_animation(&donkey_kong->base, ANIM_IDLE_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HELP_PEACH);
                 next_cutscene_step(game_state);
@@ -89,16 +89,16 @@ void cutscene_dk_intro(game_state_t *game_state, float dt_seconds) {
             // Donky Kong goes to the left
             donkey_kong->base.x -= MOVE_SPEED * dt_seconds;
 
-            if (donkey_kong->base.x >= 130) {
-                entity_jump(&donkey_kong->base, 150.0f);
+            if (donkey_kong->base.x >= C1_DK_CLIMB_HEIGHT - EPSILON_2) {
+                entity_jump(&donkey_kong->base, DK_JUMP_FORCE);
             }
-            apply_gravity(&donkey_kong->base, dt_seconds, 600);
-            if (donkey_kong->base.y >= 133) {
-                donkey_kong->base.y = 133;
+            apply_gravity(&donkey_kong->base, dt_seconds, DK_GRAVITY);
+            if (donkey_kong->base.y >= C1_DK_CLIMB_HEIGHT) {
+                donkey_kong->base.y = C1_DK_CLIMB_HEIGHT;
                 donkey_kong->base.is_grounded = true;
             }
 
-            if (donkey_kong->base.x <= 73) {
+            if (donkey_kong->base.x <= C1_DK_FINAL_POS_X) {
                 next_cutscene_step(game_state);
             }
             break;
@@ -122,7 +122,7 @@ void cutscene_dk_escape(game_state_t *game_state, float dt_seconds) {
     switch (game_state->cutscene_step) {
         case 0:
             if (game_state->level.num_effects == 0) {
-                new_effect(&game_state->level, ANIM_HEART_FULL, 295, 86, 1, false);
+                new_effect(&game_state->level, ANIM_HEART_FULL, C2_HEART_X, C2_HEART_Y, 1, false);
             }
             if (game_state->cutscene_time > 1.0f) {
                 next_cutscene_step(game_state);
@@ -130,29 +130,29 @@ void cutscene_dk_escape(game_state_t *game_state, float dt_seconds) {
             break;
         case 1:
             set_animation(&donkey_kong->base, ANIM_CLIMB_WITHOUT_PEACH_DONKEY_KONG);
-            donkey_kong->base.x = 178;
-            donkey_kong->base.y = 131;
+            donkey_kong->base.x = C2_DK_START_X;
+            donkey_kong->base.y = C2_DK_START_Y;
             next_cutscene_step(game_state);
             break;
         case 2:
             // Donkey Kong climb to peach
-            donkey_kong->base.y -= 80 * dt_seconds;
+            donkey_kong->base.y -= DK_CLIMB_SPEED * dt_seconds;
 
             if (donkey_kong->base.y <= game_state->level.peach.base.y) {
-                donkey_kong->base.x = 174;
+                donkey_kong->base.x = C2_DK_START_X - EPSILON_4;
                 set_animation(&donkey_kong->base, ANIM_CLIMB_WITH_PEACH_DONKEY_KONG);
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
                 effect_destroy(&game_state->level, 0);
-                new_effect(&game_state->level, ANIM_HEART_BROKEN, 295, 86, 1, false);
+                new_effect(&game_state->level, ANIM_HEART_BROKEN, C2_HEART_X, C2_HEART_Y, 1, false);
                 next_cutscene_step(game_state);
             }
             break;
 
         case 3:
             // Donkey Kong climb to further
-            donkey_kong->base.y -= 80 * dt_seconds;
+            donkey_kong->base.y -= DK_CLIMB_SPEED * dt_seconds;
 
-            if (donkey_kong->base.y <= 40) {
+            if (donkey_kong->base.y <= C2_DK_FINAL_POS_Y) {
                 set_animation(&donkey_kong->base, ANIM_HIDE);
                 set_animation(&game_state->level.peach.base, ANIM_HIDE);
                 next_cutscene_step(game_state);
@@ -198,18 +198,18 @@ void cutscene_dk_death(game_state_t *game_state, float dt_seconds) {
         
         case 2:
             // Donkey Kong falling
-            donkey_kong->base.y += 180 * dt_seconds;
+            donkey_kong->base.y += C3_DK_FALLING_SPEED * dt_seconds;
 
-            if (donkey_kong->base.y >= 506 - donkey_kong->base.height) {
+            if (donkey_kong->base.y >= C3_DK_FALLING_STOP - donkey_kong->base.height) {
                 peach_t *peach = &game_state->level.peach;
-                peach->base.x -= 46;
+                peach->base.x -= C3_PEACH_OFFSET_X;
                 // Set Player Pos
-                player->base.x = peach->base.x + 100;
+                player->base.x = peach->base.x + C3_MARIO_OFFSET_X;
                 player->base.y = peach->base.y + peach->base.height - player->base.height;
                 if (player->base.direction > 0) {
                     player->base.direction = -1;
                 }
-                new_effect(&game_state->level, ANIM_HEART_FULL, peach->base.x + 50, peach->base.y - 10, 1, false);
+                new_effect(&game_state->level, ANIM_HEART_FULL, peach->base.x + (C3_MARIO_OFFSET_X / 2), peach->base.y - C3_HEART_OFFSET_X, 1, false);
                 set_animation(&donkey_kong->base, ANIM_IDLE_FALLING_DONKEY_KONG);
                 next_cutscene_step(game_state);
             }

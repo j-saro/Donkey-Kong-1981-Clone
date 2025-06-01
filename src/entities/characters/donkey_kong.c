@@ -61,7 +61,7 @@ void donkey_kong_update(game_state_t *game_state, float dt_seconds) {
             
         case ANIM_IDLE_DONKEY_KONG:
         case ANIM_BEATING_CHEST_DONKEY_KONG:
-            // if animation last frame set trowing animation
+            // if animation last frame, set next animation
             if (animation->current_frame_index == sequence.frame_count - 1 && 
                 animation->frame_time >= (sequence.frame_duration - 0.05)) {
                 if (game_state->current_level == 1) {

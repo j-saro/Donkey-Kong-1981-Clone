@@ -33,6 +33,26 @@
 #define GUI_TEXT_RETURN "PRESS SPACE TO RETURN"
 #define GUI_TEXT_BONUS_HERT "1UP"
 
+// Cutscenes
+#define DK_CLIMB_SPEED 80
+#define DK_GRAVITY 600
+#define DK_JUMP_FORCE 150.0f
+// Cutscene 1
+#define C1_DK_CLIMB_HEIGHT 133
+#define C1_DK_FINAL_POS_X 73
+// Cutscene 2
+#define C2_HEART_X 295
+#define C2_HEART_Y 86
+#define C2_DK_START_X 178
+#define C2_DK_START_Y 131
+#define C2_DK_FINAL_POS_Y 40
+// Cutscene 3
+#define C3_DK_FALLING_SPEED 180
+#define C3_DK_FALLING_STOP 506
+#define C3_PEACH_OFFSET_X 46
+#define C3_MARIO_OFFSET_X 100
+#define C3_HEART_OFFSET_X 10
+
 // Physics
 #define GRAVITY 800.0f
 #define FALL_DAMAGE_SPEED 500.0f
