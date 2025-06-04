@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "consts.h"
-#include "entities/abstract/enemy.h"
+#include "entities/characters/enemy.h"
 #include "entities/abstract/entity.h"
 #include "entities/abstract/entity_utils.h"
 #include "core/sprite/animation.h"

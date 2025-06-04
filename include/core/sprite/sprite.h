@@ -10,5 +10,5 @@ extern animation_sequence_t *animations;
 extern unsigned int num_animations;
 extern unsigned int num_sprite_sheets;
 
-void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json);
+void sprite_init(game_state_t *game_state, cJSON *sprite_sheet_json, cJSON *animation_json);
 void sprite_cleanup();

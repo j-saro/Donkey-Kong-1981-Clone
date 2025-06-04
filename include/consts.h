@@ -1,7 +1,5 @@
 #pragma once
 
-//#define DEBUG
-
 // Gdk Window
 #define BASE_WIDTH 600.0f
 #define BASE_HEIGHT 600.0f
@@ -82,6 +80,7 @@
 #define PLAYER_LIVES 2
 
 // Level
+#define MAX_LEVELS 4
 #define BASE_BONUS_POINTS 4000
 #define LEVEL_BONUS_POINTS 1000
 #define BONUS_POINT_DECREMENT 100
@@ -91,10 +90,11 @@
 
 // Sprites
 #define SCALE 2.0f
+#define DATA_FOLDER_PATH "./"
 #define MENU_FILE_PATH "data/menu_"
-#define ASSETS_FILE_PATH "data/assets.json"
-#define LEVEL_FILE_PATH "data/level_"
-#define CUTSCENE_FILE_PATH "data/cutscene_"
+#define ASSETS_FILE_PATH "data/assets/assets.json"
+#define LEVEL_FILE_PATH "data/levels/level_"
+#define CUTSCENE_FILE_PATH "data/cutscenes/cutscene_"
 
 // Enemy
 #define MAX_ENEMIES 10

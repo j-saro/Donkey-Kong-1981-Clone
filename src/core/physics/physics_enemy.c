@@ -2,8 +2,8 @@
 #include "consts.h"
 #include "core/physics/physics_enemy.h"
 #include "core/physics/physics_utils.h"
-#include "entities/abstract/enemy.h"
-#include "entities/abstract/effect.h"
+#include "entities/characters/enemy.h"
+#include "entities/environment/effect.h"
 #include "core/sprite/animation.h"
 
 void enemy_physics(game_state_t *game_state, float dt_seconds);

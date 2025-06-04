@@ -7,18 +7,18 @@
 #include "entities/environment/platform.h"
 #include "entities/environment/ladder.h"
 #include "entities/abstract/static_entity.h"
-#include "entities/abstract/effect.h"
+#include "entities/environment/effect.h"
 #include "entities/characters/peach.h"
 #include "entities/characters/donkey_kong.h"
 #include "entities/characters/player.h"
-#include "entities/abstract/item.h"
-#include "entities/abstract/enemy.h"
+#include "entities/environment/item.h"
+#include "entities/characters/enemy.h"
 
 char *load_file_content_from_json(const char *filename);
 
 // Load Sprites/Animations
-gboolean sprite_load_from_json(const char *filename);
-gboolean sprite_parse_from_json(const char *json_str);
+gboolean sprite_load_from_json(game_state_t *game_state, const char *filename);
+gboolean sprite_parse_from_json(game_state_t *game_state, const char *json_str);
 
 // Load current level
 gboolean level_load_from_json(level_t *level, const char *filename);
@@ -58,18 +58,18 @@ char *load_file_content_from_json(const char *filename) {
 }
 
 // load animations & sprites from json
-gboolean sprite_load_from_json(const char *filename) {
+gboolean sprite_load_from_json(game_state_t *game_state, const char *filename) {
     char *json_str = load_file_content_from_json(filename);
     if (!json_str) {
         g_warning("Failed to read sprite/animation file: %s", filename);
         return FALSE;
     }
-    gboolean success = sprite_parse_from_json(json_str);
+    gboolean success = sprite_parse_from_json(game_state, json_str);
     free(json_str);
     return success;
 }
 
-gboolean sprite_parse_from_json(const char *json_str) {
+gboolean sprite_parse_from_json(game_state_t *game_state, const char *json_str) {
     cJSON *json = cJSON_Parse(json_str);
     if (json == NULL) {
         g_warning("Error parsing JSON");
@@ -85,7 +85,7 @@ gboolean sprite_parse_from_json(const char *json_str) {
         return FALSE;
     }
 
-    sprite_init(spritesheet_json, animation_json);
+    sprite_init(game_state, spritesheet_json, animation_json);
 
     cJSON_Delete(json);
     return TRUE;

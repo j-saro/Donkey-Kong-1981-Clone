@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json);
+void sprite_init(game_state_t *game_state, cJSON *sprite_sheet_json, cJSON *animation_json);
 void sprite_cleanup();
-void load_sprite_sheets_from_json(cJSON *json);
+void load_sprite_sheets_from_json(game_state_t *game_state, cJSON *json);
 void load_animation_sprites();
 void animation_load_form_json(cJSON *json);
 void free_animation_frames();
@@ -49,9 +49,9 @@ Struct
 animation_frames_t *loaded_animations = NULL;
 
 
-void sprite_init(cJSON *sprite_sheet_json, cJSON *animation_json) {
+void sprite_init(game_state_t *game_state, cJSON *sprite_sheet_json, cJSON *animation_json) {
     animation_load_form_json(animation_json);
-    load_sprite_sheets_from_json(sprite_sheet_json);
+    load_sprite_sheets_from_json(game_state, sprite_sheet_json);
     load_animation_sprites();
 }
 
@@ -61,7 +61,7 @@ void sprite_cleanup() {
     animation_cleanup();
 }
 
-void load_sprite_sheets_from_json(cJSON *json) {
+void load_sprite_sheets_from_json(game_state_t *game_state, cJSON *json) {
     num_sprite_sheets = cJSON_GetArraySize(json);
     sprite_sheets = calloc(num_sprite_sheets, sizeof(spritesheet_t));
     if (!sprite_sheets) {
@@ -82,8 +82,21 @@ void load_sprite_sheets_from_json(cJSON *json) {
                 continue;
             }
 
+            // Create spritsheet path
+            const char *folder_path = game_state->arguments.level_folder_path;
             const char *path = path_item->valuestring;
-            cairo_surface_t *surface = cairo_image_surface_create_from_png(path);
+
+            int file_path_len = strlen(folder_path) + strlen(path) + 1;
+
+            char *stylesheet_path = malloc(file_path_len);
+            if (stylesheet_path) {
+                snprintf(stylesheet_path, file_path_len, "%s%s", folder_path, path);
+            } else {
+                g_warning("Failed to allocate memory for spritsheet path");
+                continue;
+            }
+
+            cairo_surface_t *surface = cairo_image_surface_create_from_png(stylesheet_path);
 
             if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
                 g_warning("Failed to load sprite sheet: %s", path);

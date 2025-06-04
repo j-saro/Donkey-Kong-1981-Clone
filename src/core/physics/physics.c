@@ -1,12 +1,12 @@
 #include <gtk/gtk.h>
 #include "consts.h"
 #include "core/physics/physics.h"
-#include "entities/abstract/item.h"
+#include "entities/environment/item.h"
 #include "core/physics/physics_enemy.h"
 #include "core/physics/physics_geometry.h"
 #include "core/physics/physics_utils.h"
 #include "core/sprite/sprite_utils.h"
-#include "entities/abstract/effect.h"
+#include "entities/environment/effect.h"
 
 void apply_physics(game_state_t *game_state, float dt_seconds, float screen_height);
 void apply_gravity(entity_t *base, float dt_seconds, float gravity_force);

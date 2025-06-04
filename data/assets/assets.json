@@ -2,35 +2,35 @@
     "sprite_sheet": [
         {
             "type": "MARIO",
-            "path": "./assets/mario_sprite_sheet.png"
+            "path": "./data/assets/mario_sprite_sheet.png"
         },
         {
             "type": "DONKEY_KONG",
-            "path": "./assets/donkey_kong_sprite_sheet.png"
+            "path": "./data/assets/donkey_kong_sprite_sheet.png"
         },
         {
             "type": "PEACH",
-            "path": "./assets/peach_sprite_sheet.png"
+            "path": "./data/assets/peach_sprite_sheet.png"
         },
         {
             "type": "ENEMY",
-            "path": "./assets/enemy_sprite_sheet.png"
+            "path": "./data/assets/enemy_sprite_sheet.png"
         },
         {
             "type": "LADDER",
-            "path": "./assets/ladder.png"
+            "path": "./data/assets/ladder.png"
         },
         {
             "type": "PLATFORM",
-            "path": "./assets/platform.png"
+            "path": "./data/assets/platform.png"
         },
         {
             "type": "STATIC_ENTITY",
-            "path": "./assets/static_entities_sprite_sheet.png"
+            "path": "./data/assets/static_entities_sprite_sheet.png"
         },
         {
             "type": "EFFECT",
-            "path": "./assets/effects_sprite_sheet.png"
+            "path": "./data/assets/effects_sprite_sheet.png"
         }
     ],
     "animations": [

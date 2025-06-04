@@ -52,22 +52,6 @@ void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game
 
         // Sets the geometry's top left cords as (0,0)
         cairo_translate(cr, structure->base.x, structure->base.y);
-
-        #ifdef DEBUG
-        // Set outline color and line width
-        if (structure->base.type == LADDER)
-            cairo_set_source_rgb(cr, 1.0, 0.0, 0.0); // Red
-        else if (structure->base.type == PLATFORM)
-            cairo_set_source_rgb(cr, 0.0, 0.0, 1.0); // Blue
-        else
-            cairo_set_source_rgb(cr, 0.0, 0.0, 1.0); // Green
-
-        cairo_set_line_width(cr, 2.0); // line width
-
-        // Draw rectangle outline
-        cairo_rectangle(cr, 0, 0, structure->base.width, structure->base.height);
-        cairo_stroke(cr);
-        #else
         
         cairo_pattern_t *pattern = cairo_pattern_create_for_surface(frame_surface);
         cairo_pattern_set_extend(pattern, CAIRO_EXTEND_REPEAT);
@@ -96,7 +80,6 @@ void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game
         cairo_fill(cr);
 
         cairo_pattern_destroy(pattern);
-        #endif
 
         cairo_restore(cr);
     }

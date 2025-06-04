@@ -3,13 +3,13 @@
 #include "core/game.h"
 #include "level/level.h"
 #include "level/cutscene.h"
-#include "entities/abstract/effect.h"
-#include "entities/abstract/enemy.h"
+#include "entities/environment/effect.h"
+#include "entities/characters/enemy.h"
 #include "entities/characters/player.h"
 #include "core/physics/physics.h"
 #include "core/physics/physics_geometry.h"
 #include "core/input.h"
-#include "core/gui.h"
+#include "core/gui/gui.h"
 
 void game_init(game_state_t *game_state);
 gboolean draw(GtkWidget *drawing_area, cairo_t *cr, gpointer user_data);

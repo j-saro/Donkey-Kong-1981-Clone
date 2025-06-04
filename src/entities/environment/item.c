@@ -1,6 +1,6 @@
-#include "entities/abstract/item.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "entities/environment/item.h"
 #include "core/sprite/sprite_utils.h"
 #include "entities/abstract/entity.h"
 #include <gtk/gtk.h>

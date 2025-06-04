@@ -6,8 +6,8 @@
 #include "core/physics/physics.h"
 #include "core/physics/physics_utils.h"
 #include "core/physics/physics_geometry.h"
-#include "entities/abstract/effect.h"
-#include "entities/abstract/enemy.h"
+#include "entities/environment/effect.h"
+#include "entities/characters/enemy.h"
 
 void cutscene_load(game_state_t *game_state, float dt_seconds);
 void next_cutscene_step(game_state_t *game_state);

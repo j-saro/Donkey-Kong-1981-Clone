@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "consts.h"
-#include "core/gui.h"
-#include "core/gui_utils.h"
+#include "core/gui/gui.h"
+#include "core/gui/gui_utils.h"
 #include "core/sprite/sprite_utils.h"
 #include "entities/abstract/entity.h"
 

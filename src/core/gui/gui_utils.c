@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "consts.h"
-#include "core/gui_utils.h"
+#include "core/gui/gui_utils.h"
 #include "core/sprite/sprite_utils.h"
 
 float calc_center_text(const char *text, float letter_spacing);

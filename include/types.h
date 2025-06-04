@@ -210,7 +210,19 @@ typedef struct {
 /* 
 * Game State
 */
+
 typedef struct {
+    int width;
+    int height;
+    gboolean fullscreen;
+    int start_level;
+    char *level_folder_path;
+} arguments_t;
+
+typedef struct {
+    // Command line arguments
+    arguments_t arguments;
+
     // Input
     GHashTable *pressed_keys;
 

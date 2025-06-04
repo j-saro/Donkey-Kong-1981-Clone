@@ -3,15 +3,15 @@
 #include "entities/environment/platform.h"
 #include "entities/environment/ladder.h"
 #include "entities/abstract/static_entity.h"
-#include "entities/abstract/effect.h"
+#include "entities/environment/effect.h"
 #include "entities/characters/peach.h"
 #include "entities/characters/donkey_kong.h"
 #include "entities/characters/player.h"
-#include "entities/abstract/item.h"
-#include "entities/abstract/enemy.h"
+#include "entities/environment/item.h"
+#include "entities/characters/enemy.h"
 #include "core/sprite/animation.h"
 #include "core/physics/physics.h"
-#include "core/gui.h"
+#include "core/gui/gui.h"
 #include "level/loader.h"
 
 void level_init(game_state_t *game_state);
@@ -33,6 +33,7 @@ void level_init(game_state_t *game_state) {
     game_state->player_lives = PLAYER_LIVES;
     game_state->pressed_buttons = NUM_BUTTONS;
     game_state->bonus_points_timer = DECREMENT_TIMER;
+    game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
 
     // Cutscene
     game_state->current_cutscene = CUTSCENE_DK_INTRO;
@@ -42,11 +43,29 @@ void level_init(game_state_t *game_state) {
 
 // load current level
 gboolean level_load(game_state_t *game_state, const char *file_path, int file_index) {
-    game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
-    char filename[64];
     // create current level file path
-    snprintf(filename, sizeof(filename), "%s%d.json", file_path, file_index);
-    return level_load_from_json(&game_state->level, filename);
+
+    int folder_len = strlen(game_state->arguments.level_folder_path);
+    int base_len = strlen(file_path);
+    int digits = snprintf(NULL, 0, "%d", file_index);
+    int file_ending = strlen(".json");
+    int total_len = folder_len + base_len + digits + file_ending + 1;
+
+    char *full_path = malloc(total_len);
+    if (!full_path) {
+        g_warning("Failed to allocate memory for level path");
+        return FALSE;
+    }
+
+    snprintf(full_path, total_len, "%s%s%d.json",
+        game_state->arguments.level_folder_path,
+        file_path,
+        file_index
+    );
+
+    gboolean result = level_load_from_json(&game_state->level, full_path);
+    free(full_path);
+    return result;
 }
 
 gboolean level_next(game_state_t *game_state, const char *file_path, int *file_index) {

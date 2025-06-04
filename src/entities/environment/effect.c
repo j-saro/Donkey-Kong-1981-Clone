@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
-#include "entities/abstract/effect.h"
+#include "entities/environment/effect.h"
 #include "entities/abstract/entity.h"
 #include "entities/abstract/entity_utils.h"
 #include "core/sprite/sprite_utils.h"
