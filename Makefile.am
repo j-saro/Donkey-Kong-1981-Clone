@@ -3,7 +3,6 @@ SUBDIRS = \
     src
 
 EXTRA_DIST = \
-    assets \
     data \
     include \
     lib/cjson

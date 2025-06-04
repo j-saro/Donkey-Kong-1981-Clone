@@ -1,5 +1,7 @@
+# Define executable name
 bin_PROGRAMS = game
 
+# List of all source files used to build executable
 game_SOURCES = \
 	$(top_srcdir)/src/main.c \
 	$(top_srcdir)/src/core/game.c \
@@ -30,11 +32,15 @@ game_SOURCES = \
 	$(top_srcdir)/src/level/loader.c \
 	$(top_srcdir)/src/level/level.c
 
+# Preprocessor and compiler flags
+# - Include paths for headers
+# - GTK-related flags
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/lib/cjson \
 	$(GTK_CFLAGS)
 
+# Link additional libraries
+# - static libcjson.a library
+# - GTK libraries
 game_LDADD = ../lib/cjson/libcjson.a $(GTK_LIBS)
-
-bindir = $(top_srcdir)

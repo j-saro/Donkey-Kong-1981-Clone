@@ -9,7 +9,7 @@ static struct argp_option options[] = {
     {"height",     'h', "HEIGHT", 0, "Set game window height (default: 600)", 0},
     {"fullscreen", 'f', 0,        0, "Start in fullscreen mode", 0},
     {"level",      'l', "LEVEL",  0, "Start directly at a specific level number (1-4)", 0},
-    {"data-path",  'p', "DIR",    0, "Base folder for all game data files\n(default: current directory)", 0},
+    {"data-path",  'p', "DIR",    0, "Specify folder path to game data files\n(default: current directory)", 0},
     {0},
 };
 

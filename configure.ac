@@ -9,9 +9,17 @@ PKG_CHECK_MODULES([GTK], [gtk+-3.0 cairo], [], [
   AC_MSG_ERROR([GTK+3 and Cairo are required])
 ])
 
-# Export flags
+# Custom include paths
+# - $(top_srcdir)/include: project headers
+# - $(top_srcdir)/lib/cjson: cJSON library headers
 CPPFLAGS="$CPPFLAGS -I\$(top_srcdir)/include -I\$(top_srcdir)/lib/cjson"
+
+# Compiler flags
+# - -O2: optimization level 2
+# - -g: include debug symbols
 CFLAGS="$CFLAGS -O2 -g"
+
+# Link math library (-lm)
 LIBS="$LIBS -lm"
 
 # Substitute the pkg-config flags
