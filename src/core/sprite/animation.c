@@ -12,6 +12,10 @@ void update_animation_progress(entity_t *base, float dt_seconds) {
 
     animation_t *animation = &base->animation;
     animation_sequence_t anim = get_animation_by_key(base, animation->current_animation);
+    if (anim.frame_count <= 0) {
+        g_warning("Animation %d has invalid frame_count: %d", animation->current_animation, anim.frame_count);
+        return;
+    }
     
     animation->frame_time += dt_seconds;
     

@@ -73,19 +73,26 @@ void load_sprite_sheets_from_json(game_state_t *game_state, cJSON *json) {
     for (int i = 0; i < num_sprite_sheets; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         if (item) {
-            const char *type_str = cJSON_GetObjectItem(item, "type")->valuestring;
-            sprite_sheets[i].type = get_type_by_name(type_str);
-
+             
+            cJSON *type_item = cJSON_GetObjectItem(item, "type");
+            if (type_item && cJSON_IsString(type_item)) {
+                sprite_sheets[i].type = get_type_by_name(type_item->valuestring);
+            } else {
+                g_warning("sprite_sheet[%d] missing or invalid 'type' field", i);
+                continue;
+            }
+            
+            const char *path = NULL;
             cJSON *path_item = cJSON_GetObjectItem(item, "path");
-            if (!cJSON_IsString(path_item) || strlen(path_item->valuestring) == 0) {
-                g_warning("sprite_sheet[%d] missing or invalid 'path' field for '%s'", i, type_str);
+            if (cJSON_IsString(path_item) && strlen(path_item->valuestring) > 0) {
+                path = path_item->valuestring;
+            } else {
+                g_warning("sprite_sheet[%d] missing or invalid 'path' field for '%s'", i, type_item->valuestring);
                 continue;
             }
 
             // Create spritsheet path
             const char *folder_path = game_state->arguments.level_folder_path;
-            const char *path = path_item->valuestring;
-
             int file_path_len = strlen(folder_path) + strlen(path) + 1;
 
             char *stylesheet_path = malloc(file_path_len);
@@ -97,6 +104,7 @@ void load_sprite_sheets_from_json(game_state_t *game_state, cJSON *json) {
             }
 
             cairo_surface_t *surface = cairo_image_surface_create_from_png(stylesheet_path);
+            free(stylesheet_path);
 
             if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
                 g_warning("Failed to load sprite sheet: %s", path);
@@ -116,18 +124,32 @@ void animation_load_form_json(cJSON *json) {
     for (int i = 0; i < num_animations; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
 
-        const char *key_str = cJSON_GetObjectItem(item, "key")->valuestring;
-        animations[i].anim_key = get_type_by_name(key_str);
+        cJSON *key_item = cJSON_GetObjectItem(item, "key");
+        cJSON *type_item = cJSON_GetObjectItem(item, "entity_id");
+        cJSON *start_x_item = cJSON_GetObjectItem(item, "start_x");
+        cJSON *start_y_item = cJSON_GetObjectItem(item, "start_y");
+        cJSON *frame_count_item = cJSON_GetObjectItem(item, "frame_count");
+        cJSON *frame_duration_item = cJSON_GetObjectItem(item, "frame_duration");
+        cJSON *frame_width_item = cJSON_GetObjectItem(item, "frame_width");
+        cJSON *frame_height_item = cJSON_GetObjectItem(item, "frame_height");
 
-        const char *type_str = cJSON_GetObjectItem(item, "entity_id")->valuestring;
-        animations[i].type = get_type_by_name(type_str);
+        if (!cJSON_IsString(key_item) || !cJSON_IsString(type_item) ||
+            !cJSON_IsNumber(start_x_item) || !cJSON_IsNumber(start_y_item) ||
+            !cJSON_IsNumber(frame_count_item) || !cJSON_IsNumber(frame_duration_item) ||
+            !cJSON_IsNumber(frame_width_item) || !cJSON_IsNumber(frame_height_item)) {
+            
+            g_warning("Animation %d: invalid or missing fields", i);
+            continue;
+        }
 
-        animations[i].start_x = cJSON_GetObjectItem(item, "start_x")->valueint;
-        animations[i].start_y = cJSON_GetObjectItem(item, "start_y")->valueint;
-        animations[i].frame_count = cJSON_GetObjectItem(item, "frame_count")->valueint;
-        animations[i].frame_duration = (float)cJSON_GetObjectItem(item, "frame_duration")->valuedouble;
-        animations[i].frame_width = cJSON_GetObjectItem(item, "frame_width")->valueint;
-        animations[i].frame_height = (float)cJSON_GetObjectItem(item, "frame_height")->valueint;
+        animations[i].anim_key = get_type_by_name(key_item->valuestring);
+        animations[i].type = get_type_by_name(type_item->valuestring);
+        animations[i].start_x = start_x_item->valueint;
+        animations[i].start_y = start_y_item->valueint;
+        animations[i].frame_count = frame_count_item->valueint;
+        animations[i].frame_duration = (float)frame_duration_item->valuedouble;
+        animations[i].frame_width = frame_width_item->valueint;
+        animations[i].frame_height = (float)frame_height_item->valueint;
     }
 }
 

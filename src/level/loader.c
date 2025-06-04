@@ -202,6 +202,9 @@ gboolean level_parse_from_json(level_t *level, const char *json_str) {
 
 void level_parse_metadata(level_t *level, cJSON *json) {
     // Height player has to reach
-    level->finish_line = (float)cJSON_GetObjectItem(json, "finish_line")->valuedouble;
+    cJSON *item_json = cJSON_GetObjectItem(json, "finish_line");
+    if (item_json && cJSON_IsNumber(item_json)) {
+        level->finish_line = (float)item_json->valuedouble;
+    }
     level->frame_timer = 0.0f;
 }

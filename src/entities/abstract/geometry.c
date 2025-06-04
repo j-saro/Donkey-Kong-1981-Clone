@@ -11,24 +11,34 @@ void geometry_parse(geometry_t *structure, cJSON *json, entities_t type);
 void geometry_draw(cairo_t *cr, geometry_t *array, int count, game_state_t *game_state);
 
 void geometry_parse(geometry_t *structure, cJSON *json, entities_t type) {
+    float json_width = 0.0f;
+    float json_height = 0.0f;
+
     structure->base.type = type;
     entity_parse(&structure->base, json);
     
     // Get the native dimensions of the animation frame for this geometry
     animation_sequence_t anim_seq = get_animation_by_key(&structure->base, structure->base.animation.current_animation);
-    float native_tile_width = (float)anim_seq.frame_width;
-    float native_tile_height = (float)anim_seq.frame_height;
+    float anim_tile_width = (float)anim_seq.frame_width;
+    float anim_tile_height = (float)anim_seq.frame_height;
 
     // Gets width and height form JSON
-    float json_total_width = (float)cJSON_GetObjectItem(json, "width")->valuedouble;
-    float json_total_height = (float)cJSON_GetObjectItem(json, "height")->valuedouble;
+    cJSON *width_item = cJSON_GetObjectItem(json, "width");
+    if (width_item && cJSON_IsNumber(width_item)) {
+        json_width = (float)width_item->valuedouble;
+    }
+
+    cJSON *height_item = cJSON_GetObjectItem(json, "height");
+    if (height_item && cJSON_IsNumber(height_item)) {
+        json_height = (float)height_item->valuedouble;
+    }
 
     if (type == PLATFORM) {
-        structure->base.width = json_total_width;
-        structure->base.height = native_tile_height * SCALE;
+        structure->base.width = json_width;
+        structure->base.height = anim_tile_height * SCALE;
     } else if (type == LADDER) {
-        structure->base.width = native_tile_width * SCALE;
-        structure->base.height = json_total_height;
+        structure->base.width = anim_tile_width * SCALE;
+        structure->base.height = json_height;
     }
 
     cJSON *physics_json = cJSON_GetObjectItem(json, "has_physics");

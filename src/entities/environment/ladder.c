@@ -11,8 +11,12 @@ void ladder_draw(cairo_t *cr, game_state_t *game_state);
 
 void ladder_init(level_t *level, cJSON *ladders_json) {
     level->num_ladders = cJSON_GetArraySize(ladders_json);
-    level->ladders = malloc(level->num_ladders * sizeof(geometry_t));
-
+    if (level->num_ladders > 0) {
+        level->ladders = malloc(level->num_ladders * sizeof(geometry_t));
+    } else {
+        level->ladders = NULL;
+    }
+    
     for (int i = 0; i < level->num_ladders; i++) {
         cJSON *ladder_json = cJSON_GetArrayItem(ladders_json, i);
         geometry_parse(&level->ladders[i], ladder_json, LADDER);

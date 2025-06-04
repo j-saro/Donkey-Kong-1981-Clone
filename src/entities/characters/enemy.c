@@ -25,8 +25,12 @@ void enemy_init(level_t *level, cJSON *json) {
 
     // Enemy Categories
     level->num_enemy_spawns = cJSON_GetArraySize(json);
-    level->enemy_spawns = calloc(level->num_enemy_spawns, sizeof(enemy_spawn_t));
-
+    if (level->num_enemy_spawns > 0) {
+        level->enemy_spawns = calloc(level->num_enemy_spawns, sizeof(enemy_spawn_t));
+    } else {
+        level->enemy_spawns = NULL;
+    }
+    
     for (int i = 0; i < level->num_enemy_spawns; i++) {
         cJSON *item = cJSON_GetArrayItem(json, i);
         enemy_spawn_t *spawn = &level->enemy_spawns[i];

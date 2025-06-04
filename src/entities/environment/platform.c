@@ -12,7 +12,11 @@ void platform_update(level_t *level, float dt_seconds);
 
 void platform_init(level_t *level, cJSON *platforms_json) {
     level->num_platforms = cJSON_GetArraySize(platforms_json);
-    level->platforms = malloc(level->num_platforms * sizeof(geometry_t));
+    if (level->num_platforms > 0) {
+        level->platforms = malloc(level->num_platforms * sizeof(geometry_t));
+    } else {
+        level->platforms = NULL;
+    }
 
     for (int i = 0; i < level->num_platforms; i++) {
         cJSON *platform_json = cJSON_GetArrayItem(platforms_json, i);

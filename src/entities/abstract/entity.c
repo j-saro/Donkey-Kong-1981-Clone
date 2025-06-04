@@ -11,26 +11,43 @@ void entity_array_cleanup(void **array, int *count);
 
 void entity_parse(entity_t *base, cJSON *json) {
     // Json read Values
-    cJSON *type_str = cJSON_GetObjectItem(json, "type");
-    if (cJSON_IsString(type_str)) {
-        const char *id_str = type_str->valuestring;
-        base->type = get_type_by_name(id_str);
+    cJSON *type_item = cJSON_GetObjectItem(json, "type");
+    if (cJSON_IsString(type_item)) {
+        const char *key_str = type_item->valuestring;
+        base->type = get_type_by_name(key_str);
     }
 
-    const char *key_str = cJSON_GetObjectItem(json, "key")->valuestring;
-    animation_state_t anim_state = get_type_by_name(key_str);
-    if (anim_state == -1) {
-        g_warning("Unknown animation state: %s", key_str);
+    cJSON *key_item = cJSON_GetObjectItem(json, "key");
+    if (key_item && cJSON_IsString(key_item)) {
+        animation_state_t anim_state = get_type_by_name(key_item->valuestring);
+        if (anim_state == -1) {
+            g_warning("Unknown animation state for %s", key_item->valuestring);
+        }
+        base->animation.current_animation = anim_state;
     }
-    base->animation.current_animation = anim_state;
+    
+    cJSON *x_item = cJSON_GetObjectItem(json, "x");
+    if (x_item && cJSON_IsNumber(x_item)) {
+        base->x = (float)x_item->valuedouble;
+    }
 
-    base->x = (float)cJSON_GetObjectItem(json, "x")->valuedouble;
-    base->y = (float)cJSON_GetObjectItem(json, "y")->valuedouble;
-    base->width = cJSON_GetObjectItem(json, "width")->valueint * SCALE;
-    base->height = cJSON_GetObjectItem(json, "height")->valueint * SCALE;
+    cJSON *y_item = cJSON_GetObjectItem(json, "y");
+    if (y_item && cJSON_IsNumber(y_item)) {
+        base->y = (float)y_item->valuedouble;
+    }
 
-    cJSON *dir_item = cJSON_GetObjectItem(json, "direction");
-    base->direction = (dir_item && cJSON_IsNumber(dir_item)) ? dir_item->valueint : 1;
+    cJSON *width_item = cJSON_GetObjectItem(json, "width");
+    if (width_item && cJSON_IsNumber(width_item)) {
+        base->width = width_item->valueint * SCALE;
+    }
+
+    cJSON *height_item = cJSON_GetObjectItem(json, "height");
+    if (height_item && cJSON_IsNumber(height_item)) {
+        base->height = height_item->valueint * SCALE;
+    }
+
+    cJSON *direction_item = cJSON_GetObjectItem(json, "direction");
+    base->direction = (direction_item && cJSON_IsNumber(direction_item)) ? direction_item->valueint : 1;
 
 
     // Default Values

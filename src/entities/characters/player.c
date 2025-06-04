@@ -91,8 +91,11 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
     bool key_space = is_key_pressed(game_state, GDK_KEY_space);
     
     float player_bottom = player->base.y + player->base.height;
+    geometry_t *ladder = NULL;
     int current_ladder = player->current_ladder_index;
-    geometry_t *ladder = &game_state->level.ladders[current_ladder];
+    if (current_ladder <= game_state->level.num_ladders && game_state->level.ladders) {
+        ladder = &game_state->level.ladders[current_ladder];
+    }
 
     if (key_left) {
         player->base.x -= move_amount;
@@ -102,13 +105,13 @@ void player_movement(game_state_t *game_state, float dt_seconds, float screen_wi
         player->base.x += move_amount;
         player->base.direction = 1;
     }
-    if (key_up && player->on_ladder) {
+    if (key_up && player->on_ladder && ladder) {
         float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP;
         if ((player_bottom - EPSILON_2) >= ladder_top) {
             player->base.y -= move_amount;
         }
     }
-    if (key_down && player->on_ladder) {
+    if (key_down && player->on_ladder && ladder) {
         float ladder_bottom = ladder->base.y + ladder->base.height;
         if (player_bottom <= ladder_bottom - EPSILON_2) {
             player->base.y += move_amount;
@@ -130,11 +133,18 @@ void player_change_animation(game_state_t *game_state, float dt_seconds) {
 
     float player_bottom = player->base.y + player->base.height;
 
+    geometry_t *ladder = NULL;
     int current_ladder = player->current_ladder_index;
-    geometry_t *ladder = &game_state->level.ladders[current_ladder];
+    if (current_ladder <= game_state->level.num_ladders && game_state->level.ladders) {
+        ladder = &game_state->level.ladders[current_ladder];
+    }
     
-    float ladder_top = ladder->base.y - LADDER_TOP_OVERLAP + EPSILON_4;
-    float ladder_bottom = ladder->base.y + ladder->base.height - EPSILON_2;
+    float ladder_top = 0;
+    float ladder_bottom = 0;
+    if (ladder) {
+        ladder_top = ladder->base.y - LADDER_TOP_OVERLAP + EPSILON_4;
+        ladder_bottom = ladder->base.y + ladder->base.height - EPSILON_2; 
+    }
 
     if (player->has_hammer && (key_right || key_left)) {
         player->climbing = false;
