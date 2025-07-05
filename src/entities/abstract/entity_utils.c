@@ -1,13 +1,13 @@
 #include <gtk/gtk.h>
 #include "entities/abstract/entity_utils.h"
 
-gboolean allocate_new_entity(void **array, unsigned int *num, unsigned int *capacity, size_t type_size);
+gboolean allocate_new_entity(void **array, unsigned int num, unsigned int *capacity, size_t type_size);
 void init_new_entity_base(entity_t *base, float pos_x, float pos_y, int direction);
 void destroy_entity(void *array, unsigned int *count, size_t entity_size, int index);
 
-gboolean allocate_new_entity(void **array, unsigned int *num, unsigned int *capacity, size_t type_size) {
+gboolean allocate_new_entity(void **array, unsigned int num, unsigned int *capacity, size_t type_size) {
     // check array capacity
-    if (*num + 1 > *capacity) {
+    if (num + 1 > *capacity) {
         // grows by 4
         unsigned int new_capacity = *capacity == 0 ? 4 : *capacity + 4;
         void *tmp = realloc(*array, new_capacity * type_size);
@@ -40,7 +40,7 @@ void init_new_entity_base(entity_t *base, float pos_x, float pos_y, int directio
 
 void destroy_entity(void *array, unsigned int *count, size_t entity_size, int index) {
     // Check if index is within valid bounds
-    if (index < 0 || index >= (int)(*count)) {
+    if (index < 0 || index >= (*count)) {
         g_warning("Tried to destroy entity at invalid index: %d", index);
         return;
     }
@@ -49,7 +49,7 @@ void destroy_entity(void *array, unsigned int *count, size_t entity_size, int in
     char *char_array = (char*)array;
 
     // Shift all entities after the one being removed to the left
-    for (int i = index; i < (int)(*count) - 1; i++) {
+    for (int i = index; i < (*count) - 1; i++) {
         // Destination: current entity's memory location
         void *dest = char_array + i * entity_size;
 

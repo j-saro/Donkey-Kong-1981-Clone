@@ -59,7 +59,7 @@ void enemy_init(level_t *level, cJSON *json) {
 }
 
 void new_enemy(level_t *level, enemy_spawn_t *spawn) {
-    if (!allocate_new_entity((void**)&level->enemies, &level->num_enemies, &level->enemy_capacity, sizeof(enemy_t))) {
+    if (!allocate_new_entity((void**)&level->enemies, level->num_enemies, &level->enemy_capacity, sizeof(enemy_t))) {
         return;
     }
 

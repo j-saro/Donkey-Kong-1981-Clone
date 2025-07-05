@@ -23,7 +23,7 @@ void effect_init(level_t *level) {
 }
 
 void new_effect(level_t *level, animation_state_t animation, float pos_x, float pos_y, int direction, bool once) {
-    if (!allocate_new_entity((void**)&level->effects, &level->num_effects, &level->effects_capacity, sizeof(effect_t))) {
+    if (!allocate_new_entity((void**)&level->effects, level->num_effects, &level->effects_capacity, sizeof(effect_t))) {
         return;
     }
 

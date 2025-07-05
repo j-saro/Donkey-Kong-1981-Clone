@@ -33,7 +33,6 @@ void level_init(game_state_t *game_state) {
     game_state->player_lives = PLAYER_LIVES;
     game_state->pressed_buttons = NUM_BUTTONS;
     game_state->bonus_points_timer = DECREMENT_TIMER;
-    game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
 
     // Cutscene
     game_state->current_cutscene = CUTSCENE_DK_INTRO;
@@ -43,8 +42,9 @@ void level_init(game_state_t *game_state) {
 
 // load current level
 gboolean level_load(game_state_t *game_state, const char *file_path, int file_index) {
+    game_state->bonus_points = BASE_BONUS_POINTS + game_state->current_level * LEVEL_BONUS_POINTS;
+    
     // create current level file path
-
     int folder_len = strlen(game_state->arguments.level_folder_path);
     int base_len = strlen(file_path);
     int digits = snprintf(NULL, 0, "%d", file_index);
