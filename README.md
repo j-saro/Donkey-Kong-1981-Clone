@@ -57,6 +57,13 @@ You can launch the game via command line with the following options:
 | `-l` | `--level=LEVEL` | Start at a specific level (1-4) |
 | `-p` | `--data-path=DIR` | Set path to game data files |
 
+| Key | Game Controls |
+| :--- | :--- |
+| `A` | Move character left |
+| `D` | Move character right |
+| `Space` | Jump |
+| `C` | Skip cutscenes |
+
 
 ## Screenshots
 
