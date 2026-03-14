@@ -111,6 +111,10 @@ gboolean update(GtkWidget *drawing_area, GdkFrameClock *clock, gpointer user_dat
     float dt_seconds = time_delta / 1000000.f;
     previous_time = current_time;
 
+    if (dt_seconds > 0.1f) {
+        dt_seconds = 0.1f;
+    }
+
     // update key cooldown
     game_state->key_cooldown -= dt_seconds;
 
