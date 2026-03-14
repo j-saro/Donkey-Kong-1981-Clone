@@ -47,6 +47,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
     // Connect Input handlers and draw event
     g_signal_connect(window, "key_press_event", G_CALLBACK(on_key_pressed), game_state);
     g_signal_connect(window, "key_release_event", G_CALLBACK(on_key_released), game_state);
+    g_signal_connect(window, "focus-out-event", G_CALLBACK(on_focus_out), game_state);
     g_signal_connect(drawing_area, "draw", G_CALLBACK(draw), game_state);
 
     // Update game state every tick

@@ -3,6 +3,7 @@
 
 gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+gboolean on_focus_out(GtkWidget *widget, GdkEventFocus *event, gpointer user_data);
 void input_init(game_state_t *game_state);
 void input_cleanup(game_state_t *game_state);
 gboolean is_key_pressed(game_state_t *game_state, unsigned int keyval);
@@ -13,8 +14,11 @@ gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_dat
         g_warning("Input system not initialized or invalid game state for key press event.");
         return FALSE;
     }
+
+    guint keyval = gdk_keyval_to_lower(event->keyval);
+
     // Insert keyval into hash table (gpointer keyval & gpointer int 1)
-    g_hash_table_insert(game_state->pressed_keys, GINT_TO_POINTER(event->keyval), GINT_TO_POINTER(1));
+    g_hash_table_insert(game_state->pressed_keys, GINT_TO_POINTER(keyval), GINT_TO_POINTER(1));
     return TRUE;
 }
 
@@ -24,9 +28,18 @@ gboolean on_key_released(GtkWidget *widget, GdkEventKey *event, gpointer user_da
         g_warning("Input system not initialized or invalid game state for key release event.");
         return FALSE;
     }
+
+    guint keyval = gdk_keyval_to_lower(event->keyval);
+
     // Remove keyval from hash table
-    g_hash_table_remove(game_state->pressed_keys, GINT_TO_POINTER(event->keyval));
+    g_hash_table_remove(game_state->pressed_keys, GINT_TO_POINTER(keyval));
     return TRUE;
+}
+
+gboolean on_focus_out(GtkWidget *widget, GdkEventFocus *event, gpointer user_data) {
+    game_state_t *game_state = (game_state_t*) user_data;
+    g_hash_table_remove_all(game_state->pressed_keys);
+    return FALSE;
 }
 
 void input_init(game_state_t *game_state) {
